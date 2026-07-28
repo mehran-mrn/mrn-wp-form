@@ -4,7 +4,7 @@ Tags: form builder, contact form, email notification, entries, rtl, persian
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,10 @@ MRN Form برای سایت‌هایی ساخته شده که یک فرم‌سا�
 داده فرم‌ها در جدول‌های اختصاصی سایت ذخیره می‌شود. IP خام ذخیره نمی‌شود و تنها hash یک‌طرفه برای کنترل سوءاستفاده ثبت می‌شود. حذف کامل داده در uninstall اختیاری است و باید از تنظیمات فعال شود.
 
 == Changelog ==
+
+= 1.0.1 =
+
+* اصلاح فاصله از سایدبار و حذف اسکرول افقی پنل مدیریت در چیدمان‌های RTL و LTR.
 
 = 1.0.0 =
 
