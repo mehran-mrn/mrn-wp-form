@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<ruleset name="MRN Form">
+	<description>WordPress coding standards for MRN Form.</description>
+	<file>mrn-form.php</file>
+	<file>includes</file>
+	<file>uninstall.php</file>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+	<config name="minimum_supported_wp_version" value="6.6"/>
+	<rule ref="WordPress"/>
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="PHPCompatibilityWP">
+		<include-pattern>*.php$</include-pattern>
+	</rule>
+	<!-- The plugin owns purpose-built tables; repository methods are the caching boundary. -->
+	<rule ref="WordPress.DB.DirectDatabaseQuery.DirectQuery">
+		<exclude-pattern>includes/class-form-repository.php</exclude-pattern>
+		<exclude-pattern>includes/class-entry-repository.php</exclude-pattern>
+		<exclude-pattern>uninstall.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.DirectDatabaseQuery.NoCaching">
+		<exclude-pattern>includes/class-form-repository.php</exclude-pattern>
+		<exclude-pattern>includes/class-entry-repository.php</exclude-pattern>
+		<exclude-pattern>uninstall.php</exclude-pattern>
+	</rule>
+	<config name="testVersion" value="8.1-"/>
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>tests/*</exclude-pattern>
+</ruleset>
