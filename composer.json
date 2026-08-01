@@ -20,8 +20,10 @@
   "scripts": {
     "lint": "phpcs",
     "test": [
+      "@php tests/test-i18n.php",
       "@php tests/test-validator.php",
       "@php tests/test-field-registry.php",
+      "@php tests/test-form-repository.php",
       "@php tests/test-email-notifications.php"
     ]
   }

@@ -1,14 +1,14 @@
 === MRN Form ===
 Contributors: mehran-mrn
-Tags: form builder, contact form, email notification, entries, rtl, persian
+Tags: form builder, contact form, email notification, entries, rtl, ltr, persian, english
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-فرم‌ساز سبک و حرفه‌ای MRN با رابط فارسی، صندوق ورودی، منطق شرطی و اعلان ایمیلی برای مدیر و تکمیل‌کننده فرم.
+فرم‌ساز سبک و حرفه‌ای MRN با رابط فارسی و انگلیسی، پشتیبانی RTL/LTR، صندوق ورودی، منطق شرطی و اعلان ایمیلی.
 
 == Description ==
 
@@ -17,6 +17,7 @@ MRN Form برای سایت‌هایی ساخته شده که یک فرم‌سا�
 = امکانات =
 
 * فرم‌ساز Drag & Drop با پیش‌نمایش زنده
+* رابط کامل فارسی و انگلیسی با تشخیص خودکار RTL/LTR بر اساس زبان وردپرس
 * ۱۴ نوع فیلد: متن، ایمیل، تلفن، عدد، متن بلند، انتخابی، رادیویی، چک‌باکس، تاریخ، فایل، رضایت، پنهان، عنوان و HTML
 * عرض‌های واکنش‌گرا، رنگ، فاصله، گردی گوشه، محل برچسب و کلاس CSS اختصاصی
 * منطق شرطی برای نمایش فیلدها
@@ -106,6 +107,21 @@ MRN Form برای سایت‌هایی ساخته شده که یک فرم‌سا�
 داده فرم‌ها در جدول‌های اختصاصی سایت ذخیره می‌شود. IP خام ذخیره نمی‌شود و تنها hash یک‌طرفه برای کنترل سوءاستفاده ثبت می‌شود. حذف کامل داده در uninstall اختیاری است و باید از تنظیمات فعال شود.
 
 == Changelog ==
+
+= 1.1.1 =
+
+* Preserve a form's stable slug when editing fields, appearance, or notification settings.
+* Keep all plugin administration screens inside the standard WordPress content area.
+
+= 1.1.0 =
+
+* افزودن رابط کامل انگلیسی برای مدیریت، فرم‌ساز، فرانت‌اند، اعتبارسنجی و ایمیل‌ها.
+* افزودن پشتیبانی خودکار و کامل LTR در کنار RTL.
+* ثبت Mehran Marandi و mehranmarandi.ir به‌عنوان سازنده افزونه.
+
+= 1.0.2 =
+
+* دریافت nonce تازه و غیرقابل‌کش پیش از ارسال فرم برای جلوگیری از خطای نشست در صفحات کش‌شده.
 
 = 1.0.1 =
 

@@ -98,6 +98,10 @@
   padding-inline-end: 2.3rem;
 }
 
+.mrnf-shell[dir="ltr"] .mrnf-field select {
+  background-position: calc(100% - 1rem) 50%, calc(100% - 1rem - 5px) 50%;
+}
+
 .mrnf-field input:focus,
 .mrnf-field textarea:focus,
 .mrnf-field select:focus {

@@ -53,7 +53,18 @@ final class Blocks {
 			),
 			$this->forms->all( array( 'status' => 'published' ) )
 		);
-		wp_localize_script( 'mrnf-block', 'mrnfBlock', array( 'forms' => $options ) );
+		wp_localize_script(
+			'mrnf-block',
+			'mrnfBlock',
+			array(
+				'forms' => $options,
+				'i18n'  => array(
+					'form'         => __( 'فرم', 'mrn-form' ),
+					'selectForm'   => __( 'یک فرم انتخاب کنید…', 'mrn-form' ),
+					'selectedForm' => __( 'فرم انتخاب‌شده:', 'mrn-form' ),
+				),
+			)
+		);
 		register_block_type(
 			'mrn/form',
 			array(

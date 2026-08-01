@@ -73,13 +73,45 @@
     notice.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
   }
 
+  function refreshNonce(form) {
+    var url = mrnfFrontend.restUrl + form.dataset.mrnfForm + '/nonce?_=' + Date.now();
+    return window.fetch(url, {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    }).then(function (response) {
+      return response.json().then(function (data) {
+        if (!response.ok || !data.nonce) {
+          throw new Error(data.message || mrnfFrontend.network);
+        }
+        var input = form.querySelector('[name="_mrnf_nonce"]');
+        if (!input) {
+          throw new Error(mrnfFrontend.network);
+        }
+        input.value = data.nonce;
+      });
+    });
+  }
+
+  function responseData(response) {
+    return response.json().then(function (data) {
+      if (!response.ok) {
+        var error = new Error(data.message || mrnfFrontend.network);
+        error.fields = data.data && data.data.fields ? data.data.fields : {};
+        throw error;
+      }
+      return data;
+    });
+  }
+
   document.querySelectorAll('[data-mrnf-form]').forEach(function (form) {
     updateConditions(form);
     form.addEventListener('input', function () { updateConditions(form); });
     form.addEventListener('change', function () { updateConditions(form); });
 
     form.addEventListener('submit', function (event) {
-      if (form.dataset.ajax !== '1' || typeof window.fetch !== 'function') {
+      if (typeof window.fetch !== 'function') {
         return;
       }
       event.preventDefault();
@@ -96,23 +128,24 @@
       var original = label.textContent;
       button.disabled = true;
       label.textContent = mrnfFrontend.processing;
-      var payload = new FormData(form);
 
-      window.fetch(mrnfFrontend.restUrl + form.dataset.mrnfForm + '/submit', {
-        method: 'POST',
-        body: payload,
-        credentials: 'same-origin',
-        headers: { 'Accept': 'application/json' }
-      }).then(function (response) {
-        return response.json().then(function (data) {
-          if (!response.ok) {
-            var error = new Error(data.message || mrnfFrontend.network);
-            error.fields = data.data && data.data.fields ? data.data.fields : {};
-            throw error;
-          }
-          return data;
-        });
+      refreshNonce(form).then(function () {
+        if (form.dataset.ajax !== '1') {
+          window.HTMLFormElement.prototype.submit.call(form);
+          return null;
+        }
+
+        return window.fetch(mrnfFrontend.restUrl + form.dataset.mrnfForm + '/submit', {
+          method: 'POST',
+          body: new FormData(form),
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Accept': 'application/json' }
+        }).then(responseData);
       }).then(function (data) {
+        if (!data) {
+          return;
+        }
         showNotice(form, data.message, 'success');
         form.reset();
         updateConditions(form);

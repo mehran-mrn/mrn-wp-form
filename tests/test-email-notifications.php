@@ -9,9 +9,14 @@ define( 'ABSPATH', dirname( __DIR__ ) . DIRECTORY_SEPARATOR );
 define( 'ARRAY_A', 'ARRAY_A' );
 
 $sent_mail = array();
+$test_is_rtl = true;
 
 function __( string $value ): string { return $value; }
 function esc_html__( string $value ): string { return $value; }
+function is_rtl(): bool {
+	global $test_is_rtl;
+	return $test_is_rtl;
+}
 function get_bloginfo( string $key ): string { return 'MRN Test'; }
 function get_option( string $key, mixed $fallback = false ): mixed {
 	return 'admin_email' === $key ? 'admin@example.com' : $fallback;
@@ -98,6 +103,14 @@ if ( array( 'user@example.com' ) !== $sent_mail[1]['to'] ) {
 }
 if ( 2 !== count( $wpdb->inserts ) || 'wp_mrnf_notification_logs' !== $wpdb->inserts[0]['table'] ) {
 	$errors[] = 'Every delivery should be logged in the plugin table.';
+}
+
+$test_is_rtl = false;
+$engine      = new Template_Engine();
+$ltr_body    = $engine->render( '{all_fields}', $form, $values, 42 );
+$ltr_email   = $engine->email_document( 'Receipt', $ltr_body );
+if ( ! str_contains( $ltr_email, '<html dir="ltr">' ) || ! str_contains( $ltr_email, '<th align="left"' ) ) {
+	$errors[] = 'English email documents should render with LTR direction and alignment.';
 }
 
 if ( $errors ) {

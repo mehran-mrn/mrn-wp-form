@@ -82,7 +82,12 @@ final class Form_Repository {
 			return new \WP_Error( 'mrnf_title_required', __( 'عنوان فرم الزامی است.', 'mrn-form' ) );
 		}
 
-		$slug    = sanitize_title( $data['slug'] ?? $title );
+		$slug_source = $data['slug'] ?? '';
+		if ( $id && ! array_key_exists( 'slug', $data ) ) {
+			$existing    = $this->find( $id );
+			$slug_source = $existing['slug'] ?? '';
+		}
+		$slug    = sanitize_title( $slug_source ? $slug_source : $title );
 		$slug    = $this->unique_slug( $slug ? $slug : 'form', $id );
 		$row     = array(
 			'title'         => $title,
