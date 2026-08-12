@@ -4,7 +4,7 @@ Tags: form builder, contact form, email notification, entries, rtl, ltr, persian
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,15 @@ MRN Form برای سایت‌هایی ساخته شده که یک فرم‌سا�
 داده فرم‌ها در جدول‌های اختصاصی سایت ذخیره می‌شود. IP خام ذخیره نمی‌شود و تنها hash یک‌طرفه برای کنترل سوءاستفاده ثبت می‌شود. حذف کامل داده در uninstall اختیاری است و باید از تنظیمات فعال شود.
 
 == Changelog ==
+
+= 1.2.0 =
+* Add a polished requirement-mode control to the form builder: optional, always required, or required when another field is empty.
+* Add an alternative-field selector with safe reference cleanup when fields are renamed or deleted.
+* Show conditional required indicators dynamically on frontend forms.
+
+= 1.1.2 =
+* Add cross-field required-without validation for text and upload alternatives.
+* Display successful frontend submissions as accessible, dismissible toast notifications.
 
 = 1.1.1 =
 

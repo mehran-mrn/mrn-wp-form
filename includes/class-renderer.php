@@ -39,9 +39,12 @@ final class Renderer {
 			'mrnf-frontend',
 			'mrnfFrontend',
 			array(
-				'restUrl'    => esc_url_raw( rest_url( 'mrn-form/v1/forms/' ) ),
-				'processing' => __( 'در حال ارسال…', 'mrn-form' ),
-				'network'    => __( 'ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', 'mrn-form' ),
+				'restUrl'         => esc_url_raw( rest_url( 'mrn-form/v1/forms/' ) ),
+				'processing'      => __( 'در حال ارسال…', 'mrn-form' ),
+				'network'         => __( 'ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', 'mrn-form' ),
+				'close'           => __( 'بستن', 'mrn-form' ),
+				/* translators: 1: field label, 2: related field label. */
+				'requiredWithout' => __( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-form' ),
 			)
 		);
 
@@ -83,7 +86,7 @@ final class Renderer {
 				$query_notice = sanitize_text_field( wp_unslash( $_GET['mrnf_success'] ?? $_GET['mrnf_error'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only classic submission feedback.
 				$query_type   = isset( $_GET['mrnf_error'] ) ? 'error' : 'success'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				?>
-				<div class="mrnf-form__notice <?php echo $query_notice ? 'is-' . esc_attr( $query_type ) : ''; ?>" role="status" aria-live="polite" <?php echo $query_notice ? '' : 'hidden'; ?>><?php echo esc_html( $query_notice ); ?></div>
+				<div class="mrnf-form__notice <?php echo $query_notice ? 'is-' . esc_attr( $query_type ) . ( 'success' === $query_type ? ' is-toast' : '' ) : ''; ?>" role="status" aria-live="polite" <?php echo $query_notice ? '' : 'hidden'; ?>><span class="mrnf-form__notice-text"><?php echo esc_html( $query_notice ); ?></span><button class="mrnf-form__notice-close" type="button" aria-label="<?php esc_attr_e( 'بستن', 'mrn-form' ); ?>">&times;</button></div>
 				<div class="mrnf-form__grid">
 					<?php foreach ( $form['fields'] as $field ) : ?>
 						<?php echo $this->field( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Field method escapes values. ?>
@@ -105,12 +108,14 @@ final class Renderer {
 	 * @return string
 	 */
 	private function field( array $field ): string {
-		$type      = $field['type'];
-		$key       = $field['key'];
-		$id        = 'mrnf-' . $field['id'];
-		$required  = ! empty( $field['required'] );
-		$condition = wp_json_encode( $field['condition'], JSON_UNESCAPED_UNICODE );
-		$classes   = 'mrnf-field mrnf-field--' . sanitize_html_class( $type );
+		$type             = $field['type'];
+		$key              = $field['key'];
+		$id               = 'mrnf-' . $field['id'];
+		$required         = ! empty( $field['required'] );
+		$condition        = wp_json_encode( $field['condition'], JSON_UNESCAPED_UNICODE );
+		$validation       = wp_json_encode( $field['validation'], JSON_UNESCAPED_UNICODE );
+		$required_without = sanitize_key( $field['validation']['requiredWithout'] ?? '' );
+		$classes          = 'mrnf-field mrnf-field--' . sanitize_html_class( $type );
 
 		if ( 'heading' === $type ) {
 			return '<div class="' . esc_attr( $classes ) . '" style="--mrnf-width:' . esc_attr( $field['width'] ) . '%"><h3>' . esc_html( $field['label'] ) . '</h3>' . ( $field['content'] ? '<p>' . esc_html( $field['content'] ) . '</p>' : '' ) . '</div>';
@@ -121,13 +126,13 @@ final class Renderer {
 
 		ob_start();
 		?>
-		<div class="<?php echo esc_attr( $classes ); ?>" style="--mrnf-width:<?php echo esc_attr( $field['width'] ); ?>%" data-mrnf-field="<?php echo esc_attr( $key ); ?>" data-condition="<?php echo esc_attr( $condition ); ?>">
+		<div class="<?php echo esc_attr( $classes ); ?>" style="--mrnf-width:<?php echo esc_attr( $field['width'] ); ?>%" data-mrnf-field="<?php echo esc_attr( $key ); ?>" data-condition="<?php echo esc_attr( $condition ); ?>" data-validation="<?php echo esc_attr( $validation ); ?>"<?php echo $required_without ? ' data-required-without="' . esc_attr( $required_without ) . '"' : ''; ?>>
 			<?php if ( ! in_array( $type, array( 'hidden', 'consent' ), true ) ) : ?>
 				<label class="mrnf-field__label" for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $field['label'] ); ?>
 				<?php
-				if ( $required ) :
+				if ( $required || $required_without ) :
 					?>
-					<b aria-label="<?php esc_attr_e( 'الزامی', 'mrn-form' ); ?>">*</b><?php endif; ?></label>
+					<b class="mrnf-field__required" aria-label="<?php esc_attr_e( 'الزامی', 'mrn-form' ); ?>"<?php echo $required_without && ! $required ? ' data-mrnf-required-indicator' : ''; ?>>*</b><?php endif; ?></label>
 			<?php endif; ?>
 			<?php $this->control( $field, $id ); ?>
 			<?php

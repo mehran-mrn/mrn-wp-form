@@ -34,7 +34,7 @@ $wpdb = new class() {
 	public array $updated = array();
 	public array $rows = array(
 		7 => array(
-			'id' => '7', 'title' => 'Contact WDS', 'slug' => 'stable-contact-slug',
+			'id' => '7', 'title' => 'Contact Form', 'slug' => 'stable-contact-slug',
 			'status' => 'published', 'description' => '', 'fields' => '[]',
 			'settings' => '{}', 'notifications' => '[]', 'user_id' => '1',
 			'created_at' => '2026-08-01 10:00:00', 'updated_at' => '2026-08-01 10:00:00',

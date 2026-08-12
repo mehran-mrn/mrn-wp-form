@@ -68,6 +68,7 @@
 .mrnf-field--hidden { display: none; }
 .mrnf-field__label { color: var(--mrnf-text); font-size: .84rem; font-weight: 700; line-height: 1.7; }
 .mrnf-field__label b { color: #bc4840; margin-inline-start: .2rem; }
+.mrnf-field__required[hidden] { display: none; }
 .mrnf-field__description { color: color-mix(in srgb, var(--mrnf-text), transparent 43%); font-size: .72rem; line-height: 1.65; }
 .mrnf-field__error { color: #b9443c; font-size: .72rem; min-height: 0; }
 
@@ -203,8 +204,58 @@
   margin-block-end: 1rem;
   padding: .7rem .9rem;
 }
+.mrnf-form__notice[hidden] { display: none !important; }
+.mrnf-form__notice-text { flex: 1; }
+.mrnf-form__notice-close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: currentColor;
+  cursor: pointer;
+  display: none;
+  flex: 0 0 1.75rem;
+  font: inherit;
+  font-size: 1.25rem;
+  height: 1.75rem;
+  justify-content: center;
+  line-height: 1;
+  margin: -.2rem;
+  opacity: .7;
+  padding: 0;
+}
+.mrnf-form__notice-close:hover { opacity: 1; }
 .mrnf-form__notice.is-success { background: #e5f5eb; border-color: #aedbc0; color: #246b44; }
 .mrnf-form__notice.is-error { background: #fff0ed; border-color: #efc2bc; color: #963f37; }
+.mrnf-form__notice.is-toast {
+  align-items: center;
+  box-shadow: 0 1rem 2.5rem rgb(15 45 30 / 20%);
+  display: flex;
+  gap: .75rem;
+  inset-block-start: 1.25rem;
+  inset-inline-end: 1.25rem;
+  margin: 0;
+  max-width: min(26rem, calc(100vw - 2rem));
+  min-width: min(20rem, calc(100vw - 2rem));
+  opacity: 0;
+  position: fixed;
+  transform: translateY(-.75rem);
+  transition: opacity .22s ease, transform .22s ease;
+  z-index: 100000;
+}
+.mrnf-form__notice.is-toast::before {
+  align-items: center;
+  background: #2d8255;
+  border-radius: 999px;
+  color: #fff;
+  content: "\2713";
+  display: flex;
+  flex: 0 0 1.55rem;
+  font-size: .85rem;
+  height: 1.55rem;
+  justify-content: center;
+}
+.mrnf-form__notice.is-toast.is-visible { opacity: 1; transform: translateY(0); }
+.mrnf-form__notice.is-toast .mrnf-form__notice-close { display: inline-flex; }
 .mrnf-honeypot { clip: rect(0, 0, 0, 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
 
 .mrnf-labels--hidden .mrnf-field__label {
@@ -233,4 +284,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mrnf-shell * { scroll-behavior: auto !important; transition: none !important; }
+  .mrnf-form__notice.is-toast { transform: none; }
 }

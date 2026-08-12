@@ -84,7 +84,7 @@
       required: false,
       width: '100',
       choices: definition.choices ? [i18n.choice1, i18n.choice2, i18n.choice3] : [],
-      validation: { min: '', max: '', minLength: '', maxLength: '', pattern: '', extensions: 'jpg,jpeg,png,pdf,doc,docx', maxFileMB: 5 },
+	      validation: { min: '', max: '', minLength: '', maxLength: '', pattern: '', extensions: 'jpg,jpeg,png,pdf,doc,docx', maxFileMB: 5, requiredWithout: '' },
       condition: { enabled: false, field: '', operator: 'equals', value: '' },
       content: ''
     };
@@ -130,11 +130,13 @@
     if (!fields.length) {
       canvas.innerHTML = '<div class="mrnf-canvas-empty"><span class="dashicons dashicons-plus-alt2"></span><b>' + escapeHtml(i18n.startsHere) + '</b><p>' + escapeHtml(i18n.emptyCanvas) + '</p></div>';
     } else {
-      canvas.innerHTML = fields.map(function (field) {
-        var definition = typeDefinitions[field.type] || typeDefinitions.text;
-        return '<article class="mrnf-canvas-field mrnf-canvas-field--' + escapeHtml(field.type) + (field.id === selectedId ? ' is-selected' : '') + '" style="--field-width:' + escapeHtml(field.width) + '%" draggable="true" data-field-id="' + escapeHtml(field.id) + '">' +
-          '<div class="mrnf-canvas-field__actions"><button type="button" data-field-duplicate title="' + escapeHtml(i18n.duplicate) + '"><span class="dashicons dashicons-admin-page"></span></button><button type="button" data-field-delete title="' + escapeHtml(i18n.delete) + '"><span class="dashicons dashicons-trash"></span></button></div>' +
-          '<div class="mrnf-canvas-field__top"><span class="dashicons dashicons-move"></span><b>' + escapeHtml(field.label) + (field.required ? ' <em>*</em>' : '') + '</b><small>' + escapeHtml(definition.label) + ' · ' + escapeHtml(field.width) + '%</small></div>' +
+	      canvas.innerHTML = fields.map(function (field) {
+	        var definition = typeDefinitions[field.type] || typeDefinitions.text;
+	        var isConditionallyRequired = field.validation && field.validation.requiredWithout;
+	        var requirementMark = field.required ? ' <em title="' + escapeHtml(i18n.alwaysRequired) + '">*</em>' : (isConditionallyRequired ? ' <em class="is-conditional" title="' + escapeHtml(i18n.conditionallyRequired) + '">↔</em>' : '');
+	        return '<article class="mrnf-canvas-field mrnf-canvas-field--' + escapeHtml(field.type) + (field.id === selectedId ? ' is-selected' : '') + '" style="--field-width:' + escapeHtml(field.width) + '%" draggable="true" data-field-id="' + escapeHtml(field.id) + '">' +
+	          '<div class="mrnf-canvas-field__actions"><button type="button" data-field-duplicate title="' + escapeHtml(i18n.duplicate) + '"><span class="dashicons dashicons-admin-page"></span></button><button type="button" data-field-delete title="' + escapeHtml(i18n.delete) + '"><span class="dashicons dashicons-trash"></span></button></div>' +
+	          '<div class="mrnf-canvas-field__top"><span class="dashicons dashicons-move"></span><b>' + escapeHtml(field.label) + requirementMark + '</b><small>' + escapeHtml(definition.label) + ' · ' + escapeHtml(field.width) + '%</small></div>' +
           fieldControl(field) +
           '</article>';
       }).join('');
@@ -151,8 +153,17 @@
       item.addEventListener('click', function (event) {
         selectedId = item.dataset.fieldId;
         if (event.target.closest('[data-field-delete]')) {
-          if (window.confirm(mrnfAdmin.i18n.deleteField)) {
-            fields = fields.filter(function (field) { return field.id !== selectedId; });
+	          if (window.confirm(mrnfAdmin.i18n.deleteField)) {
+	            var deleted = fields.find(function (field) { return field.id === selectedId; });
+	            fields = fields.filter(function (field) { return field.id !== selectedId; });
+	            fields.forEach(function (field) {
+	              if (deleted && field.validation && field.validation.requiredWithout === deleted.key) {
+	                field.validation.requiredWithout = '';
+	              }
+	              if (deleted && field.condition && field.condition.field === deleted.key) {
+	                field.condition = { enabled: false, field: '', operator: 'equals', value: '' };
+	              }
+	            });
             selectedId = fields.length ? fields[Math.max(0, fields.length - 1)].id : '';
             sync();
             render();
@@ -210,9 +221,43 @@
     return '<label class="mrnf-input"><span>' + escapeHtml(label) + '</span>' + control + (help ? '<small>' + escapeHtml(help) + '</small>' : '') + '</label>';
   }
 
-  function toggle(label, prop, checked) {
-    return '<label class="mrnf-builder-toggle"><input type="checkbox" data-field-prop="' + prop + '"' + (checked ? ' checked' : '') + '><i></i><span>' + escapeHtml(label) + '</span></label>';
-  }
+	  function toggle(label, prop, checked) {
+	    return '<label class="mrnf-builder-toggle"><input type="checkbox" data-field-prop="' + prop + '"' + (checked ? ' checked' : '') + '><i></i><span>' + escapeHtml(label) + '</span></label>';
+	  }
+
+	  function dependencyOptions(field) {
+	    return fields.filter(function (candidate) {
+	      return candidate.id !== field.id && candidate.type !== 'hidden' && typeDefinitions[candidate.type] && typeDefinitions[candidate.type].input;
+	    });
+	  }
+
+	  function requirementControl(field) {
+	    field.validation = field.validation || {};
+	    var candidates = dependencyOptions(field);
+	    var relatedKey = field.validation.requiredWithout || '';
+	    var mode = field.required ? 'always' : (relatedKey ? 'conditional' : 'optional');
+	    var name = 'mrnf-requirement-' + escapeHtml(field.id);
+	    var modes = [
+	      { value: 'optional', icon: 'dashicons-minus', label: i18n.optionalField, help: i18n.optionalFieldHelp },
+	      { value: 'always', icon: 'dashicons-yes-alt', label: i18n.alwaysRequired, help: i18n.alwaysRequiredHelp },
+	      { value: 'conditional', icon: 'dashicons-randomize', label: i18n.conditionallyRequired, help: i18n.conditionallyRequiredHelp, disabled: !candidates.length }
+	    ];
+	    var html = '<div class="mrnf-requirement"><span class="mrnf-requirement__title">' + escapeHtml(i18n.requirementMode) + '</span><div class="mrnf-requirement__modes">';
+	    html += modes.map(function (item) {
+	      return '<label class="mrnf-requirement-option' + (mode === item.value ? ' is-active' : '') + (item.disabled ? ' is-disabled' : '') + '">' +
+	        '<input type="radio" name="' + name + '" value="' + item.value + '" data-requirement-mode' + (mode === item.value ? ' checked' : '') + (item.disabled ? ' disabled' : '') + '>' +
+	        '<span class="dashicons ' + item.icon + '"></span><span><b>' + escapeHtml(item.label) + '</b><small>' + escapeHtml(item.help) + '</small></span></label>';
+	    }).join('');
+	    html += '</div>';
+	    if ('conditional' === mode && candidates.length) {
+	      html += '<div class="mrnf-requirement__relation"><span class="dashicons dashicons-arrow-down-alt"></span><label class="mrnf-input"><span>' + escapeHtml(i18n.alternativeField) + '</span><select data-required-without-field>' + candidates.map(function (candidate) {
+	        return '<option value="' + escapeHtml(candidate.key) + '"' + (candidate.key === relatedKey ? ' selected' : '') + '>' + escapeHtml(candidate.label) + '</option>';
+	      }).join('') + '</select><small>' + escapeHtml(i18n.requiredWithoutHelp) + '</small></label></div>';
+	    } else if (!candidates.length) {
+	      html += '<p class="mrnf-requirement__empty"><span class="dashicons dashicons-info-outline"></span>' + escapeHtml(i18n.addAlternativeField) + '</p>';
+	    }
+	    return html + '</div>';
+	  }
 
   function renderInspector() {
     var field = selectedField();
@@ -240,8 +285,8 @@
       { value: '25', label: i18n.width25 }, { value: '33', label: i18n.width33 }, { value: '50', label: i18n.width50 },
       { value: '66', label: i18n.width66 }, { value: '75', label: i18n.width75 }, { value: '100', label: i18n.width100 }
     ]) + '</section>';
-    if (typeDefinitions[field.type] && typeDefinitions[field.type].input) {
-      html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.validation) + '</b>' + toggle(i18n.requiredField, 'required', field.required);
+	    if (typeDefinitions[field.type] && typeDefinitions[field.type].input) {
+	      html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.validation) + '</b>' + requirementControl(field);
       if (field.type === 'text' || field.type === 'textarea' || field.type === 'tel') {
         html += input(i18n.minLength, 'validation.minLength', field.validation.minLength, 'number') + input(i18n.maxLength, 'validation.maxLength', field.validation.maxLength, 'number') + input(i18n.pattern, 'validation.pattern', field.validation.pattern);
       }
@@ -290,24 +335,54 @@
     target[parts[parts.length - 1]] = value;
   }
 
-  function bindInspector() {
-    var field = selectedField();
+	  function bindInspector() {
+	    var field = selectedField();
     inspector.querySelectorAll('[data-field-prop]').forEach(function (control) {
       var handler = function () {
         var value = control.type === 'checkbox' ? control.checked : control.value;
-        if (control.dataset.fieldProp === 'key') {
-          value = slugify(value);
-          control.value = value;
-        }
-        setNested(field, control.dataset.fieldProp, value);
+	        var previousKey = control.dataset.fieldProp === 'key' ? field.key : '';
+	        if (control.dataset.fieldProp === 'key') {
+	          value = slugify(value);
+	          control.value = value;
+	        }
+	        setNested(field, control.dataset.fieldProp, value);
+	        if (previousKey && previousKey !== value) {
+	          fields.forEach(function (candidate) {
+	            if (candidate.validation && candidate.validation.requiredWithout === previousKey) {
+	              candidate.validation.requiredWithout = value;
+	            }
+	            if (candidate.condition && candidate.condition.field === previousKey) {
+	              candidate.condition.field = value;
+	            }
+	          });
+	        }
         sync();
         if (control.dataset.fieldProp === 'condition.enabled') {
           renderInspector();
         }
         renderCanvas();
       };
-      control.addEventListener(control.type === 'text' || control.tagName === 'TEXTAREA' ? 'input' : 'change', handler);
-    });
+	      control.addEventListener(control.type === 'text' || control.tagName === 'TEXTAREA' ? 'input' : 'change', handler);
+	    });
+	    inspector.querySelectorAll('[data-requirement-mode]').forEach(function (control) {
+	      control.addEventListener('change', function () {
+	        var mode = control.value;
+	        var candidates = dependencyOptions(field);
+	        field.required = mode === 'always';
+	        field.validation = field.validation || {};
+	        field.validation.requiredWithout = mode === 'conditional' && candidates.length ? candidates[0].key : '';
+	        sync();
+	        render();
+	      });
+	    });
+	    var requiredWithoutField = inspector.querySelector('[data-required-without-field]');
+	    if (requiredWithoutField) {
+	      requiredWithoutField.addEventListener('change', function () {
+	        field.validation.requiredWithout = requiredWithoutField.value;
+	        sync();
+	        renderCanvas();
+	      });
+	    }
     inspector.querySelectorAll('[data-choice-index]').forEach(function (control) {
       control.addEventListener('input', function () {
         field.choices[Number(control.dataset.choiceIndex)] = control.value;

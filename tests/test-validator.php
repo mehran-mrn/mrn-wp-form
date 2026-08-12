@@ -16,6 +16,9 @@ function wp_unslash( string $value ): string {
 function sanitize_text_field( mixed $value ): string {
 	return trim( strip_tags( (string) $value ) );
 }
+function sanitize_key( mixed $value ): string {
+	return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $value ) );
+}
 function sanitize_textarea_field( mixed $value ): string {
 	return trim( strip_tags( (string) $value ) );
 }
@@ -61,6 +64,29 @@ $invalid = $validator->validate( $fields, array( 'email' => 'bad-address', 'age'
 $assert( isset( $invalid['errors']['email'] ), 'Invalid email should fail.' );
 $assert( isset( $invalid['errors']['age'] ), 'Number below minimum should fail.' );
 $assert( isset( $invalid['errors']['company'] ), 'Visible required field should fail.' );
+
+$related_fields = array(
+	array(
+		'type' => 'text', 'key' => 'document_number', 'label' => 'Document number', 'required' => false,
+		'validation' => array( 'requiredWithout' => 'document_file' ), 'condition' => array(),
+	),
+	array(
+		'type' => 'file', 'key' => 'document_file', 'label' => 'Document upload', 'required' => false,
+		'validation' => array(), 'condition' => array(),
+	),
+);
+$neither = $validator->validate( $related_fields, array(), array() );
+$assert( isset( $neither['errors']['document_number'] ), 'Related requirement should fail when both fields are empty.' );
+
+$number_only = $validator->validate( $related_fields, array( 'document_number' => 'D1234-56789' ), array() );
+$assert( array() === $number_only['errors'], 'Related requirement should accept the text field by itself.' );
+
+$file_only = $validator->validate(
+	$related_fields,
+	array(),
+	array( 'document_file' => array( 'name' => 'document.jpg', 'error' => UPLOAD_ERR_OK ) )
+);
+$assert( array() === $file_only['errors'], 'Related requirement should accept the file field by itself.' );
 
 if ( $failures ) {
 	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );
