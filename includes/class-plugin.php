@@ -46,6 +46,7 @@ final class Plugin {
 	 * @return void
 	 */
 	private function boot(): void {
+		I18n::register();
 		Activator::maybe_upgrade();
 		$forms          = new Form_Repository();
 		$entries        = new Entry_Repository();

@@ -18,9 +18,10 @@ final class Validator {
 	 *
 	 * @param array<int, array<string, mixed>> $fields Form fields.
 	 * @param array<string, mixed>             $input Raw values.
+	 * @param array<string, mixed>             $files Uploaded files.
 	 * @return array{values: array<string, mixed>, errors: array<string, string>}
 	 */
-	public function validate( array $fields, array $input ): array {
+	public function validate( array $fields, array $input, array $files = array() ): array {
 		$values = array();
 		$errors = array();
 
@@ -53,10 +54,71 @@ final class Validator {
 			}
 		}
 
+		$this->validate_required_without( $fields, $input, $files, $errors );
+
 		return array(
 			'values' => $values,
 			'errors' => $errors,
 		);
+	}
+
+	/**
+	 * Require this field only when a related field has no submitted value.
+	 *
+	 * @param array<int, array<string, mixed>> $fields Form fields.
+	 * @param array<string, mixed>             $input Raw values.
+	 * @param array<string, mixed>             $files Uploaded files.
+	 * @param array<string, string>            $errors Errors, updated by reference.
+	 * @return void
+	 */
+	private function validate_required_without( array $fields, array $input, array $files, array &$errors ): void {
+		$field_map = array();
+		foreach ( $fields as $field ) {
+			if ( ! empty( $field['key'] ) ) {
+				$field_map[ $field['key'] ] = $field;
+			}
+		}
+
+		foreach ( $fields as $field ) {
+			$rules     = (array) ( $field['validation'] ?? array() );
+			$other_key = sanitize_key( $rules['requiredWithout'] ?? '' );
+			if ( ! $other_key || ! isset( $field_map[ $other_key ] ) || ! $this->is_visible( $field, $input ) ) {
+				continue;
+			}
+
+			$other = $field_map[ $other_key ];
+			if ( $this->has_submission_value( $field, $input, $files ) || $this->has_submission_value( $other, $input, $files ) ) {
+				continue;
+			}
+
+			$key = $field['key'];
+			if ( ! isset( $errors[ $key ] ) ) {
+				$errors[ $key ] = sprintf(
+					/* translators: 1: field label, 2: related field label. */
+					__( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-form' ),
+					$field['label'],
+					$other['label']
+				);
+			}
+		}
+	}
+
+	/**
+	 * Whether a regular input or upload has a submitted value.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param array<string, mixed> $input Raw values.
+	 * @param array<string, mixed> $files Uploaded files.
+	 * @return bool
+	 */
+	private function has_submission_value( array $field, array $input, array $files ): bool {
+		$key = $field['key'];
+		if ( 'file' === ( $field['type'] ?? '' ) ) {
+			$file = $files[ $key ] ?? $files[ 'mrnf_' . $key ] ?? null;
+			return is_array( $file ) && ! empty( $file['name'] ) && UPLOAD_ERR_NO_FILE !== (int) ( $file['error'] ?? UPLOAD_ERR_OK );
+		}
+
+		return ! $this->is_empty( $this->sanitize( $field, $input[ $key ] ?? '' ) );
 	}
 
 	/**

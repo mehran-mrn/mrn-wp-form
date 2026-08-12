@@ -3,11 +3,11 @@
  * Plugin Name:       MRN Form
  * Plugin URI:        https://github.com/mehran-mrn/mrn-wp-form
  * Description:       فرم‌ساز سبک و حرفه‌ای MRN با مدیریت ارسال‌ها، منطق شرطی و اعلان‌های ایمیلی زیبا.
- * Version:           1.0.0
+ * Version:           1.2.0
  * Requires at least: 6.6
  * Requires PHP:      8.1
- * Author:            MRN
- * Author URI:        https://github.com/mehran-mrn
+ * Author:            Mehran Marandi
+ * Author URI:        https://mehranmarandi.ir
  * Text Domain:       mrn-form
  * Domain Path:       /languages
  * License:           GPL-2.0-or-later
@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MRNF_VERSION', '1.0.0' );
+define( 'MRNF_VERSION', '1.2.0' );
 define( 'MRNF_DB_VERSION', '1.0.0' );
 define( 'MRNF_FILE', __FILE__ );
 define( 'MRNF_PATH', plugin_dir_path( __FILE__ ) );

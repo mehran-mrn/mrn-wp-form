@@ -167,6 +167,22 @@ final class Field_Registry {
 			$keys[ $field['key'] ] = true;
 			$output[]              = $field;
 		}
+
+		$input_keys = array();
+		$types      = self::all();
+		foreach ( $output as $field ) {
+			if ( ! empty( $types[ $field['type'] ]['input'] ) ) {
+				$input_keys[ $field['key'] ] = true;
+			}
+		}
+		foreach ( $output as &$field ) {
+			$related = $field['validation']['requiredWithout'] ?? '';
+			if ( $related && ( $related === $field['key'] || ! isset( $input_keys[ $related ] ) ) ) {
+				$field['validation']['requiredWithout'] = '';
+			}
+		}
+		unset( $field );
+
 		return $output;
 	}
 
@@ -237,13 +253,14 @@ final class Field_Registry {
 	 */
 	private static function sanitize_validation( array $rules ): array {
 		return array(
-			'min'        => isset( $rules['min'] ) && '' !== $rules['min'] ? (float) $rules['min'] : '',
-			'max'        => isset( $rules['max'] ) && '' !== $rules['max'] ? (float) $rules['max'] : '',
-			'minLength'  => isset( $rules['minLength'] ) && '' !== $rules['minLength'] ? absint( $rules['minLength'] ) : '',
-			'maxLength'  => isset( $rules['maxLength'] ) && '' !== $rules['maxLength'] ? absint( $rules['maxLength'] ) : '',
-			'pattern'    => sanitize_text_field( $rules['pattern'] ?? '' ),
-			'extensions' => sanitize_text_field( $rules['extensions'] ?? 'jpg,jpeg,png,pdf,doc,docx' ),
-			'maxFileMB'  => max( 1, min( 20, absint( $rules['maxFileMB'] ?? 5 ) ) ),
+			'min'             => isset( $rules['min'] ) && '' !== $rules['min'] ? (float) $rules['min'] : '',
+			'max'             => isset( $rules['max'] ) && '' !== $rules['max'] ? (float) $rules['max'] : '',
+			'minLength'       => isset( $rules['minLength'] ) && '' !== $rules['minLength'] ? absint( $rules['minLength'] ) : '',
+			'maxLength'       => isset( $rules['maxLength'] ) && '' !== $rules['maxLength'] ? absint( $rules['maxLength'] ) : '',
+			'pattern'         => sanitize_text_field( $rules['pattern'] ?? '' ),
+			'extensions'      => sanitize_text_field( $rules['extensions'] ?? 'jpg,jpeg,png,pdf,doc,docx' ),
+			'maxFileMB'       => max( 1, min( 20, absint( $rules['maxFileMB'] ?? 5 ) ) ),
+			'requiredWithout' => sanitize_key( $rules['requiredWithout'] ?? '' ),
 		);
 	}
 

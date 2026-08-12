@@ -4,7 +4,8 @@
   var InspectorControls = blockEditor.InspectorControls;
   var SelectControl = components.SelectControl;
   var Placeholder = components.Placeholder;
-  var options = [{ value: '0', label: 'یک فرم انتخاب کنید…' }].concat((window.mrnfBlock && mrnfBlock.forms) || []);
+  var i18n = (window.mrnfBlock && mrnfBlock.i18n) || {};
+  var options = [{ value: '0', label: i18n.selectForm }].concat((window.mrnfBlock && mrnfBlock.forms) || []);
 
   blocks.registerBlockType('mrn/form', {
     apiVersion: 3,
@@ -14,7 +15,7 @@
     attributes: { formId: { type: 'integer', default: 0 } },
     edit: function (props) {
       var selector = el(SelectControl, {
-        label: 'فرم',
+        label: i18n.form,
         value: String(props.attributes.formId || 0),
         options: options,
         onChange: function (value) { props.setAttributes({ formId: Number(value) }); }
@@ -23,7 +24,7 @@
       return el('div', {},
         el(InspectorControls, {}, el('div', { style: { padding: '16px' } }, selector)),
         el(Placeholder, { icon: 'feedback', label: 'MRN Form' },
-          props.attributes.formId ? el('p', {}, 'فرم انتخاب‌شده: ', el('strong', {}, selected ? selected.label : '#' + props.attributes.formId)) : selector
+          props.attributes.formId ? el('p', {}, i18n.selectedForm + ' ', el('strong', {}, selected ? selected.label : '#' + props.attributes.formId)) : selector
         )
       );
     },

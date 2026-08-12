@@ -75,13 +75,79 @@ final class Admin {
 			array(
 				'fieldTypes'   => Field_Registry::all(),
 				'starterField' => Field_Registry::normalize( 'text' ),
+				'direction'    => is_rtl() ? 'rtl' : 'ltr',
 				'i18n'         => array(
-					'selectField' => __( 'برای ویرایش تنظیمات، یک فیلد را انتخاب کنید.', 'mrn-form' ),
-					'deleteField' => __( 'این فیلد حذف شود؟', 'mrn-form' ),
-					'emptyCanvas' => __( 'فیلدها را از ستون کناری بکشید یا روی آن‌ها کلیک کنید.', 'mrn-form' ),
-					'choice'      => __( 'گزینه', 'mrn-form' ),
-					'unsaved'     => __( 'تغییرات ذخیره‌نشده دارید.', 'mrn-form' ),
-					'copySuccess' => __( 'کپی شد', 'mrn-form' ),
+					'addChoice'                 => __( 'افزودن گزینه', 'mrn-form' ),
+					'allowedExtensions'         => __( 'پسوندهای مجاز', 'mrn-form' ),
+					'addAlternativeField'       => __( 'برای استفاده از الزام وابسته، ابتدا یک فیلد ورودی دیگر به فرم اضافه کنید.', 'mrn-form' ),
+					'alternativeField'          => __( 'فیلد جایگزین', 'mrn-form' ),
+					'alwaysRequired'            => __( 'همیشه الزامی', 'mrn-form' ),
+					'alwaysRequiredHelp'        => __( 'کاربر همیشه باید این فیلد را تکمیل کند.', 'mrn-form' ),
+					'choice'                    => __( 'گزینه', 'mrn-form' ),
+					'choice1'                   => __( 'گزینه ۱', 'mrn-form' ),
+					'choice2'                   => __( 'گزینه ۲', 'mrn-form' ),
+					'choice3'                   => __( 'گزینه ۳', 'mrn-form' ),
+					'choices'                   => __( 'گزینه‌ها', 'mrn-form' ),
+					'conditionalLogic'          => __( 'منطق شرطی', 'mrn-form' ),
+					'conditionallyRequired'     => __( 'الزامی وقتی فیلد دیگری خالی است', 'mrn-form' ),
+					'conditionallyRequiredHelp' => __( 'تکمیل این فیلد به مقدار فیلد جایگزین بستگی دارد.', 'mrn-form' ),
+					'confirmAction'             => __( 'این عملیات قابل بازگشت نیست. ادامه می‌دهید؟', 'mrn-form' ),
+					'content'                   => __( 'محتوا', 'mrn-form' ),
+					'copySuccess'               => __( 'کپی شد', 'mrn-form' ),
+					'defaultValue'              => __( 'مقدار پیش‌فرض', 'mrn-form' ),
+					'delete'                    => __( 'حذف', 'mrn-form' ),
+					'deleteField'               => __( 'این فیلد حذف شود؟', 'mrn-form' ),
+					'description'               => __( 'توضیح راهنما', 'mrn-form' ),
+					'duplicate'                 => __( 'تکثیر', 'mrn-form' ),
+					'emptyCanvas'               => __( 'فیلدها را از ستون کناری بکشید یا روی آن‌ها کلیک کنید.', 'mrn-form' ),
+					/* translators: %d: Number of fields in the form. */
+					'fieldCount'                => __( '%d فیلد', 'mrn-form' ),
+					'fieldLabel'                => __( 'برچسب', 'mrn-form' ),
+					'fieldWidth'                => __( 'عرض فیلد', 'mrn-form' ),
+					'fileSelect'                => __( 'انتخاب فایل…', 'mrn-form' ),
+					/* translators: %s: Field key used in a merge tag. */
+					'helpMergeTag'              => __( 'برای merge tag: {field:%s}', 'mrn-form' ),
+					'hidden'                    => __( 'پنهان', 'mrn-form' ),
+					/* translators: %s: Field type label. */
+					'input'                     => __( 'ورودی %s', 'mrn-form' ),
+					'layout'                    => __( 'چیدمان', 'mrn-form' ),
+					'maxFileSize'               => __( 'حداکثر حجم (MB)', 'mrn-form' ),
+					'maximum'                   => __( 'بیشینه', 'mrn-form' ),
+					'maxLength'                 => __( 'حداکثر نویسه', 'mrn-form' ),
+					'minimum'                   => __( 'کمینه', 'mrn-form' ),
+					'minLength'                 => __( 'حداقل نویسه', 'mrn-form' ),
+					'newSection'                => __( 'عنوان یک بخش تازه', 'mrn-form' ),
+					'noOptions'                 => __( 'بدون گزینه', 'mrn-form' ),
+					'noValue'                   => __( 'بدون مقدار', 'mrn-form' ),
+					'optionalField'             => __( 'اختیاری', 'mrn-form' ),
+					'optionalFieldHelp'         => __( 'تکمیل این فیلد برای کاربر اختیاری است.', 'mrn-form' ),
+					'pattern'                   => __( 'الگوی RegEx', 'mrn-form' ),
+					'placeholderContent'        => __( 'متن توضیحی یا HTML', 'mrn-form' ),
+					'placeholderLong'           => __( 'متن بلند…', 'mrn-form' ),
+					'requiredField'             => __( 'تکمیل این فیلد الزامی است', 'mrn-form' ),
+					'requiredWithoutHelp'       => __( 'اگر فیلد جایگزین خالی باشد، تکمیل این فیلد الزامی می‌شود.', 'mrn-form' ),
+					'requirementMode'           => __( 'وضعیت الزامی بودن', 'mrn-form' ),
+					'selectField'               => __( 'برای ویرایش تنظیمات، یک فیلد را انتخاب کنید.', 'mrn-form' ),
+					'selectFieldOption'         => __( 'انتخاب فیلد…', 'mrn-form' ),
+					'showConditionally'         => __( 'نمایش شرطی این فیلد', 'mrn-form' ),
+					'startsHere'                => __( 'فرم شما از اینجا شروع می‌شود', 'mrn-form' ),
+					'uniqueKey'                 => __( 'کلید یکتا', 'mrn-form' ),
+					'unsaved'                   => __( 'تغییرات ذخیره‌نشده دارید.', 'mrn-form' ),
+					'validation'                => __( 'اعتبارسنجی', 'mrn-form' ),
+					'width25'                   => __( '۲۵٪', 'mrn-form' ),
+					'width33'                   => __( '۳۳٪', 'mrn-form' ),
+					'width50'                   => __( '۵۰٪', 'mrn-form' ),
+					'width66'                   => __( '۶۶٪', 'mrn-form' ),
+					'width75'                   => __( '۷۵٪', 'mrn-form' ),
+					'width100'                  => __( '۱۰۰٪', 'mrn-form' ),
+					'condition'                 => __( 'شرط', 'mrn-form' ),
+					'compareValue'              => __( 'مقدار مقایسه', 'mrn-form' ),
+					'equals'                    => __( 'برابر باشد با', 'mrn-form' ),
+					'notEquals'                 => __( 'برابر نباشد با', 'mrn-form' ),
+					'contains'                  => __( 'شامل باشد', 'mrn-form' ),
+					'notEmpty'                  => __( 'خالی نباشد', 'mrn-form' ),
+					'empty'                     => __( 'خالی باشد', 'mrn-form' ),
+					'sourceField'               => __( 'فیلد مبنا', 'mrn-form' ),
 				),
 			)
 		);
@@ -614,7 +680,7 @@ final class Admin {
 		$this->header( 'entries', __( 'جزئیات ارسال', 'mrn-form' ) );
 		?>
 		<main class="mrnf-admin__content">
-			<div class="mrnf-detail-head"><a class="mrnf-button" href="<?php echo esc_url( $this->page_url( 'entries' ) ); ?>">→ <?php esc_html_e( 'بازگشت به صندوق ورودی', 'mrn-form' ); ?></a><div><?php echo $this->status_badge( $entry['status'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span>#<?php echo esc_html( (string) $entry['id'] ); ?></span></div></div>
+			<div class="mrnf-detail-head"><a class="mrnf-button" href="<?php echo esc_url( $this->page_url( 'entries' ) ); ?>"><?php echo esc_html( is_rtl() ? '→' : '←' ); ?> <?php esc_html_e( 'بازگشت به صندوق ورودی', 'mrn-form' ); ?></a><div><?php echo $this->status_badge( $entry['status'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span>#<?php echo esc_html( (string) $entry['id'] ); ?></span></div></div>
 			<section class="mrnf-detail-grid">
 				<article class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'پاسخ‌ها', 'mrn-form' ); ?></span><h2><?php echo esc_html( $form['title'] ?? __( 'فرم حذف‌شده', 'mrn-form' ) ); ?></h2></div></div><dl class="mrnf-entry-values">
 				<?php
@@ -657,7 +723,7 @@ final class Admin {
 			<?php
 			foreach ( $preview as $value ) :
 				?>
-				<i><?php echo esc_html( wp_trim_words( is_array( $value ) ? implode( '، ', $value ) : $value, 7 ) ); ?></i><?php endforeach; ?></span></td><td><?php echo esc_html( human_time_diff( strtotime( $entry['created_at'] . ' UTC' ), time() ) ); ?> <?php esc_html_e( 'پیش', 'mrn-form' ); ?></td>
+				<i><?php echo esc_html( wp_trim_words( is_array( $value ) ? implode( __( '، ', 'mrn-form' ), $value ) : $value, 7 ) ); ?></i><?php endforeach; ?></span></td><td><?php echo esc_html( human_time_diff( strtotime( $entry['created_at'] . ' UTC' ), time() ) ); ?> <?php esc_html_e( 'پیش', 'mrn-form' ); ?></td>
 				<?php
 				if ( ! $compact ) :
 					?>
@@ -683,7 +749,7 @@ final class Admin {
 			'settings'  => array( self::PAGE . '-settings', __( 'تنظیمات', 'mrn-form' ) ),
 		);
 		?>
-		<div class="wrap mrnf-admin" dir="rtl">
+		<div class="wrap mrnf-admin" dir="<?php echo esc_attr( is_rtl() ? 'rtl' : 'ltr' ); ?>">
 			<header class="mrnf-admin__hero">
 				<div class="mrnf-admin__brand"><span class="mrnf-admin__mark"><i></i><i></i><i></i></span><div><small>MRN FORM</small><h1><?php esc_html_e( 'فرم‌ساز هوشمند', 'mrn-form' ); ?></h1><p><?php echo esc_html( $context ? $context : __( 'از اولین کلیک تا یک گفت‌وگوی واقعی با مخاطب', 'mrn-form' ) ); ?></p></div></div>
 				<div class="mrnf-admin__art" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
@@ -803,7 +869,7 @@ final class Admin {
 	 * @return void
 	 */
 	private function entry_value( mixed $value ): void {
-		$value = is_array( $value ) ? implode( '، ', $value ) : (string) $value;
+		$value = is_array( $value ) ? implode( __( '، ', 'mrn-form' ), $value ) : (string) $value;
 		if ( is_email( $value ) ) {
 			echo '<a href="mailto:' . esc_attr( $value ) . '">' . esc_html( $value ) . '</a>';
 		} elseif ( filter_var( $value, FILTER_VALIDATE_URL ) ) {

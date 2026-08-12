@@ -32,6 +32,16 @@ final class REST_API {
 	public function register(): void {
 		register_rest_route(
 			'mrn-form/v1',
+			'/forms/(?P<id>\d+)/nonce',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'callback'            => array( $this, 'nonce' ),
+				'args'                => array( 'id' => array( 'sanitize_callback' => 'absint' ) ),
+			)
+		);
+		register_rest_route(
+			'mrn-form/v1',
 			'/forms/(?P<id>\d+)/submit',
 			array(
 				'methods'             => 'POST',
@@ -49,6 +59,33 @@ final class REST_API {
 				'callback'            => array( $this, 'forms' ),
 			)
 		);
+	}
+
+	/**
+	 * Issue a fresh, non-cacheable submission nonce.
+	 *
+	 * Page caches can retain the nonce embedded in a rendered form after its
+	 * WordPress nonce tick has expired. Fetching it immediately before submit
+	 * keeps cached pages usable without weakening submission verification.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function nonce( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+		$form = $this->forms->find( absint( $request['id'] ) );
+		if ( ! $form || 'published' !== $form['status'] ) {
+			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-form' ), array( 'status' => 404 ) );
+		}
+
+		$response = rest_ensure_response(
+			array(
+				'nonce' => wp_create_nonce( 'mrnf_submit_' . $form['id'] ),
+			)
+		);
+		$response->header( 'Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0' );
+		$response->header( 'Pragma', 'no-cache' );
+
+		return $response;
 	}
 
 	/**

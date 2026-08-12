@@ -22,7 +22,7 @@ use MRN\Form\Field_Registry;
 $failures = array();
 $fields   = Field_Registry::normalize_many(
 	array(
-		array( 'type' => 'email', 'key' => 'contact', 'label' => '<b>Email</b>', 'required' => 1 ),
+		array( 'type' => 'email', 'key' => 'contact', 'label' => '<b>Email</b>', 'required' => 1, 'validation' => array( 'requiredWithout' => 'fallback' ) ),
 		array( 'type' => 'text', 'key' => 'contact', 'label' => 'Name' ),
 		array( 'type' => 'unknown', 'key' => 'fallback', 'label' => 'Fallback' ),
 	)
@@ -39,6 +39,18 @@ if ( 'text' !== $fields[2]['type'] ) {
 }
 if ( ! $fields[0]['required'] ) {
 	$failures[] = 'Required should normalize to boolean true.';
+}
+if ( 'fallback' !== $fields[0]['validation']['requiredWithout'] ) {
+	$failures[] = 'Required-without should retain a valid related input key.';
+}
+
+$invalid_relation = Field_Registry::normalize_many(
+	array(
+		array( 'type' => 'text', 'key' => 'name', 'validation' => array( 'requiredWithout' => 'missing' ) ),
+	)
+);
+if ( '' !== $invalid_relation[0]['validation']['requiredWithout'] ) {
+	$failures[] = 'Required-without should discard a missing related field key.';
 }
 
 if ( $failures ) {

@@ -56,7 +56,7 @@ final class Submission_Handler {
 		}
 
 		$raw    = isset( $request['mrnf'] ) && is_array( $request['mrnf'] ) ? wp_unslash( $request['mrnf'] ) : array();
-		$result = $this->validator->validate( $form['fields'], $raw );
+		$result = $this->validator->validate( $form['fields'], $raw, $files );
 		$this->handle_files( $form['fields'], $files, $result['values'], $result['errors'] );
 		if ( $result['errors'] ) {
 			return new \WP_Error(

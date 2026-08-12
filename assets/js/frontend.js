@@ -2,9 +2,13 @@
   'use strict';
 
   function values(form, key) {
-    var elements = form.querySelectorAll('[name="mrnf[' + CSS.escape(key) + ']"], [name="mrnf[' + CSS.escape(key) + '][]"]');
+    var escaped = CSS.escape(key);
+    var elements = form.querySelectorAll('[name="mrnf[' + escaped + ']"], [name="mrnf[' + escaped + '][]"], [name="' + escaped + '"]');
     if (!elements.length) {
       return '';
+    }
+    if (elements[0].type === 'file') {
+      return elements[0].files && elements[0].files.length ? elements[0].files[0].name : '';
     }
     if (elements[0].type === 'checkbox' || elements[0].type === 'radio') {
       return Array.prototype.filter.call(elements, function (element) { return element.checked; })
@@ -40,11 +44,56 @@
         control.disabled = !visible;
       });
     });
+    updateRelatedRequirements(form);
+  }
+
+  function updateRelatedRequirements(form) {
+    form.querySelectorAll('[data-required-without]').forEach(function (field) {
+      var otherKey = field.dataset.requiredWithout || '';
+      var required = !field.hidden && !values(form, otherKey).trim();
+      var indicator = field.querySelector('[data-mrnf-required-indicator]');
+      var control = field.querySelector('input, select, textarea');
+      if (indicator) { indicator.hidden = !required; }
+      if (control) {
+        if (required) {
+          control.setAttribute('aria-required', 'true');
+        } else if (!control.required) {
+          control.removeAttribute('aria-required');
+        }
+      }
+    });
   }
 
   function clearErrors(form) {
     form.querySelectorAll('.is-invalid').forEach(function (field) { field.classList.remove('is-invalid'); });
     form.querySelectorAll('.mrnf-field__error').forEach(function (error) { error.textContent = ''; });
+    form.querySelectorAll('[aria-invalid="true"]').forEach(function (control) {
+      control.removeAttribute('aria-invalid');
+      control.removeAttribute('aria-describedby');
+    });
+  }
+
+  function fieldLabel(field) {
+    var label = field && field.querySelector('.mrnf-field__label');
+    return label ? label.textContent.replace('*', '').trim() : '';
+  }
+
+  function relatedRequirementErrors(form) {
+    var errors = {};
+    form.querySelectorAll('[data-validation]').forEach(function (field) {
+      var rules;
+      try { rules = JSON.parse(field.dataset.validation); } catch (error) { rules = {}; }
+      var otherKey = rules && rules.requiredWithout ? String(rules.requiredWithout) : '';
+      var key = field.dataset.mrnfField || '';
+      var other = otherKey ? form.querySelector('[data-mrnf-field="' + CSS.escape(otherKey) + '"]') : null;
+      if (!key || !other || field.hidden || values(form, key).trim() || values(form, otherKey).trim()) {
+        return;
+      }
+      errors[key] = String(mrnfFrontend.requiredWithout || '')
+        .replace('%1$s', fieldLabel(field))
+        .replace('%2$s', fieldLabel(other));
+    });
+    return errors;
   }
 
   function showErrors(form, errors) {
@@ -67,24 +116,86 @@
 
   function showNotice(form, message, type) {
     var notice = form.querySelector('.mrnf-form__notice');
-    notice.textContent = message || '';
-    notice.className = 'mrnf-form__notice is-' + type;
+    var text = notice.querySelector('.mrnf-form__notice-text');
+    var close = notice.querySelector('.mrnf-form__notice-close');
+    text.textContent = message || '';
+    notice.className = 'mrnf-form__notice is-' + type + (type === 'success' ? ' is-toast' : '');
     notice.hidden = false;
+    if (close) { close.setAttribute('aria-label', mrnfFrontend.close || 'Close'); }
+    if (type === 'success') {
+      window.requestAnimationFrame(function () { notice.classList.add('is-visible'); });
+      window.clearTimeout(notice.mrnfDismissTimer);
+      notice.mrnfDismissTimer = window.setTimeout(function () {
+        notice.classList.remove('is-visible');
+        window.setTimeout(function () { notice.hidden = true; }, 220);
+      }, 6500);
+      return;
+    }
     notice.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
   }
 
+  function refreshNonce(form) {
+    var url = mrnfFrontend.restUrl + form.dataset.mrnfForm + '/nonce?_=' + Date.now();
+    return window.fetch(url, {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    }).then(function (response) {
+      return response.json().then(function (data) {
+        if (!response.ok || !data.nonce) {
+          throw new Error(data.message || mrnfFrontend.network);
+        }
+        var input = form.querySelector('[name="_mrnf_nonce"]');
+        if (!input) {
+          throw new Error(mrnfFrontend.network);
+        }
+        input.value = data.nonce;
+      });
+    });
+  }
+
+  function responseData(response) {
+    return response.json().then(function (data) {
+      if (!response.ok) {
+        var error = new Error(data.message || mrnfFrontend.network);
+        error.fields = data.data && data.data.fields ? data.data.fields : {};
+        throw error;
+      }
+      return data;
+    });
+  }
+
   document.querySelectorAll('[data-mrnf-form]').forEach(function (form) {
+    var initialNotice = form.querySelector('.mrnf-form__notice');
+    var noticeClose = initialNotice.querySelector('.mrnf-form__notice-close');
+    noticeClose.addEventListener('click', function () {
+      window.clearTimeout(initialNotice.mrnfDismissTimer);
+      initialNotice.classList.remove('is-visible');
+      window.setTimeout(function () { initialNotice.hidden = true; }, 220);
+    });
+    if (initialNotice.classList.contains('is-toast') && !initialNotice.hidden) {
+      window.requestAnimationFrame(function () { initialNotice.classList.add('is-visible'); });
+      initialNotice.mrnfDismissTimer = window.setTimeout(function () { noticeClose.click(); }, 6500);
+    }
+
     updateConditions(form);
     form.addEventListener('input', function () { updateConditions(form); });
     form.addEventListener('change', function () { updateConditions(form); });
 
     form.addEventListener('submit', function (event) {
-      if (form.dataset.ajax !== '1' || typeof window.fetch !== 'function') {
+      if (typeof window.fetch !== 'function') {
         return;
       }
       event.preventDefault();
       clearErrors(form);
       updateConditions(form);
+
+      var relatedErrors = relatedRequirementErrors(form);
+      if (Object.keys(relatedErrors).length) {
+        showErrors(form, relatedErrors);
+        return;
+      }
 
       if (!form.checkValidity()) {
         form.reportValidity();
@@ -96,23 +207,24 @@
       var original = label.textContent;
       button.disabled = true;
       label.textContent = mrnfFrontend.processing;
-      var payload = new FormData(form);
 
-      window.fetch(mrnfFrontend.restUrl + form.dataset.mrnfForm + '/submit', {
-        method: 'POST',
-        body: payload,
-        credentials: 'same-origin',
-        headers: { 'Accept': 'application/json' }
-      }).then(function (response) {
-        return response.json().then(function (data) {
-          if (!response.ok) {
-            var error = new Error(data.message || mrnfFrontend.network);
-            error.fields = data.data && data.data.fields ? data.data.fields : {};
-            throw error;
-          }
-          return data;
-        });
+      refreshNonce(form).then(function () {
+        if (form.dataset.ajax !== '1') {
+          window.HTMLFormElement.prototype.submit.call(form);
+          return null;
+        }
+
+        return window.fetch(mrnfFrontend.restUrl + form.dataset.mrnfForm + '/submit', {
+          method: 'POST',
+          body: new FormData(form),
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Accept': 'application/json' }
+        }).then(responseData);
       }).then(function (data) {
+        if (!data) {
+          return;
+        }
         showNotice(form, data.message, 'success');
         form.reset();
         updateConditions(form);

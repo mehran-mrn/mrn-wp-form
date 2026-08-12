@@ -3,10 +3,12 @@
 
   var builder = document.querySelector('[data-mrnf-builder]');
   var dirty = false;
+  var i18n = mrnfAdmin.i18n || {};
+  var format = function (value, replacement) { return String(value).replace('%s', replacement).replace('%d', replacement); };
 
   document.querySelectorAll('[data-mrnf-confirm]').forEach(function (link) {
     link.addEventListener('click', function (event) {
-      if (!window.confirm('این عملیات قابل بازگشت نیست. ادامه می‌دهید؟')) {
+      if (!window.confirm(i18n.confirmAction)) {
         event.preventDefault();
       }
     });
@@ -81,8 +83,8 @@
       default: '',
       required: false,
       width: '100',
-      choices: definition.choices ? [mrnfAdmin.i18n.choice + ' ۱', mrnfAdmin.i18n.choice + ' ۲', mrnfAdmin.i18n.choice + ' ۳'] : [],
-      validation: { min: '', max: '', minLength: '', maxLength: '', pattern: '', extensions: 'jpg,jpeg,png,pdf,doc,docx', maxFileMB: 5 },
+      choices: definition.choices ? [i18n.choice1, i18n.choice2, i18n.choice3] : [],
+	      validation: { min: '', max: '', minLength: '', maxLength: '', pattern: '', extensions: 'jpg,jpeg,png,pdf,doc,docx', maxFileMB: 5, requiredWithout: '' },
       condition: { enabled: false, field: '', operator: 'equals', value: '' },
       content: ''
     };
@@ -101,45 +103,47 @@
 
   function fieldControl(field) {
     if (field.type === 'heading') {
-      return '<div class="mrnf-canvas-control">' + escapeHtml(field.content || 'عنوان یک بخش تازه') + '</div>';
+      return '<div class="mrnf-canvas-control">' + escapeHtml(field.content || i18n.newSection) + '</div>';
     }
     if (field.type === 'html') {
-      return '<div class="mrnf-canvas-control">' + escapeHtml(field.content || 'متن توضیحی یا HTML') + '</div>';
+      return '<div class="mrnf-canvas-control">' + escapeHtml(field.content || i18n.placeholderContent) + '</div>';
     }
     if (field.type === 'textarea') {
-      return '<div class="mrnf-canvas-control">' + escapeHtml(field.placeholder || 'متن بلند…') + '</div>';
+      return '<div class="mrnf-canvas-control">' + escapeHtml(field.placeholder || i18n.placeholderLong) + '</div>';
     }
     if (field.type === 'select' || field.type === 'radio' || field.type === 'checkbox') {
-      return '<div class="mrnf-canvas-control">' + escapeHtml((field.choices || []).join('  ·  ') || 'بدون گزینه') + '</div>';
+      return '<div class="mrnf-canvas-control">' + escapeHtml((field.choices || []).join('  ·  ') || i18n.noOptions) + '</div>';
     }
     if (field.type === 'file') {
-      return '<div class="mrnf-canvas-control">انتخاب فایل…</div>';
+      return '<div class="mrnf-canvas-control">' + escapeHtml(i18n.fileSelect) + '</div>';
     }
     if (field.type === 'consent') {
       return '<div class="mrnf-canvas-control">□ ' + escapeHtml(field.label) + '</div>';
     }
     if (field.type === 'hidden') {
-      return '<div class="mrnf-canvas-control">پنهان · ' + escapeHtml(field.default || 'بدون مقدار') + '</div>';
+      return '<div class="mrnf-canvas-control">' + escapeHtml(i18n.hidden) + ' · ' + escapeHtml(field.default || i18n.noValue) + '</div>';
     }
-    return '<div class="mrnf-canvas-control">' + escapeHtml(field.placeholder || field.default || 'ورودی ' + typeDefinitions[field.type].label) + '</div>';
+    return '<div class="mrnf-canvas-control">' + escapeHtml(field.placeholder || field.default || format(i18n.input, typeDefinitions[field.type].label)) + '</div>';
   }
 
   function renderCanvas() {
     if (!fields.length) {
-      canvas.innerHTML = '<div class="mrnf-canvas-empty"><span class="dashicons dashicons-plus-alt2"></span><b>فرم شما از اینجا شروع می‌شود</b><p>' + escapeHtml(mrnfAdmin.i18n.emptyCanvas) + '</p></div>';
+      canvas.innerHTML = '<div class="mrnf-canvas-empty"><span class="dashicons dashicons-plus-alt2"></span><b>' + escapeHtml(i18n.startsHere) + '</b><p>' + escapeHtml(i18n.emptyCanvas) + '</p></div>';
     } else {
-      canvas.innerHTML = fields.map(function (field) {
-        var definition = typeDefinitions[field.type] || typeDefinitions.text;
-        return '<article class="mrnf-canvas-field mrnf-canvas-field--' + escapeHtml(field.type) + (field.id === selectedId ? ' is-selected' : '') + '" style="--field-width:' + escapeHtml(field.width) + '%" draggable="true" data-field-id="' + escapeHtml(field.id) + '">' +
-          '<div class="mrnf-canvas-field__actions"><button type="button" data-field-duplicate title="تکثیر"><span class="dashicons dashicons-admin-page"></span></button><button type="button" data-field-delete title="حذف"><span class="dashicons dashicons-trash"></span></button></div>' +
-          '<div class="mrnf-canvas-field__top"><span class="dashicons dashicons-move"></span><b>' + escapeHtml(field.label) + (field.required ? ' <em>*</em>' : '') + '</b><small>' + escapeHtml(definition.label) + ' · ' + escapeHtml(field.width) + '%</small></div>' +
+	      canvas.innerHTML = fields.map(function (field) {
+	        var definition = typeDefinitions[field.type] || typeDefinitions.text;
+	        var isConditionallyRequired = field.validation && field.validation.requiredWithout;
+	        var requirementMark = field.required ? ' <em title="' + escapeHtml(i18n.alwaysRequired) + '">*</em>' : (isConditionallyRequired ? ' <em class="is-conditional" title="' + escapeHtml(i18n.conditionallyRequired) + '">↔</em>' : '');
+	        return '<article class="mrnf-canvas-field mrnf-canvas-field--' + escapeHtml(field.type) + (field.id === selectedId ? ' is-selected' : '') + '" style="--field-width:' + escapeHtml(field.width) + '%" draggable="true" data-field-id="' + escapeHtml(field.id) + '">' +
+	          '<div class="mrnf-canvas-field__actions"><button type="button" data-field-duplicate title="' + escapeHtml(i18n.duplicate) + '"><span class="dashicons dashicons-admin-page"></span></button><button type="button" data-field-delete title="' + escapeHtml(i18n.delete) + '"><span class="dashicons dashicons-trash"></span></button></div>' +
+	          '<div class="mrnf-canvas-field__top"><span class="dashicons dashicons-move"></span><b>' + escapeHtml(field.label) + requirementMark + '</b><small>' + escapeHtml(definition.label) + ' · ' + escapeHtml(field.width) + '%</small></div>' +
           fieldControl(field) +
           '</article>';
       }).join('');
     }
     var count = builder.querySelector('[data-mrnf-field-count]');
     if (count) {
-      count.textContent = fields.length + ' فیلد';
+      count.textContent = format(i18n.fieldCount, fields.length);
     }
     bindCanvasItems();
   }
@@ -149,8 +153,17 @@
       item.addEventListener('click', function (event) {
         selectedId = item.dataset.fieldId;
         if (event.target.closest('[data-field-delete]')) {
-          if (window.confirm(mrnfAdmin.i18n.deleteField)) {
-            fields = fields.filter(function (field) { return field.id !== selectedId; });
+	          if (window.confirm(mrnfAdmin.i18n.deleteField)) {
+	            var deleted = fields.find(function (field) { return field.id === selectedId; });
+	            fields = fields.filter(function (field) { return field.id !== selectedId; });
+	            fields.forEach(function (field) {
+	              if (deleted && field.validation && field.validation.requiredWithout === deleted.key) {
+	                field.validation.requiredWithout = '';
+	              }
+	              if (deleted && field.condition && field.condition.field === deleted.key) {
+	                field.condition = { enabled: false, field: '', operator: 'equals', value: '' };
+	              }
+	            });
             selectedId = fields.length ? fields[Math.max(0, fields.length - 1)].id : '';
             sync();
             render();
@@ -208,9 +221,43 @@
     return '<label class="mrnf-input"><span>' + escapeHtml(label) + '</span>' + control + (help ? '<small>' + escapeHtml(help) + '</small>' : '') + '</label>';
   }
 
-  function toggle(label, prop, checked) {
-    return '<label class="mrnf-builder-toggle"><input type="checkbox" data-field-prop="' + prop + '"' + (checked ? ' checked' : '') + '><i></i><span>' + escapeHtml(label) + '</span></label>';
-  }
+	  function toggle(label, prop, checked) {
+	    return '<label class="mrnf-builder-toggle"><input type="checkbox" data-field-prop="' + prop + '"' + (checked ? ' checked' : '') + '><i></i><span>' + escapeHtml(label) + '</span></label>';
+	  }
+
+	  function dependencyOptions(field) {
+	    return fields.filter(function (candidate) {
+	      return candidate.id !== field.id && candidate.type !== 'hidden' && typeDefinitions[candidate.type] && typeDefinitions[candidate.type].input;
+	    });
+	  }
+
+	  function requirementControl(field) {
+	    field.validation = field.validation || {};
+	    var candidates = dependencyOptions(field);
+	    var relatedKey = field.validation.requiredWithout || '';
+	    var mode = field.required ? 'always' : (relatedKey ? 'conditional' : 'optional');
+	    var name = 'mrnf-requirement-' + escapeHtml(field.id);
+	    var modes = [
+	      { value: 'optional', icon: 'dashicons-minus', label: i18n.optionalField, help: i18n.optionalFieldHelp },
+	      { value: 'always', icon: 'dashicons-yes-alt', label: i18n.alwaysRequired, help: i18n.alwaysRequiredHelp },
+	      { value: 'conditional', icon: 'dashicons-randomize', label: i18n.conditionallyRequired, help: i18n.conditionallyRequiredHelp, disabled: !candidates.length }
+	    ];
+	    var html = '<div class="mrnf-requirement"><span class="mrnf-requirement__title">' + escapeHtml(i18n.requirementMode) + '</span><div class="mrnf-requirement__modes">';
+	    html += modes.map(function (item) {
+	      return '<label class="mrnf-requirement-option' + (mode === item.value ? ' is-active' : '') + (item.disabled ? ' is-disabled' : '') + '">' +
+	        '<input type="radio" name="' + name + '" value="' + item.value + '" data-requirement-mode' + (mode === item.value ? ' checked' : '') + (item.disabled ? ' disabled' : '') + '>' +
+	        '<span class="dashicons ' + item.icon + '"></span><span><b>' + escapeHtml(item.label) + '</b><small>' + escapeHtml(item.help) + '</small></span></label>';
+	    }).join('');
+	    html += '</div>';
+	    if ('conditional' === mode && candidates.length) {
+	      html += '<div class="mrnf-requirement__relation"><span class="dashicons dashicons-arrow-down-alt"></span><label class="mrnf-input"><span>' + escapeHtml(i18n.alternativeField) + '</span><select data-required-without-field>' + candidates.map(function (candidate) {
+	        return '<option value="' + escapeHtml(candidate.key) + '"' + (candidate.key === relatedKey ? ' selected' : '') + '>' + escapeHtml(candidate.label) + '</option>';
+	      }).join('') + '</select><small>' + escapeHtml(i18n.requiredWithoutHelp) + '</small></label></div>';
+	    } else if (!candidates.length) {
+	      html += '<p class="mrnf-requirement__empty"><span class="dashicons dashicons-info-outline"></span>' + escapeHtml(i18n.addAlternativeField) + '</p>';
+	    }
+	    return html + '</div>';
+	  }
 
   function renderInspector() {
     var field = selectedField();
@@ -219,56 +266,56 @@
       return;
     }
     var html = '<div class="mrnf-inspector">';
-    html += '<section class="mrnf-inspector-section"><b>محتوا</b>';
-    html += input('برچسب', 'label', field.label);
-    html += input('کلید یکتا', 'key', field.key, 'text', null, 'برای merge tag: {field:' + field.key + '}');
+    html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.content) + '</b>';
+    html += input(i18n.fieldLabel, 'label', field.label);
+    html += input(i18n.uniqueKey, 'key', field.key, 'text', null, format(i18n.helpMergeTag, field.key));
     if (field.type === 'html' || field.type === 'heading') {
-      html += input('محتوا', 'content', field.content, 'textarea');
+      html += input(i18n.content, 'content', field.content, 'textarea');
     } else {
       if (field.type !== 'consent' && field.type !== 'hidden' && field.type !== 'file') {
         html += input('Placeholder', 'placeholder', field.placeholder);
       }
       if (field.type !== 'file') {
-        html += input('مقدار پیش‌فرض', 'default', Array.isArray(field.default) ? field.default.join(',') : field.default);
+        html += input(i18n.defaultValue, 'default', Array.isArray(field.default) ? field.default.join(',') : field.default);
       }
-      html += input('توضیح راهنما', 'description', field.description);
+      html += input(i18n.description, 'description', field.description);
     }
     html += '</section>';
-    html += '<section class="mrnf-inspector-section"><b>چیدمان</b>' + input('عرض فیلد', 'width', field.width, 'select', [
-      { value: '25', label: '۲۵٪' }, { value: '33', label: '۳۳٪' }, { value: '50', label: '۵۰٪' },
-      { value: '66', label: '۶۶٪' }, { value: '75', label: '۷۵٪' }, { value: '100', label: '۱۰۰٪' }
+    html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.layout) + '</b>' + input(i18n.fieldWidth, 'width', field.width, 'select', [
+      { value: '25', label: i18n.width25 }, { value: '33', label: i18n.width33 }, { value: '50', label: i18n.width50 },
+      { value: '66', label: i18n.width66 }, { value: '75', label: i18n.width75 }, { value: '100', label: i18n.width100 }
     ]) + '</section>';
-    if (typeDefinitions[field.type] && typeDefinitions[field.type].input) {
-      html += '<section class="mrnf-inspector-section"><b>اعتبارسنجی</b>' + toggle('تکمیل این فیلد الزامی است', 'required', field.required);
+	    if (typeDefinitions[field.type] && typeDefinitions[field.type].input) {
+	      html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.validation) + '</b>' + requirementControl(field);
       if (field.type === 'text' || field.type === 'textarea' || field.type === 'tel') {
-        html += input('حداقل نویسه', 'validation.minLength', field.validation.minLength, 'number') + input('حداکثر نویسه', 'validation.maxLength', field.validation.maxLength, 'number') + input('الگوی RegEx', 'validation.pattern', field.validation.pattern);
+        html += input(i18n.minLength, 'validation.minLength', field.validation.minLength, 'number') + input(i18n.maxLength, 'validation.maxLength', field.validation.maxLength, 'number') + input(i18n.pattern, 'validation.pattern', field.validation.pattern);
       }
       if (field.type === 'number') {
-        html += input('کمینه', 'validation.min', field.validation.min, 'number') + input('بیشینه', 'validation.max', field.validation.max, 'number');
+        html += input(i18n.minimum, 'validation.min', field.validation.min, 'number') + input(i18n.maximum, 'validation.max', field.validation.max, 'number');
       }
       if (field.type === 'file') {
-        html += input('پسوندهای مجاز', 'validation.extensions', field.validation.extensions) + input('حداکثر حجم (MB)', 'validation.maxFileMB', field.validation.maxFileMB, 'number');
+        html += input(i18n.allowedExtensions, 'validation.extensions', field.validation.extensions) + input(i18n.maxFileSize, 'validation.maxFileMB', field.validation.maxFileMB, 'number');
       }
       html += '</section>';
     }
     if (typeDefinitions[field.type] && typeDefinitions[field.type].choices) {
-      html += '<section class="mrnf-inspector-section"><b>گزینه‌ها</b><div class="mrnf-choice-rows">' + (field.choices || []).map(function (choice, index) {
+      html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.choices) + '</b><div class="mrnf-choice-rows">' + (field.choices || []).map(function (choice, index) {
         return '<div class="mrnf-choice-row"><input value="' + escapeHtml(choice) + '" data-choice-index="' + index + '"><button type="button" data-delete-choice="' + index + '">×</button></div>';
-      }).join('') + '</div><button type="button" class="mrnf-add-choice" data-add-choice>+ افزودن گزینه</button></section>';
+      }).join('') + '</div><button type="button" class="mrnf-add-choice" data-add-choice>+ ' + escapeHtml(i18n.addChoice) + '</button></section>';
     }
     if (field.type !== 'hidden') {
-      var sourceOptions = [{ value: '', label: 'انتخاب فیلد…' }].concat(fields.filter(function (candidate) {
+      var sourceOptions = [{ value: '', label: i18n.selectFieldOption }].concat(fields.filter(function (candidate) {
         return candidate.id !== field.id && typeDefinitions[candidate.type] && typeDefinitions[candidate.type].input;
       }).map(function (candidate) { return { value: candidate.key, label: candidate.label }; }));
-      html += '<section class="mrnf-inspector-section"><b>منطق شرطی</b>' + toggle('نمایش شرطی این فیلد', 'condition.enabled', field.condition.enabled);
+      html += '<section class="mrnf-inspector-section"><b>' + escapeHtml(i18n.conditionalLogic) + '</b>' + toggle(i18n.showConditionally, 'condition.enabled', field.condition.enabled);
       if (field.condition.enabled) {
-        html += input('فیلد مبنا', 'condition.field', field.condition.field, 'select', sourceOptions);
-        html += input('شرط', 'condition.operator', field.condition.operator, 'select', [
-          { value: 'equals', label: 'برابر باشد با' }, { value: 'not_equals', label: 'برابر نباشد با' },
-          { value: 'contains', label: 'شامل باشد' }, { value: 'not_empty', label: 'خالی نباشد' }, { value: 'empty', label: 'خالی باشد' }
+        html += input(i18n.sourceField, 'condition.field', field.condition.field, 'select', sourceOptions);
+        html += input(i18n.condition, 'condition.operator', field.condition.operator, 'select', [
+          { value: 'equals', label: i18n.equals }, { value: 'not_equals', label: i18n.notEquals },
+          { value: 'contains', label: i18n.contains }, { value: 'not_empty', label: i18n.notEmpty }, { value: 'empty', label: i18n.empty }
         ]);
         if (field.condition.operator !== 'empty' && field.condition.operator !== 'not_empty') {
-          html += input('مقدار مقایسه', 'condition.value', field.condition.value);
+          html += input(i18n.compareValue, 'condition.value', field.condition.value);
         }
       }
       html += '</section>';
@@ -288,24 +335,54 @@
     target[parts[parts.length - 1]] = value;
   }
 
-  function bindInspector() {
-    var field = selectedField();
+	  function bindInspector() {
+	    var field = selectedField();
     inspector.querySelectorAll('[data-field-prop]').forEach(function (control) {
       var handler = function () {
         var value = control.type === 'checkbox' ? control.checked : control.value;
-        if (control.dataset.fieldProp === 'key') {
-          value = slugify(value);
-          control.value = value;
-        }
-        setNested(field, control.dataset.fieldProp, value);
+	        var previousKey = control.dataset.fieldProp === 'key' ? field.key : '';
+	        if (control.dataset.fieldProp === 'key') {
+	          value = slugify(value);
+	          control.value = value;
+	        }
+	        setNested(field, control.dataset.fieldProp, value);
+	        if (previousKey && previousKey !== value) {
+	          fields.forEach(function (candidate) {
+	            if (candidate.validation && candidate.validation.requiredWithout === previousKey) {
+	              candidate.validation.requiredWithout = value;
+	            }
+	            if (candidate.condition && candidate.condition.field === previousKey) {
+	              candidate.condition.field = value;
+	            }
+	          });
+	        }
         sync();
         if (control.dataset.fieldProp === 'condition.enabled') {
           renderInspector();
         }
         renderCanvas();
       };
-      control.addEventListener(control.type === 'text' || control.tagName === 'TEXTAREA' ? 'input' : 'change', handler);
-    });
+	      control.addEventListener(control.type === 'text' || control.tagName === 'TEXTAREA' ? 'input' : 'change', handler);
+	    });
+	    inspector.querySelectorAll('[data-requirement-mode]').forEach(function (control) {
+	      control.addEventListener('change', function () {
+	        var mode = control.value;
+	        var candidates = dependencyOptions(field);
+	        field.required = mode === 'always';
+	        field.validation = field.validation || {};
+	        field.validation.requiredWithout = mode === 'conditional' && candidates.length ? candidates[0].key : '';
+	        sync();
+	        render();
+	      });
+	    });
+	    var requiredWithoutField = inspector.querySelector('[data-required-without-field]');
+	    if (requiredWithoutField) {
+	      requiredWithoutField.addEventListener('change', function () {
+	        field.validation.requiredWithout = requiredWithoutField.value;
+	        sync();
+	        renderCanvas();
+	      });
+	    }
     inspector.querySelectorAll('[data-choice-index]').forEach(function (control) {
       control.addEventListener('input', function () {
         field.choices[Number(control.dataset.choiceIndex)] = control.value;
@@ -408,7 +485,8 @@
           '<input type="' + (['email', 'tel', 'number', 'date', 'file'].indexOf(field.type) >= 0 ? field.type : 'text') + '" placeholder="' + escapeHtml(field.placeholder) + '">';
         return '<label style="flex:1 1 calc(' + escapeHtml(field.width) + '% - 16px);max-width:calc(' + escapeHtml(field.width) + '% - 8px)"><b>' + escapeHtml(field.label) + (field.required ? ' *' : '') + '</b>' + control + '<small>' + escapeHtml(field.description) + '</small></label>';
       }).join('');
-      var doc = '<!doctype html><html dir="' + (settings.direction === 'ltr' ? 'ltr' : 'rtl') + '"><head><meta charset="utf-8"><style>body{background:#f4f1ea;padding:50px;font-family:Tahoma;color:' + escapeHtml(settings.textColor) + '}.form{max-width:820px;margin:auto;background:' + escapeHtml(settings.backgroundColor) + ';border-radius:' + Number(settings.borderRadius) + 'px;padding:32px;box-shadow:0 16px 50px #173b3d14}.form h2{color:' + escapeHtml(settings.primaryColor) + ';margin-top:0}.grid{display:flex;flex-wrap:wrap;gap:' + Number(settings.layoutGap) + 'px}label{display:grid;gap:7px;font-size:13px}input,textarea{border:1px solid #d8d9d4;border-radius:' + Number(settings.borderRadius) + 'px;padding:12px;font:inherit}small{color:#77827f}button{margin-top:20px;background:' + escapeHtml(settings.primaryColor) + ';color:#fff;border:0;border-radius:' + Number(settings.borderRadius) + 'px;padding:12px 25px;font:inherit;font-weight:bold}</style></head><body><div class="form"><h2>' + escapeHtml(title) + '</h2><p>' + escapeHtml(description) + '</p><div class="grid">' + controls + '</div><button>' + escapeHtml(settings.submitLabel) + '</button></div></body></html>';
+      var previewDirection = settings.direction === 'auto' ? mrnfAdmin.direction : settings.direction;
+      var doc = '<!doctype html><html dir="' + previewDirection + '"><head><meta charset="utf-8"><style>body{background:#f4f1ea;padding:50px;font-family:Tahoma;color:' + escapeHtml(settings.textColor) + '}.form{max-width:820px;margin:auto;background:' + escapeHtml(settings.backgroundColor) + ';border-radius:' + Number(settings.borderRadius) + 'px;padding:32px;box-shadow:0 16px 50px #173b3d14}.form h2{color:' + escapeHtml(settings.primaryColor) + ';margin-top:0}.grid{display:flex;flex-wrap:wrap;gap:' + Number(settings.layoutGap) + 'px}label{display:grid;gap:7px;font-size:13px}input,textarea{border:1px solid #d8d9d4;border-radius:' + Number(settings.borderRadius) + 'px;padding:12px;font:inherit}small{color:#77827f}button{margin-top:20px;background:' + escapeHtml(settings.primaryColor) + ';color:#fff;border:0;border-radius:' + Number(settings.borderRadius) + 'px;padding:12px 25px;font:inherit;font-weight:bold}</style></head><body><div class="form"><h2>' + escapeHtml(title) + '</h2><p>' + escapeHtml(description) + '</p><div class="grid">' + controls + '</div><button>' + escapeHtml(settings.submitLabel) + '</button></div></body></html>';
       previewModal.querySelector('iframe').srcdoc = doc;
       previewModal.hidden = false;
     });
