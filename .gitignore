@@ -1,4 +1,7 @@
 /vendor/
+__pycache__/
+*.pyc
+/docs/ai/
 /.phpcs-cache
 /.phpunit.result.cache
 *.zip

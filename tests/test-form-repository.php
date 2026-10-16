@@ -46,7 +46,7 @@ $wpdb = new class() {
 	}
 
 	public function get_row( array $prepared ): ?array {
-		$id = (int) ( $prepared['args'][0] ?? 0 );
+		$id = (int) ( $prepared['args'][1] ?? 0 );
 		return $this->rows[ $id ] ?? null;
 	}
 

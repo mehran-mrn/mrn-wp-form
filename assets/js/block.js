@@ -6,11 +6,12 @@
   var Placeholder = components.Placeholder;
   var i18n = (window.mrnfBlock && mrnfBlock.i18n) || {};
   var options = [{ value: '0', label: i18n.selectForm }].concat((window.mrnfBlock && mrnfBlock.forms) || []);
+  var logo = el('img', { src: (window.mrnfBlock && mrnfBlock.logoUrl) || '', alt: '', width: 20, height: 20 });
 
   blocks.registerBlockType('mrn/form', {
     apiVersion: 3,
-    title: 'MRN Form',
-    icon: 'feedback',
+    title: i18n.title || 'MRN Forms',
+    icon: logo,
     category: 'widgets',
     attributes: { formId: { type: 'integer', default: 0 } },
     edit: function (props) {
@@ -23,7 +24,7 @@
       var selected = options.find(function (item) { return Number(item.value) === props.attributes.formId; });
       return el('div', {},
         el(InspectorControls, {}, el('div', { style: { padding: '16px' } }, selector)),
-        el(Placeholder, { icon: 'feedback', label: 'MRN Form' },
+        el(Placeholder, { icon: logo, label: i18n.title || 'MRN Forms' },
           props.attributes.formId ? el('p', {}, i18n.selectedForm + ' ', el('strong', {}, selected ? selected.label : '#' + props.attributes.formId)) : selector
         )
       );

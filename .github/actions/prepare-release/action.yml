@@ -1,0 +1,57 @@
+name: Prepare MRN Forms release
+description: Test the plugin and prepare the runtime package.
+inputs:
+  tag:
+    description: Release tag, optionally prefixed with v.
+    required: false
+    default: ''
+outputs:
+  version:
+    description: Validated plugin version.
+    value: ${{ steps.package.outputs.version }}
+  build_dir:
+    description: Directory containing only installable files.
+    value: ${{ steps.package.outputs.build_dir }}
+runs:
+  using: composite
+  steps:
+    - name: Set up PHP
+      uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
+      with:
+        php-version: '8.1'
+        coverage: none
+    - name: Install development dependencies and check coding standards
+      shell: bash
+      run: |
+        composer install --no-interaction --prefer-dist --no-progress
+        composer lint
+    - name: Check PHP syntax and run tests
+      shell: bash
+      run: |
+        set -euo pipefail
+        find includes tests -name '*.php' -print0 | xargs -0 -n1 php -l
+        php -l mrn-form.php
+        php -l uninstall.php
+        for test in tests/test-*.php; do php "$test"; done
+    - name: Check JavaScript and tracking behavior
+      shell: bash
+      run: |
+        set -euo pipefail
+        for script in assets/js/*.js; do node --check "$script"; done
+        node tests/test-tracking.js
+    - name: Test release validation
+      shell: bash
+      run: python3 tests/test-release.py
+    - name: Build installable ZIP
+      shell: pwsh
+      run: ./tools/package.ps1 -Destination "$env:RUNNER_TEMP/mrn-forms.zip"
+    - name: Validate and extract release package
+      id: package
+      shell: bash
+      env:
+        RELEASE_TAG: ${{ inputs.tag }}
+      run: |
+        python3 tools/prepare-release.py \
+          --tag "$RELEASE_TAG" \
+          --package "$RUNNER_TEMP/mrn-forms.zip" \
+          --output "$RUNNER_TEMP/mrn-forms-release"

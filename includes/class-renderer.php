@@ -30,7 +30,7 @@ final class Renderer {
 	public function render( int|string $identifier, array $args = array() ): string {
 		$form = $this->forms->find( $identifier );
 		if ( ! $form || ( 'published' !== $form['status'] && ! current_user_can( 'manage_options' ) ) ) {
-			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'فرم پیدا نشد یا هنوز منتشر نشده است.', 'mrn-form' ) . '</p>' : '';
+			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'فرم پیدا نشد یا هنوز منتشر نشده است.', 'mrn-forms' ) . '</p>' : '';
 		}
 
 		wp_enqueue_style( 'mrnf-frontend', MRNF_URL . 'assets/css/frontend.css', array(), MRNF_VERSION );
@@ -40,11 +40,11 @@ final class Renderer {
 			'mrnfFrontend',
 			array(
 				'restUrl'         => esc_url_raw( rest_url( 'mrn-form/v1/forms/' ) ),
-				'processing'      => __( 'در حال ارسال…', 'mrn-form' ),
-				'network'         => __( 'ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', 'mrn-form' ),
-				'close'           => __( 'بستن', 'mrn-form' ),
+				'processing'      => __( 'در حال ارسال…', 'mrn-forms' ),
+				'network'         => __( 'ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', 'mrn-forms' ),
+				'close'           => __( 'بستن', 'mrn-forms' ),
 				/* translators: 1: field label, 2: related field label. */
-				'requiredWithout' => __( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-form' ),
+				'requiredWithout' => __( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-forms' ),
 			)
 		);
 
@@ -75,7 +75,8 @@ final class Renderer {
 				<input type="hidden" name="form_id" value="<?php echo esc_attr( (string) $form['id'] ); ?>">
 				<input type="hidden" name="_mrnf_nonce" value="<?php echo esc_attr( wp_create_nonce( 'mrnf_submit_' . $form['id'] ) ); ?>">
 				<input type="hidden" name="_mrnf_loaded_at" value="<?php echo esc_attr( (string) time() ); ?>">
-				<label class="mrnf-honeypot" aria-hidden="true"><?php esc_html_e( 'Company', 'mrn-form' ); ?><input type="text" name="_mrnf_company" value="" tabindex="-1" autocomplete="off"></label>
+				<input type="hidden" name="_mrnf_attribution" value="">
+				<label class="mrnf-honeypot" aria-hidden="true"><?php esc_html_e( 'Company', 'mrn-forms' ); ?><input type="text" name="_mrnf_company" value="" tabindex="-1" autocomplete="off"></label>
 				<?php if ( ! empty( $settings['showTitle'] ) ) : ?>
 					<h2 class="mrnf-form__title"><?php echo esc_html( $form['title'] ); ?></h2>
 				<?php endif; ?>
@@ -86,7 +87,7 @@ final class Renderer {
 				$query_notice = sanitize_text_field( wp_unslash( $_GET['mrnf_success'] ?? $_GET['mrnf_error'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only classic submission feedback.
 				$query_type   = isset( $_GET['mrnf_error'] ) ? 'error' : 'success'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				?>
-				<div class="mrnf-form__notice <?php echo $query_notice ? 'is-' . esc_attr( $query_type ) . ( 'success' === $query_type ? ' is-toast' : '' ) : ''; ?>" role="status" aria-live="polite" <?php echo $query_notice ? '' : 'hidden'; ?>><span class="mrnf-form__notice-text"><?php echo esc_html( $query_notice ); ?></span><button class="mrnf-form__notice-close" type="button" aria-label="<?php esc_attr_e( 'بستن', 'mrn-form' ); ?>">&times;</button></div>
+				<div class="mrnf-form__notice <?php echo $query_notice ? 'is-' . esc_attr( $query_type ) . ( 'success' === $query_type ? ' is-toast' : '' ) : ''; ?>" role="status" aria-live="polite" <?php echo $query_notice ? '' : 'hidden'; ?>><span class="mrnf-form__notice-text"><?php echo esc_html( $query_notice ); ?></span><button class="mrnf-form__notice-close" type="button" aria-label="<?php esc_attr_e( 'بستن', 'mrn-forms' ); ?>">&times;</button></div>
 				<div class="mrnf-form__grid">
 					<?php foreach ( $form['fields'] as $field ) : ?>
 						<?php echo $this->field( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Field method escapes values. ?>
@@ -132,7 +133,7 @@ final class Renderer {
 				<?php
 				if ( $required || $required_without ) :
 					?>
-					<b class="mrnf-field__required" aria-label="<?php esc_attr_e( 'الزامی', 'mrn-form' ); ?>"<?php echo $required_without && ! $required ? ' data-mrnf-required-indicator' : ''; ?>>*</b><?php endif; ?></label>
+					<b class="mrnf-field__required" aria-label="<?php esc_attr_e( 'الزامی', 'mrn-forms' ); ?>"<?php echo $required_without && ! $required ? ' data-mrnf-required-indicator' : ''; ?>>*</b><?php endif; ?></label>
 			<?php endif; ?>
 			<?php $this->control( $field, $id ); ?>
 			<?php
@@ -175,7 +176,7 @@ final class Renderer {
 			return;
 		}
 		if ( 'select' === $type ) {
-			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $attrs . '><option value="">' . esc_html( $field['placeholder'] ? $field['placeholder'] : __( 'انتخاب کنید', 'mrn-form' ) ) . '</option>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $attrs . '><option value="">' . esc_html( $field['placeholder'] ? $field['placeholder'] : __( 'انتخاب کنید', 'mrn-forms' ) ) . '</option>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			foreach ( $field['choices'] as $choice ) {
 				echo '<option value="' . esc_attr( $choice ) . '"' . selected( $field['default'], $choice, false ) . '>' . esc_html( $choice ) . '</option>';
 			}

@@ -36,7 +36,7 @@ final class Validator {
 			if ( ! empty( $field['required'] ) && $this->is_empty( $value ) ) {
 				$errors[ $key ] = sprintf(
 					/* translators: %s: field label. */
-					__( 'تکمیل فیلد «%s» الزامی است.', 'mrn-form' ),
+					__( 'تکمیل فیلد «%s» الزامی است.', 'mrn-forms' ),
 					$field['label']
 				);
 				continue;
@@ -95,7 +95,7 @@ final class Validator {
 			if ( ! isset( $errors[ $key ] ) ) {
 				$errors[ $key ] = sprintf(
 					/* translators: 1: field label, 2: related field label. */
-					__( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-form' ),
+					__( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-forms' ),
 					$field['label'],
 					$other['label']
 				);
@@ -183,42 +183,42 @@ final class Validator {
 		$text  = is_array( $value ) ? implode( ',', $value ) : (string) $value;
 
 		if ( 'email' === $type && ! is_email( $value ) ) {
-			return __( 'نشانی ایمیل معتبر نیست.', 'mrn-form' );
+			return __( 'نشانی ایمیل معتبر نیست.', 'mrn-forms' );
 		}
 		if ( 'number' === $type && ! is_numeric( $value ) ) {
-			return __( 'لطفاً یک عدد معتبر وارد کنید.', 'mrn-form' );
+			return __( 'لطفاً یک عدد معتبر وارد کنید.', 'mrn-forms' );
 		}
 		if ( 'date' === $type && ! $this->valid_date( $text ) ) {
-			return __( 'تاریخ واردشده معتبر نیست.', 'mrn-form' );
+			return __( 'تاریخ واردشده معتبر نیست.', 'mrn-forms' );
 		}
 		if ( in_array( $type, array( 'select', 'radio', 'checkbox' ), true ) ) {
 			$choices = (array) ( $field['choices'] ?? array() );
 			foreach ( (array) $value as $item ) {
 				if ( ! in_array( $item, $choices, true ) ) {
-					return __( 'گزینه انتخاب‌شده معتبر نیست.', 'mrn-form' );
+					return __( 'گزینه انتخاب‌شده معتبر نیست.', 'mrn-forms' );
 				}
 			}
 		}
 		if ( '' !== (string) ( $rules['minLength'] ?? '' ) && mb_strlen( $text ) < (int) $rules['minLength'] ) {
 			/* translators: %d: minimum character count. */
-			return sprintf( __( 'حداقل %d نویسه وارد کنید.', 'mrn-form' ), (int) $rules['minLength'] );
+			return sprintf( __( 'حداقل %d نویسه وارد کنید.', 'mrn-forms' ), (int) $rules['minLength'] );
 		}
 		if ( '' !== (string) ( $rules['maxLength'] ?? '' ) && mb_strlen( $text ) > (int) $rules['maxLength'] ) {
 			/* translators: %d: maximum character count. */
-			return sprintf( __( 'حداکثر %d نویسه مجاز است.', 'mrn-form' ), (int) $rules['maxLength'] );
+			return sprintf( __( 'حداکثر %d نویسه مجاز است.', 'mrn-forms' ), (int) $rules['maxLength'] );
 		}
 		if ( 'number' === $type && '' !== (string) ( $rules['min'] ?? '' ) && (float) $value < (float) $rules['min'] ) {
 			/* translators: %s: minimum numeric value. */
-			return sprintf( __( 'مقدار باید حداقل %s باشد.', 'mrn-form' ), $rules['min'] );
+			return sprintf( __( 'مقدار باید حداقل %s باشد.', 'mrn-forms' ), $rules['min'] );
 		}
 		if ( 'number' === $type && '' !== (string) ( $rules['max'] ?? '' ) && (float) $value > (float) $rules['max'] ) {
 			/* translators: %s: maximum numeric value. */
-			return sprintf( __( 'مقدار باید حداکثر %s باشد.', 'mrn-form' ), $rules['max'] );
+			return sprintf( __( 'مقدار باید حداکثر %s باشد.', 'mrn-forms' ), $rules['max'] );
 		}
 		if ( ! empty( $rules['pattern'] ) ) {
 			$pattern = '~' . str_replace( '~', '\~', (string) $rules['pattern'] ) . '~u';
 			if ( false === @preg_match( $pattern, $text ) || ! preg_match( $pattern, $text ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- User-configured pattern is validated safely.
-				return __( 'مقدار واردشده با الگوی مورد انتظار مطابقت ندارد.', 'mrn-form' );
+				return __( 'مقدار واردشده با الگوی مورد انتظار مطابقت ندارد.', 'mrn-forms' );
 			}
 		}
 		return '';

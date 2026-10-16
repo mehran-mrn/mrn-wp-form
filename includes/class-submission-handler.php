@@ -39,20 +39,20 @@ final class Submission_Handler {
 	public function submit( int $form_id, array $request, array $files = array() ): array|\WP_Error {
 		$form = $this->forms->find( $form_id );
 		if ( ! $form || 'published' !== $form['status'] ) {
-			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-form' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-forms' ), array( 'status' => 404 ) );
 		}
 		if ( ! wp_verify_nonce( sanitize_text_field( $request['_mrnf_nonce'] ?? '' ), 'mrnf_submit_' . $form_id ) ) {
-			return new \WP_Error( 'mrnf_invalid_nonce', __( 'نشست فرم منقضی شده است؛ صفحه را تازه‌سازی کنید.', 'mrn-form' ), array( 'status' => 403 ) );
+			return new \WP_Error( 'mrnf_invalid_nonce', __( 'نشست فرم منقضی شده است؛ صفحه را تازه‌سازی کنید.', 'mrn-forms' ), array( 'status' => 403 ) );
 		}
 		if ( ! empty( $request['_mrnf_company'] ) ) {
-			return new \WP_Error( 'mrnf_spam', __( 'ارسال شناسایی نشد.', 'mrn-form' ), array( 'status' => 400 ) );
+			return new \WP_Error( 'mrnf_spam', __( 'ارسال شناسایی نشد.', 'mrn-forms' ), array( 'status' => 400 ) );
 		}
 		$loaded_at = absint( $request['_mrnf_loaded_at'] ?? 0 );
 		if ( $loaded_at && time() - $loaded_at < 2 ) {
-			return new \WP_Error( 'mrnf_too_fast', __( 'لطفاً پس از تکمیل فرم دوباره تلاش کنید.', 'mrn-form' ), array( 'status' => 429 ) );
+			return new \WP_Error( 'mrnf_too_fast', __( 'لطفاً پس از تکمیل فرم دوباره تلاش کنید.', 'mrn-forms' ), array( 'status' => 429 ) );
 		}
 		if ( ! $this->within_rate_limit( $form_id ) ) {
-			return new \WP_Error( 'mrnf_rate_limit', __( 'تعداد تلاش‌ها بیش از حد مجاز است؛ چند دقیقه دیگر دوباره امتحان کنید.', 'mrn-form' ), array( 'status' => 429 ) );
+			return new \WP_Error( 'mrnf_rate_limit', __( 'تعداد تلاش‌ها بیش از حد مجاز است؛ چند دقیقه دیگر دوباره امتحان کنید.', 'mrn-forms' ), array( 'status' => 429 ) );
 		}
 
 		$raw    = isset( $request['mrnf'] ) && is_array( $request['mrnf'] ) ? wp_unslash( $request['mrnf'] ) : array();
@@ -69,10 +69,11 @@ final class Submission_Handler {
 			);
 		}
 
-		$values   = apply_filters( 'mrnf_submission_values', $result['values'], $form );
-		$entry_id = 0;
+		$values      = apply_filters( 'mrnf_submission_values', $result['values'], $form );
+		$attribution = Settings::get( 'collect_attribution', false ) ? Attribution::from_request( $request ) : array();
+		$entry_id    = 0;
 		if ( ! empty( $form['settings']['storeEntries'] ) ) {
-			$entry_id = $this->entries->create( $form_id, $values );
+			$entry_id = $this->entries->create( $form_id, $values, $attribution );
 			if ( is_wp_error( $entry_id ) ) {
 				return $entry_id;
 			}
@@ -82,12 +83,28 @@ final class Submission_Handler {
 		$email_results = $this->notifications->send( $form, $values, (int) $entry_id );
 		do_action( 'mrnf_after_submission', $entry_id, $form, $values, $email_results );
 
-		return array(
+		$response = array(
 			'success'  => true,
 			'entryId'  => (int) $entry_id,
 			'message'  => $form['settings']['successMessage'],
 			'redirect' => $form['settings']['redirectUrl'],
 		);
+
+		/**
+		 * Let integrations send one submission to its own next step, such as payment.
+		 *
+		 * @param array<string, mixed> $response Response for AJAX and classic posts.
+		 * @param array<string, mixed> $form     Form definition.
+		 * @param int                  $entry_id Stored entry ID, or 0.
+		 * @param array<string, mixed> $values   Validated values.
+		 */
+		$filtered = apply_filters( 'mrnf_submission_response', $response, $form, (int) $entry_id, $values );
+		if ( is_array( $filtered ) ) {
+			$response['message']  = (string) ( $filtered['message'] ?? $response['message'] );
+			$response['redirect'] = esc_url_raw( (string) ( $filtered['redirect'] ?? $response['redirect'] ) );
+		}
+
+		return $response;
 	}
 
 	/**
@@ -137,7 +154,7 @@ final class Submission_Handler {
 			if ( empty( $file['name'] ) ) {
 				if ( ! empty( $field['required'] ) ) {
 					/* translators: %s: upload field label. */
-					$errors[ $key ] = sprintf( __( 'بارگذاری «%s» الزامی است.', 'mrn-form' ), $field['label'] );
+					$errors[ $key ] = sprintf( __( 'بارگذاری «%s» الزامی است.', 'mrn-forms' ), $field['label'] );
 				}
 				continue;
 			}
@@ -145,12 +162,12 @@ final class Submission_Handler {
 			$extensions = array_filter( array_map( 'sanitize_key', explode( ',', $rules['extensions'] ?? '' ) ) );
 			$extension  = strtolower( pathinfo( sanitize_file_name( $file['name'] ), PATHINFO_EXTENSION ) );
 			if ( ! in_array( $extension, $extensions, true ) ) {
-				$errors[ $key ] = __( 'نوع فایل مجاز نیست.', 'mrn-form' );
+				$errors[ $key ] = __( 'نوع فایل مجاز نیست.', 'mrn-forms' );
 				continue;
 			}
 			if ( (int) $file['size'] > (int) ( $rules['maxFileMB'] ?? 5 ) * MB_IN_BYTES ) {
 				/* translators: %d: maximum file size in megabytes. */
-				$errors[ $key ] = sprintf( __( 'حجم فایل نباید بیشتر از %d مگابایت باشد.', 'mrn-form' ), (int) $rules['maxFileMB'] );
+				$errors[ $key ] = sprintf( __( 'حجم فایل نباید بیشتر از %d مگابایت باشد.', 'mrn-forms' ), (int) $rules['maxFileMB'] );
 				continue;
 			}
 			$pending[] = array(
@@ -185,7 +202,7 @@ final class Submission_Handler {
 				$upload['file']
 			);
 			if ( is_wp_error( $attachment_id ) ) {
-				$errors[ $key ] = __( 'ذخیره فایل ناموفق بود.', 'mrn-form' );
+				$errors[ $key ] = __( 'ذخیره فایل ناموفق بود.', 'mrn-forms' );
 				continue;
 			}
 			wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );

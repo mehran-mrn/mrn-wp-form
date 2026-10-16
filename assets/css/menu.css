@@ -1,0 +1,12 @@
+#adminmenu #toplevel_page_mrn-form .wp-menu-image img { display: none; }
+#adminmenu #toplevel_page_mrn-form .wp-menu-image::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 7px auto;
+  background-color: currentColor;
+  -webkit-mask: url("../images/logo-menu.png") center / contain no-repeat;
+  mask: url("../images/logo-menu.png") center / contain no-repeat;
+}

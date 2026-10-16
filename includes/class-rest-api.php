@@ -74,7 +74,7 @@ final class REST_API {
 	public function nonce( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
 		$form = $this->forms->find( absint( $request['id'] ) );
 		if ( ! $form || 'published' !== $form['status'] ) {
-			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-form' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-forms' ), array( 'status' => 404 ) );
 		}
 
 		$response = rest_ensure_response(
