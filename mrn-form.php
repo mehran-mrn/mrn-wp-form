@@ -1,24 +1,24 @@
 <?php
 /**
- * Plugin Name:       MRN Form
- * Plugin URI:        https://github.com/mehran-mrn/mrn-wp-form
- * Description:       فرم‌ساز سبک و حرفه‌ای MRN با مدیریت ارسال‌ها، منطق شرطی و اعلان‌های ایمیلی زیبا.
- * Version:           1.2.0
+ * Plugin Name:       MRN Forms
+ * Plugin URI:        https://mrnwp.ir/mrnforms
+ * Description:       Lightweight bilingual form builder with drag and drop, conditional logic, entries, and email notifications.
+ * Version:           1.4.3
  * Requires at least: 6.6
  * Requires PHP:      8.1
  * Author:            Mehran Marandi
  * Author URI:        https://mehranmarandi.ir
- * Text Domain:       mrn-form
- * Domain Path:       /languages
+ * Text Domain:       mrn-forms
  * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package MRN_Form
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MRNF_VERSION', '1.2.0' );
-define( 'MRNF_DB_VERSION', '1.0.0' );
+define( 'MRNF_VERSION', '1.4.3' );
+define( 'MRNF_DB_VERSION', '1.1.0' );
 define( 'MRNF_FILE', __FILE__ );
 define( 'MRNF_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MRNF_URL', plugin_dir_url( __FILE__ ) );

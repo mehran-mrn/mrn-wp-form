@@ -29,6 +29,8 @@ final class Settings {
 			'primary_color'       => '#0b5e62',
 			'accent_color'        => '#d9a04d',
 			'email_logo'          => '',
+			'collect_attribution' => false,
+			'analytics_events'    => false,
 			'delete_on_uninstall' => false,
 			'rate_limit'          => 5,
 		);
@@ -71,6 +73,8 @@ final class Settings {
 			'primary_color'       => sanitize_hex_color( $input['primary_color'] ?? '' ) ? sanitize_hex_color( $input['primary_color'] ) : $defaults['primary_color'],
 			'accent_color'        => sanitize_hex_color( $input['accent_color'] ?? '' ) ? sanitize_hex_color( $input['accent_color'] ) : $defaults['accent_color'],
 			'email_logo'          => esc_url_raw( $input['email_logo'] ?? '' ),
+			'collect_attribution' => ! empty( $input['collect_attribution'] ),
+			'analytics_events'    => ! empty( $input['analytics_events'] ),
 			'delete_on_uninstall' => ! empty( $input['delete_on_uninstall'] ),
 			'rate_limit'          => max( 1, min( 50, absint( $input['rate_limit'] ?? $defaults['rate_limit'] ) ) ),
 		);

@@ -23,9 +23,9 @@ final class Form_Repository {
 		global $wpdb;
 		$table = Database::table( 'forms' );
 		if ( is_numeric( $identifier ) ) {
-			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", absint( $identifier ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', $table, absint( $identifier ) ), ARRAY_A );
 		} else {
-			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE slug = %s", sanitize_title( $identifier ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE slug = %s', $table, sanitize_title( $identifier ) ), ARRAY_A );
 		}
 		return $row ? $this->hydrate( $row ) : null;
 	}
@@ -48,22 +48,21 @@ final class Form_Repository {
 				'offset' => 0,
 			)
 		);
-		$where  = array( '1=1' );
-		$params = array();
-
-		if ( $args['status'] ) {
-			$where[]  = 'status = %s';
-			$params[] = sanitize_key( $args['status'] );
-		}
-		if ( $args['search'] ) {
-			$where[]  = 'title LIKE %s';
-			$params[] = '%' . $wpdb->esc_like( sanitize_text_field( $args['search'] ) ) . '%';
-		}
-
-		$sql      = "SELECT * FROM {$table} WHERE " . implode( ' AND ', $where ) . ' ORDER BY updated_at DESC LIMIT %d OFFSET %d'; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$params[] = max( 1, min( 500, absint( $args['limit'] ) ) );
-		$params[] = absint( $args['offset'] );
-		$rows     = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$status = sanitize_key( $args['status'] );
+		$search = sanitize_text_field( $args['search'] );
+		$rows   = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM %i WHERE (%s = '' OR status = %s) AND (%s = '' OR title LIKE %s) ORDER BY updated_at DESC LIMIT %d OFFSET %d",
+				$table,
+				$status,
+				$status,
+				$search,
+				'%' . $wpdb->esc_like( $search ) . '%',
+				max( 1, min( 500, absint( $args['limit'] ) ) ),
+				absint( $args['offset'] )
+			),
+			ARRAY_A
+		);
 		return array_map( array( $this, 'hydrate' ), $rows ? $rows : array() );
 	}
 
@@ -79,7 +78,7 @@ final class Form_Repository {
 		$id    = absint( $data['id'] ?? 0 );
 		$title = sanitize_text_field( $data['title'] ?? '' );
 		if ( '' === $title ) {
-			return new \WP_Error( 'mrnf_title_required', __( 'عنوان فرم الزامی است.', 'mrn-form' ) );
+			return new \WP_Error( 'mrnf_title_required', __( 'عنوان فرم الزامی است.', 'mrn-forms' ) );
 		}
 
 		$slug_source = $data['slug'] ?? '';
@@ -122,10 +121,10 @@ final class Form_Repository {
 	public function duplicate( int $id ): int|\WP_Error {
 		$form = $this->find( $id );
 		if ( ! $form ) {
-			return new \WP_Error( 'mrnf_not_found', __( 'فرم پیدا نشد.', 'mrn-form' ) );
+			return new \WP_Error( 'mrnf_not_found', __( 'فرم پیدا نشد.', 'mrn-forms' ) );
 		}
 		unset( $form['id'], $form['created_at'], $form['updated_at'] );
-		$form['title']  = $form['title'] . ' ' . __( '(کپی)', 'mrn-form' );
+		$form['title']  = $form['title'] . ' ' . __( '(کپی)', 'mrn-forms' );
 		$form['slug']   = $form['slug'] . '-copy';
 		$form['status'] = 'draft';
 		return $this->save( $form );
@@ -153,10 +152,7 @@ final class Form_Repository {
 	public function count( string $status = '' ): int {
 		global $wpdb;
 		$table = Database::table( 'forms' );
-		if ( $status ) {
-			return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE status = %s", $status ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
-		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE (%s = '' OR status = %s)", $table, $status, $status ) );
 	}
 
 	/**
@@ -181,9 +177,9 @@ final class Form_Repository {
 	 */
 	public static function default_settings(): array {
 		return array(
-			'submitLabel'        => __( 'ارسال فرم', 'mrn-form' ),
-			'successMessage'     => __( 'سپاس! اطلاعات شما با موفقیت دریافت شد.', 'mrn-form' ),
-			'errorMessage'       => __( 'لطفاً خطاهای مشخص‌شده را برطرف کنید.', 'mrn-form' ),
+			'submitLabel'        => __( 'ارسال فرم', 'mrn-forms' ),
+			'successMessage'     => __( 'سپاس! اطلاعات شما با موفقیت دریافت شد.', 'mrn-forms' ),
+			'errorMessage'       => __( 'لطفاً خطاهای مشخص‌شده را برطرف کنید.', 'mrn-forms' ),
 			'redirectUrl'        => '',
 			'ajax'               => true,
 			'showTitle'          => true,
@@ -212,11 +208,11 @@ final class Form_Repository {
 		return array(
 			array(
 				'id'        => 'admin',
-				'name'      => __( 'اعلان مدیر', 'mrn-form' ),
+				'name'      => __( 'اعلان مدیر', 'mrn-forms' ),
 				'enabled'   => true,
 				'to'        => '{admin_email}',
-				'subject'   => __( 'ارسال جدید از {form_title}', 'mrn-form' ),
-				'body'      => __( 'یک ارسال جدید در فرم «{form_title}» دریافت شد.<br><br>{all_fields}', 'mrn-form' ),
+				'subject'   => __( 'ارسال جدید از {form_title}', 'mrn-forms' ),
+				'body'      => __( 'یک ارسال جدید در فرم «{form_title}» دریافت شد.<br><br>{all_fields}', 'mrn-forms' ),
 				'replyTo'   => '{field:email}',
 				'condition' => array(
 					'enabled'  => false,
@@ -227,11 +223,11 @@ final class Form_Repository {
 			),
 			array(
 				'id'        => 'submitter',
-				'name'      => __( 'رسید برای کاربر', 'mrn-form' ),
+				'name'      => __( 'رسید برای کاربر', 'mrn-forms' ),
 				'enabled'   => true,
 				'to'        => '{field:email}',
-				'subject'   => __( 'اطلاعات شما دریافت شد | {site_name}', 'mrn-form' ),
-				'body'      => __( 'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}', 'mrn-form' ),
+				'subject'   => __( 'اطلاعات شما دریافت شد | {site_name}', 'mrn-forms' ),
+				'body'      => __( 'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}', 'mrn-forms' ),
 				'replyTo'   => '{admin_email}',
 				'condition' => array(
 					'enabled'  => false,
@@ -288,7 +284,7 @@ final class Form_Repository {
 			}
 			$output[] = array(
 				'id'        => sanitize_key( $raw['id'] ?? 'notification_' . $index ),
-				'name'      => sanitize_text_field( $raw['name'] ?? __( 'اعلان ایمیلی', 'mrn-form' ) ),
+				'name'      => sanitize_text_field( $raw['name'] ?? __( 'اعلان ایمیلی', 'mrn-forms' ) ),
 				'enabled'   => ! empty( $raw['enabled'] ),
 				'to'        => sanitize_text_field( $raw['to'] ?? '' ),
 				'subject'   => sanitize_text_field( $raw['subject'] ?? '' ),
@@ -328,7 +324,7 @@ final class Form_Repository {
 		$table     = Database::table( 'forms' );
 		$candidate = $slug;
 		$index     = 2;
-		while ( (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE slug = %s AND id != %d", $candidate, $exclude_id ) ) ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		while ( (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE slug = %s AND id != %d', $table, $candidate, $exclude_id ) ) ) {
 			$candidate = $slug . '-' . ( $index++ );
 		}
 		return $candidate;

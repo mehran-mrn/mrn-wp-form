@@ -1,31 +1,36 @@
 [CmdletBinding()]
 param(
-	[string]$Version = '1.2.0'
+	[string]$Version = '',
+	[string]$Destination = ''
 )
 
 $ErrorActionPreference = 'Stop'
 $pluginRoot = Split-Path -Parent $PSScriptRoot
-$destination = Join-Path (Split-Path -Parent $pluginRoot) "mrn-form-$Version.zip"
+$header = Get-Content -LiteralPath (Join-Path $pluginRoot 'mrn-form.php') -Raw
+$declaredVersion = [regex]::Match($header, 'Version:\s*([0-9.]+)').Groups[1].Value
+if (-not $Version) { $Version = $declaredVersion }
+if ($Version -ne $declaredVersion) { throw 'Package version must match the plugin header.' }
+$readme = Get-Content -LiteralPath (Join-Path $pluginRoot 'readme.txt') -Raw
+if ([regex]::Match($readme, 'Stable tag:\s*([0-9.]+)').Groups[1].Value -ne $Version) {
+	throw 'Stable tag must match the plugin version.'
+}
+if ([regex]::Match($header, "define\( 'MRNF_VERSION', '([0-9.]+)' \)").Groups[1].Value -ne $Version) {
+	throw 'Runtime version must match the plugin header.'
+}
+if (-not $Destination) {
+	$Destination = Join-Path (Split-Path -Parent $pluginRoot) "dist/mrn-forms-$Version.zip"
+}
+$destination = [System.IO.Path]::GetFullPath($Destination)
+New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
 $staging = Join-Path ([System.IO.Path]::GetTempPath()) ("mrnf-" + [guid]::NewGuid().ToString('N'))
-$packageRoot = Join-Path $staging 'mrn-form'
+$packageRoot = Join-Path $staging 'mrn-forms'
 
 try {
 	New-Item -ItemType Directory -Path $packageRoot -Force | Out-Null
-	Get-ChildItem -LiteralPath $pluginRoot -Force |
-		Where-Object {
-			$_.Name -notin @(
-				'.git',
-				'.github',
-				'.gitignore',
-				'vendor',
-				'tests',
-				'tools',
-				'composer.json',
-				'composer.lock',
-				'phpcs.xml.dist'
-			)
-		} |
-		Copy-Item -Destination $packageRoot -Recurse -Force
+	# Explicit runtime allowlist excludes development files and credentials.
+	foreach ($item in @('mrn-form.php', 'readme.txt', 'LICENSE', 'uninstall.php', 'includes', 'assets')) {
+		Copy-Item -LiteralPath (Join-Path $pluginRoot $item) -Destination $packageRoot -Recurse -Force
+	}
 
 	Add-Type -AssemblyName System.IO.Compression
 	Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -72,6 +77,13 @@ try {
 }
 finally {
 	if (Test-Path -LiteralPath $staging) {
+		$resolvedStaging = [System.IO.Path]::GetFullPath($staging)
+		$expectedParent = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\', '/')
+		$actualParent = (Split-Path -Parent $resolvedStaging).TrimEnd('\', '/')
+		if (-not $actualParent.Equals($expectedParent, [System.StringComparison]::OrdinalIgnoreCase) -or
+			(Split-Path -Leaf $resolvedStaging) -notmatch '^mrnf-[a-f0-9]{32}$') {
+			throw 'Refusing to remove an unexpected staging directory.'
+		}
 		Remove-Item -LiteralPath $staging -Recurse -Force
 	}
 }

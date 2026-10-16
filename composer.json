@@ -24,7 +24,11 @@
       "@php tests/test-validator.php",
       "@php tests/test-field-registry.php",
       "@php tests/test-form-repository.php",
-      "@php tests/test-email-notifications.php"
+      "@php tests/test-attribution.php",
+      "@php tests/test-tracking-settings.php",
+      "@php tests/test-email-notifications.php",
+      "@php tests/test-csv-export.php",
+      "@php tests/test-entry-errors.php"
     ]
   }
 }

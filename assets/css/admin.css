@@ -38,20 +38,16 @@
 .mrnf-admin__brand { align-items: center; display: flex; gap: 1rem; position: relative; z-index: 2; }
 .mrnf-admin__mark {
   align-items: center;
-  background: var(--mrnf-gold);
+  background: #fff;
   border-radius: 1.15rem;
   box-shadow: 0 .8rem 2rem rgb(0 0 0 / 22%);
-  display: grid;
-  gap: .28rem;
-  grid-template-columns: repeat(3, .45rem);
+  display: flex;
+  flex: 0 0 auto;
   height: 4.8rem;
   justify-content: center;
-  transform: rotate(-3deg);
   width: 4.8rem;
 }
-.mrnf-admin__mark i { background: var(--mrnf-teal); border-radius: 50%; height: .48rem; position: relative; width: .48rem; }
-.mrnf-admin__mark i::after { background: var(--mrnf-teal); border-radius: 1rem; content: ""; height: 1.25rem; inset-block-start: .68rem; inset-inline-start: .15rem; position: absolute; width: .18rem; }
-.mrnf-admin__mark i:nth-child(2)::after { height: 1.8rem; }
+.mrnf-admin__mark img { display: block; width: 3.5rem; height: 3.5rem; object-fit: contain; }
 .mrnf-admin__brand small { color: #f2ce8b; font-size: .67rem; font-weight: 800; letter-spacing: .2em; }
 .mrnf-admin__brand h1 { color: #fff; font-size: clamp(1.55rem, 3vw, 2.2rem); margin: .1rem 0 .2rem; }
 .mrnf-admin__brand p { color: #c6d8d6; margin: 0; }

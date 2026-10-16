@@ -16,25 +16,27 @@ final class Entry_Repository {
 	/**
 	 * Store an entry.
 	 *
-	 * @param int                  $form_id Form ID.
-	 * @param array<string, mixed> $values Submitted values.
+	 * @param int                   $form_id Form ID.
+	 * @param array<string, mixed>  $values Submitted values.
+	 * @param array<string, string> $attribution First-touch traffic attribution.
 	 * @return int|\WP_Error
 	 */
-	public function create( int $form_id, array $values ): int|\WP_Error {
+	public function create( int $form_id, array $values, array $attribution = array() ): int|\WP_Error {
 		global $wpdb;
 		$ip  = Submission_Handler::client_ip();
 		$row = array(
-			'form_id'     => $form_id,
-			'status'      => 'unread',
-			'values_json' => Database::encode( $values ),
-			'user_id'     => get_current_user_id(),
-			'ip_hash'     => $ip ? hash_hmac( 'sha256', $ip, wp_salt( 'auth' ) ) : '',
-			'user_agent'  => sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ),
-			'referer'     => esc_url_raw( false !== wp_get_referer() ? wp_get_referer() : '' ),
-			'created_at'  => Database::now(),
+			'form_id'          => $form_id,
+			'status'           => 'unread',
+			'values_json'      => Database::encode( $values ),
+			'user_id'          => get_current_user_id(),
+			'ip_hash'          => $ip ? hash_hmac( 'sha256', $ip, wp_salt( 'auth' ) ) : '',
+			'user_agent'       => sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ),
+			'referer'          => esc_url_raw( false !== wp_get_referer() ? wp_get_referer() : '' ),
+			'attribution_json' => Database::encode( $attribution ),
+			'created_at'       => Database::now(),
 		);
-		$ok  = $wpdb->insert( Database::table( 'entries' ), $row, array( '%d', '%s', '%s', '%d', '%s', '%s', '%s', '%s' ) );
-		return false === $ok ? new \WP_Error( 'mrnf_entry_error', $wpdb->last_error ) : (int) $wpdb->insert_id;
+		$ok  = $wpdb->insert( Database::table( 'entries' ), $row, array( '%d', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s' ) );
+		return false === $ok ? new \WP_Error( 'mrnf_entry_error', __( 'Unable to save your submission. Please try again.', 'mrn-forms' ) ) : (int) $wpdb->insert_id;
 	}
 
 	/**
@@ -46,7 +48,7 @@ final class Entry_Repository {
 	public function find( int $id ): ?array {
 		global $wpdb;
 		$table = Database::table( 'entries' );
-		$row   = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', $table, $id ), ARRAY_A );
 		return $row ? $this->hydrate( $row ) : null;
 	}
 
@@ -69,20 +71,22 @@ final class Entry_Repository {
 				'offset'  => 0,
 			)
 		);
-		$where   = array( '1=1' );
-		$params  = array();
-		if ( $args['form_id'] ) {
-			$where[]  = 'e.form_id = %d';
-			$params[] = absint( $args['form_id'] );
-		}
-		if ( $args['status'] ) {
-			$where[]  = 'e.status = %s';
-			$params[] = sanitize_key( $args['status'] );
-		}
-		$params[] = max( 1, min( 5000, absint( $args['limit'] ) ) );
-		$params[] = absint( $args['offset'] );
-		$sql      = "SELECT e.*, f.title AS form_title FROM {$entries} e LEFT JOIN {$forms} f ON f.id=e.form_id WHERE " . implode( ' AND ', $where ) . ' ORDER BY e.created_at DESC LIMIT %d OFFSET %d'; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$rows     = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$form_id = absint( $args['form_id'] );
+		$status  = sanitize_key( $args['status'] );
+		$rows    = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT e.*, f.title AS form_title FROM %i e LEFT JOIN %i f ON f.id=e.form_id WHERE (%d = 0 OR e.form_id = %d) AND (%s = '' OR e.status = %s) ORDER BY e.created_at DESC LIMIT %d OFFSET %d",
+				$entries,
+				$forms,
+				$form_id,
+				$form_id,
+				$status,
+				$status,
+				max( 1, min( 5000, absint( $args['limit'] ) ) ),
+				absint( $args['offset'] )
+			),
+			ARRAY_A
+		);
 		return array_map( array( $this, 'hydrate' ), $rows ? $rows : array() );
 	}
 
@@ -95,19 +99,8 @@ final class Entry_Repository {
 	 */
 	public function count( int $form_id = 0, string $status = '' ): int {
 		global $wpdb;
-		$table  = Database::table( 'entries' );
-		$where  = array( '1=1' );
-		$params = array();
-		if ( $form_id ) {
-			$where[]  = 'form_id = %d';
-			$params[] = $form_id;
-		}
-		if ( $status ) {
-			$where[]  = 'status = %s';
-			$params[] = $status;
-		}
-		$sql = "SELECT COUNT(*) FROM {$table} WHERE " . implode( ' AND ', $where ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		return (int) ( $params ? $wpdb->get_var( $wpdb->prepare( $sql, $params ) ) : $wpdb->get_var( $sql ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$table = Database::table( 'entries' );
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE (%d = 0 OR form_id = %d) AND (%s = '' OR status = %s)", $table, $form_id, $form_id, $status, $status ) );
 	}
 
 	/**
@@ -171,11 +164,13 @@ final class Entry_Repository {
 	 * @return array<string, mixed>
 	 */
 	private function hydrate( array $row ): array {
-		$row['id']      = (int) $row['id'];
-		$row['form_id'] = (int) $row['form_id'];
-		$row['user_id'] = (int) $row['user_id'];
-		$row['values']  = Database::decode( $row['values_json'] );
+		$row['id']          = (int) $row['id'];
+		$row['form_id']     = (int) $row['form_id'];
+		$row['user_id']     = (int) $row['user_id'];
+		$row['values']      = Database::decode( $row['values_json'] );
+		$row['attribution'] = Database::decode( $row['attribution_json'] ?? '' );
 		unset( $row['values_json'] );
+		unset( $row['attribution_json'] );
 		return $row;
 	}
 }

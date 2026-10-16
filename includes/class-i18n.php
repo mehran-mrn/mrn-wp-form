@@ -19,7 +19,7 @@ final class I18n {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_filter( 'gettext_mrn-form', array( self::class, 'translate' ), 10, 3 );
+		add_filter( 'gettext_mrn-forms', array( self::class, 'translate' ), 10, 3 );
 	}
 
 	/**
@@ -31,7 +31,7 @@ final class I18n {
 	 * @return string
 	 */
 	public static function translate( string $translation, string $text, string $domain ): string {
-		if ( 'mrn-form' !== $domain || ! self::is_english() ) {
+		if ( 'mrn-forms' !== $domain || ! self::is_english() ) {
 			return $translation;
 		}
 
@@ -58,6 +58,14 @@ final class I18n {
 	 */
 	private static function english(): array {
 		return array(
+			'صفحه افزونه'                                  => 'Plugin website',
+			'حریم خصوصی'                                   => 'Privacy',
+			'منبع بازدید و رویدادهای آماری'                => 'Traffic attribution and analytics events',
+			'هر دو قابلیت پیش‌فرض خاموش هستند. پیش از فعال‌سازی، اطلاع‌رسانی حریم خصوصی و رضایت لازم را در سایت تنظیم کنید.' => 'Both features are off by default. Set up privacy notices and any required consent on your site before enabling them.',
+			'ثبت منبع بازدید'                              => 'Collect traffic attribution',
+			'منبع، کمپین و صفحه فرود در نشست مرورگر و همراه ارسال فرم روی همین سایت ذخیره می‌شوند.' => 'Source, campaign and landing page are stored in browser session storage and with form submissions on this site.',
+			'ارسال رویداد به Google Analytics'             => 'Send events to Google Analytics',
+			'رویدادهای تماس، واتساپ و ارسال موفق را به gtag موجود در سایت می‌فرستد. افزونه کد گوگل را نصب نمی‌کند و پاسخ فرم یا شماره تماس را نمی‌فرستد.' => 'Send phone, WhatsApp and successful submission events to the existing site gtag. The plugin does not install Google scripts or send form answers or contact numbers.',
 			'فرم‌ساز سبک و حرفه‌ای MRN با مدیریت ارسال‌ها، منطق شرطی و اعلان‌های ایمیلی زیبا.' => 'A lightweight professional form builder with entry management, conditional logic, and polished email notifications.',
 			'%d فیلد'                                      => '%d fields',
 			'%d ارسال'                                     => '%d entries',
@@ -87,6 +95,8 @@ final class I18n {
 			'اعلان مدیر'                                   => 'Administrator notification',
 			'اعلان‌ها'                                     => 'Notifications',
 			'اعمال فیلتر'                                  => 'Apply filter',
+			'ارجاع‌دهنده بیرونی'                           => 'External referrer',
+			'ارجاعی'                                       => 'Referral',
 			'امنیت و داده'                                 => 'Security and data',
 			'انتخاب تکی'                                   => 'Single choice',
 			'انتخاب چندتایی'                               => 'Multiple choice',
@@ -100,7 +110,7 @@ final class I18n {
 			'ایمیل پیش‌فرض مدیر'                           => 'Default administrator email',
 			'ایمیل فرستنده'                                => 'Sender email',
 			'ایمیل'                                        => 'Email',
-			'این پیام به‌صورت خودکار توسط MRN Form ارسال شده است.' => 'This message was sent automatically by MRN Form.',
+			'این پیام به‌صورت خودکار توسط MRN Forms ارسال شده است.' => 'This message was sent automatically by MRN Forms.',
 			'این فرم در دسترس نیست.'                       => 'This form is unavailable.',
 			'این فیلد حذف شود؟'                            => 'Delete this field?',
 			'این عملیات قابل بازگشت نیست. ادامه می‌دهید؟'  => 'This action cannot be undone. Continue?',
@@ -143,12 +153,13 @@ final class I18n {
 			'تعداد تلاش‌ها بیش از حد مجاز است؛ چند دقیقه دیگر دوباره امتحان کنید.' => 'Too many attempts. Please try again in a few minutes.',
 			'تغییرات ذخیره‌نشده دارید.'                    => 'You have unsaved changes.',
 			'تغییرات همان لحظه اعمال می‌شود'               => 'Changes are applied immediately',
+			'تبلیغات گوگل'                                 => 'Google Ads',
 			'تکثیر'                                        => 'Duplicate',
 			'تکمیل این فیلد الزامی است'                    => 'This field is required',
 			'تکمیل این فیلد به مقدار فیلد جایگزین بستگی دارد.' => 'This field is required based on the alternative field value.',
 			'تکمیل این فیلد برای کاربر اختیاری است.'       => 'Users may leave this field empty.',
 			'تکمیل فیلد «%s» الزامی است.'                  => 'The “%s” field is required.',
-			'تنظیمات MRN Form'                             => 'MRN Form settings',
+			'تنظیمات MRN Forms'                            => 'MRN Forms settings',
 			'تنظیمات ذخیره شد.'                            => 'Settings saved.',
 			'تنظیمات فیلد'                                 => 'Field settings',
 			'تنظیمات'                                      => 'Settings',
@@ -161,6 +172,7 @@ final class I18n {
 			'جزئیات ارسال'                                 => 'Entry details',
 			'جست‌وجوی فرم…'                                => 'Search forms…',
 			'جست‌وجو'                                      => 'Search',
+			'جست‌وجوی طبیعی'                               => 'Organic search',
 			'جهت'                                          => 'Direction',
 			'چیدمان و متن‌ها'                              => 'Layout and text',
 			'حجم فایل نباید بیشتر از %d مگابایت باشد.'     => 'The file must not be larger than %d MB.',
@@ -206,10 +218,13 @@ final class I18n {
 			'سپاس! اطلاعات شما با موفقیت دریافت شد.'       => 'Thank you! Your information was received successfully.',
 			'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}' => 'Hello {field:name},<br><br>We received your information successfully. A copy of your responses appears below.<br><br>{all_fields}',
 			'شامل باشد'                                    => 'Contains',
+			'شبکه اجتماعی'                                 => 'Social network',
 			'شرط'                                          => 'Condition',
 			'شروع سریع'                                    => 'Quick start',
 			'شماره تماس'                                   => 'Phone number',
 			'صفحه مبدأ'                                    => 'Referring page',
+			'صفحه ارسال فرم'                               => 'Form submission page',
+			'صفحه ورود'                                    => 'Landing page',
 			'صندوق ورودی خالی است'                         => 'The inbox is empty',
 			'صندوق ورودی'                                  => 'Inbox',
 			'عدد'                                          => 'Number',
@@ -232,7 +247,7 @@ final class I18n {
 			'فرم تماس جدید'                                => 'New contact form',
 			'فرم جدید'                                     => 'New form',
 			'فرم حذف‌شده'                                  => 'Deleted form',
-			'فرم را بسازید، ظاهرش را با قالب هماهنگ کنید و با شورت‌کد یا بلوک MRN Form نمایش دهید.' => 'Build your form, match it to your theme, and display it with the shortcode or MRN Form block.',
+			'فرم را بسازید، ظاهرش را با قالب هماهنگ کنید و با شورت‌کد یا بلوک MRN Forms نمایش دهید.' => 'Build your form, match it to your theme, and display it with the shortcode or MRN Forms block.',
 			'فرم منتشرشده'                                 => 'Published form',
 			'فرم انتخاب‌شده:'                              => 'Selected form:',
 			'فرم و ارسال‌های مرتبط حذف شدند.'              => 'The form and its related entries were deleted.',
@@ -253,6 +268,7 @@ final class I18n {
 			'کد نمایش'                                     => 'Embed code',
 			'کلاس CSS سفارشی'                              => 'Custom CSS class',
 			'کمینه'                                        => 'Minimum',
+			'کمپین'                                        => 'Campaign',
 			'کنار فیلد'                                    => 'Beside the field',
 			'کنترل ارسال و حذف اطلاعات'                    => 'Submission and data-deletion controls',
 			'کپی شد'                                       => 'Copied',
@@ -287,6 +303,8 @@ final class I18n {
 			'مشاهده'                                       => 'View',
 			'مشخصات فرستنده و رنگ‌های قالب HTML همه ایمیل‌ها.' => 'Sender details and HTML template colors for every email.',
 			'مشخصات'                                       => 'Metadata',
+			'مستقیم'                                       => 'Direct',
+			'منبع ورود'                                    => 'Traffic source',
 			'مقدار باید حداقل %s باشد.'                    => 'The value must be at least %s.',
 			'مقدار باید حداکثر %s باشد.'                   => 'The value must be no more than %s.',
 			'مقدار پیش‌فرض'                                => 'Default value',
@@ -297,6 +315,7 @@ final class I18n {
 			'مخفی'                                         => 'Hidden',
 			'موضوع'                                        => 'Subject',
 			'نام برند'                                     => 'Brand name',
+			'نامشخص'                                       => 'Unknown',
 			'نام فرستنده'                                  => 'Sender name',
 			'نام و نام خانوادگی'                           => 'Full name',
 			'نشانی ایمیل معتبر نیست.'                      => 'The email address is invalid.',
@@ -331,7 +350,7 @@ final class I18n {
 			'یک فیلد را برای تنظیم انتخاب کنید.'           => 'Select a field to configure it.',
 			'یک فرم انتخاب کنید…'                          => 'Select a form…',
 			'یک نسخه پیش‌نویس ساخته شد.'                   => 'A draft copy was created.',
-			'یا از بلوک MRN Form و تابع mrn_form() استفاده کنید.' => 'Or use the MRN Form block or the mrn_form() function.',
+			'یا از بلوک MRN Forms و تابع mrn_form() استفاده کنید.' => 'Or use the MRN Forms block or the mrn_form() function.',
 			'یک بخش تازه'                                  => 'A new section',
 			'افزودن گزینه'                                 => 'Add option',
 			'اعتبارسنجی'                                   => 'Validation',

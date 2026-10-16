@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="MRN Form">
-	<description>WordPress coding standards for MRN Form.</description>
+<ruleset name="MRN Forms">
+	<description>WordPress coding standards for MRN Forms.</description>
 	<file>mrn-form.php</file>
 	<file>includes</file>
 	<file>uninstall.php</file>

@@ -135,7 +135,8 @@
   }
 
   function refreshNonce(form) {
-    var url = mrnfFrontend.restUrl + form.dataset.mrnfForm + '/nonce?_=' + Date.now();
+    var url = new URL(mrnfFrontend.restUrl + form.dataset.mrnfForm + '/nonce', window.location.href);
+    url.searchParams.set('_', String(Date.now()));
     return window.fetch(url, {
       method: 'GET',
       credentials: 'same-origin',

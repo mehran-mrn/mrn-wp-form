@@ -21,18 +21,18 @@ use MRN\Form\I18n;
 
 $errors = array();
 
-if ( 'Forms' !== I18n::translate( 'فرم‌ها', 'فرم‌ها', 'mrn-form' ) ) {
+if ( 'Forms' !== I18n::translate( 'فرم‌ها', 'فرم‌ها', 'mrn-forms' ) ) {
 	$errors[] = 'English locale should translate administration strings.';
 }
-if ( 'The email address is invalid.' !== I18n::translate( 'نشانی ایمیل معتبر نیست.', 'نشانی ایمیل معتبر نیست.', 'mrn-form' ) ) {
+if ( 'The email address is invalid.' !== I18n::translate( 'نشانی ایمیل معتبر نیست.', 'نشانی ایمیل معتبر نیست.', 'mrn-forms' ) ) {
 	$errors[] = 'English locale should translate frontend validation strings.';
 }
-if ( 'Hello {field:name},<br><br>We received your information successfully. A copy of your responses appears below.<br><br>{all_fields}' !== I18n::translate( '', 'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}', 'mrn-form' ) ) {
+if ( 'Hello {field:name},<br><br>We received your information successfully. A copy of your responses appears below.<br><br>{all_fields}' !== I18n::translate( '', 'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}', 'mrn-forms' ) ) {
 	$errors[] = 'English locale should preserve merge tags and email HTML.';
 }
 
 $test_locale = 'fa_IR';
-if ( 'فرم‌ها' !== I18n::translate( 'فرم‌ها', 'فرم‌ها', 'mrn-form' ) ) {
+if ( 'فرم‌ها' !== I18n::translate( 'فرم‌ها', 'فرم‌ها', 'mrn-forms' ) ) {
 	$errors[] = 'Persian locale should preserve the original interface.';
 }
 

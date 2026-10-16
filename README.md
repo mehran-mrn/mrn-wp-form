@@ -1,4 +1,4 @@
-# MRN Form
+# MRN Forms
 
 یک فرم‌ساز حرفه‌ای، سبک، دو‌زبانه و مستقل از صفحه‌ساز برای WordPress.
 
@@ -25,3 +25,17 @@ composer lint
 حداقل نسخه‌ها: WordPress 6.6 و PHP 8.1.
 
 سازنده: [Mehran Marandi](https://mehranmarandi.ir)
+
+محصولی از [MRNWP](https://mrnwp.ir) · [صفحه افزونه](https://mrnwp.ir/mrnforms) · [کد و گزارش مشکل](https://github.com/mehran-mrn/mrn-wp-form)
+
+بستهٔ انتشار از پوشهٔ `mrn-forms` و دامنهٔ ترجمهٔ `mrn-forms` استفاده می‌کند. نام جدول‌ها، شورت‌کدها و تنظیمات نسخه‌های قبلی حفظ شده‌اند. قبل از فعال کردن این بسته روی نصب قدیمی، نسخهٔ پوشهٔ `mrn-form` را غیرفعال کنید.
+
+ثبت منبع بازدید و ارسال رویدادهای Google Analytics اختیاری و پیش‌فرض خاموش هستند. جزئیات داده‌ها و سرویس خارجی در readme.txt آمده است.
+
+تست رفتار حریم خصوصی در مرورگر: `node tests/test-tracking.js`.
+
+ساخت ZIP انتشار: `powershell -File tools/package.ps1`.
+
+## انتشار در WordPress.org
+
+راهنمای تنظیم دسترسی و انتشار از گیت‌هاب در [docs/releases-fa.md](docs/releases-fa.md) است. Push عادی تست‌ها را اجرا می‌کند؛ انتشار یک Release نهایی، پس از موفق‌شدن تست‌ها، کد و تصاویر را به مخزن وردپرس منتقل می‌کند.

@@ -55,26 +55,17 @@ final class Plugin {
 		$notifications  = new Notification_Service( $templates, $entries );
 		$submissions    = new Submission_Handler( $forms, $entries, new Validator(), $notifications );
 
+		( new Tracking() )->register();
 		( new Shortcodes( $this->renderer ) )->register();
 		( new Blocks( $this->renderer, $forms ) )->register();
 		$rest = new REST_API( $forms, $submissions );
 		add_action( 'rest_api_init', array( $rest, 'register' ) );
-		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_post_mrnf_submit', array( $this, 'classic_submission' ) );
 		add_action( 'admin_post_nopriv_mrnf_submit', array( $this, 'classic_submission' ) );
 
 		if ( is_admin() ) {
 			( new Admin( $forms, $entries ) )->register();
 		}
-	}
-
-	/**
-	 * Load translation files.
-	 *
-	 * @return void
-	 */
-	public function load_textdomain(): void {
-		load_plugin_textdomain( 'mrn-form', false, dirname( plugin_basename( MRNF_FILE ) ) . '/languages' );
 	}
 
 	/**

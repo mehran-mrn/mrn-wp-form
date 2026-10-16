@@ -10,7 +10,7 @@ namespace MRN\Form;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Register the dynamic MRN Form block for the block editor.
+ * Register the dynamic MRN Forms block for the block editor.
  */
 final class Blocks {
 	/**
@@ -57,11 +57,13 @@ final class Blocks {
 			'mrnf-block',
 			'mrnfBlock',
 			array(
-				'forms' => $options,
-				'i18n'  => array(
-					'form'         => __( 'فرم', 'mrn-form' ),
-					'selectForm'   => __( 'یک فرم انتخاب کنید…', 'mrn-form' ),
-					'selectedForm' => __( 'فرم انتخاب‌شده:', 'mrn-form' ),
+				'forms'   => $options,
+				'logoUrl' => esc_url_raw( MRNF_URL . 'assets/images/logo.png' ),
+				'i18n'    => array(
+					'title'        => __( 'MRN Forms', 'mrn-forms' ),
+					'form'         => __( 'فرم', 'mrn-forms' ),
+					'selectForm'   => __( 'یک فرم انتخاب کنید…', 'mrn-forms' ),
+					'selectedForm' => __( 'فرم انتخاب‌شده:', 'mrn-forms' ),
 				),
 			)
 		);
