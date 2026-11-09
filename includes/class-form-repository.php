@@ -80,6 +80,11 @@ final class Form_Repository {
 		if ( '' === $title ) {
 			return new \WP_Error( 'mrnf_title_required', __( 'عنوان فرم الزامی است.', 'mrn-forms' ) );
 		}
+		$fields   = Field_Registry::normalize_many( (array) ( $data['fields'] ?? array() ) );
+		$settings = $this->sanitize_form_settings( (array) ( $data['settings'] ?? array() ) );
+		if ( 'published' === ( $data['status'] ?? '' ) && 'off' !== $settings['anarMode'] && ! Anar_Integration::phone_key( compact( 'fields', 'settings' ) ) ) {
+			return new \WP_Error( 'mrnf_anar_phone_field', __( 'در تنظیمات انار، یک فیلد تلفنِ الزامی و بدون شرط نمایش انتخاب کنید.', 'mrn-forms' ) );
+		}
 
 		$slug_source = $data['slug'] ?? '';
 		if ( $id && ! array_key_exists( 'slug', $data ) ) {
@@ -93,8 +98,8 @@ final class Form_Repository {
 			'slug'          => $slug,
 			'status'        => in_array( $data['status'] ?? '', array( 'published', 'draft', 'archived' ), true ) ? $data['status'] : 'draft',
 			'description'   => sanitize_textarea_field( $data['description'] ?? '' ),
-			'fields'        => Database::encode( Field_Registry::normalize_many( (array) ( $data['fields'] ?? array() ) ) ),
-			'settings'      => Database::encode( $this->sanitize_form_settings( (array) ( $data['settings'] ?? array() ) ) ),
+			'fields'        => Database::encode( $fields ),
+			'settings'      => Database::encode( $settings ),
 			'notifications' => Database::encode( $this->sanitize_notifications( (array) ( $data['notifications'] ?? array() ) ) ),
 			'user_id'       => get_current_user_id(),
 			'updated_at'    => Database::now(),
@@ -196,6 +201,8 @@ final class Form_Repository {
 			'customClass'        => '',
 			'storeEntries'       => true,
 			'emailNotifications' => true,
+			'anarMode'           => 'off',
+			'anarPhoneField'     => '',
 		);
 	}
 
@@ -246,13 +253,14 @@ final class Form_Repository {
 	 * @return array<string, mixed>
 	 */
 	private function sanitize_form_settings( array $input ): array {
-		$data = wp_parse_args( $input, self::default_settings() );
+		$data      = wp_parse_args( $input, self::default_settings() );
+		$anar_mode = in_array( $data['anarMode'], array( 'sms', 'registration' ), true ) ? $data['anarMode'] : 'off';
 		return array(
 			'submitLabel'        => sanitize_text_field( $data['submitLabel'] ),
 			'successMessage'     => sanitize_text_field( $data['successMessage'] ),
 			'errorMessage'       => sanitize_text_field( $data['errorMessage'] ),
 			'redirectUrl'        => esc_url_raw( $data['redirectUrl'] ),
-			'ajax'               => ! empty( $data['ajax'] ),
+			'ajax'               => 'off' !== $anar_mode || ! empty( $data['ajax'] ),
 			'showTitle'          => ! empty( $data['showTitle'] ),
 			'showDescription'    => ! empty( $data['showDescription'] ),
 			'labelPosition'      => in_array( $data['labelPosition'], array( 'top', 'inline', 'hidden' ), true ) ? $data['labelPosition'] : 'top',
@@ -265,8 +273,10 @@ final class Form_Repository {
 			'textColor'          => sanitize_hex_color( $data['textColor'] ) ? sanitize_hex_color( $data['textColor'] ) : '#173b3d',
 			'buttonFullWidth'    => ! empty( $data['buttonFullWidth'] ),
 			'customClass'        => sanitize_html_class( $data['customClass'] ),
-			'storeEntries'       => ! empty( $data['storeEntries'] ),
+			'storeEntries'       => 'registration' === $anar_mode || ! empty( $data['storeEntries'] ),
 			'emailNotifications' => ! empty( $data['emailNotifications'] ),
+			'anarMode'           => $anar_mode,
+			'anarPhoneField'     => sanitize_key( $data['anarPhoneField'] ),
 		);
 	}
 

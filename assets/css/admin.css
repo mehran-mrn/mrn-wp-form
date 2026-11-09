@@ -340,3 +340,18 @@
   .mrnf-canvas-head input { min-width: 0; width: 100%; }
   .mrnf-canvas-field { flex-basis: 100%; max-width: 100%; }
 }
+.mrnf-anar-card {
+  border-inline-start: 4px solid #bc2449;
+}
+
+.mrnf-anar-card .mrnf-field-grid {
+  align-items: start;
+}
+
+.mrnf-anar-card__badge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #902044;
+  background: #fbe9ef;
+  font-size: 12px;
+}

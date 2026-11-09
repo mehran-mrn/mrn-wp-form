@@ -52,6 +52,16 @@ final class REST_API {
 		);
 		register_rest_route(
 			'mrn-form/v1',
+			'/forms/(?P<id>\d+)/sms',
+			array(
+				'methods'             => 'POST',
+				'permission_callback' => '__return_true',
+				'callback'            => array( $this, 'request_sms' ),
+				'args'                => array( 'id' => array( 'sanitize_callback' => 'absint' ) ),
+			)
+		);
+		register_rest_route(
+			'mrn-form/v1',
 			'/forms',
 			array(
 				'methods'             => 'GET',
@@ -96,6 +106,17 @@ final class REST_API {
 	 */
 	public function submit( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
 		$result = $this->submissions->submit( absint( $request['id'] ), $request->get_params(), $_FILES ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Submission handler verifies the form nonce.
+		return is_wp_error( $result ) ? $result : rest_ensure_response( $result );
+	}
+
+	/**
+	 * Send a one-time code without saving the submitted form.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function request_sms( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+		$result = $this->submissions->request_sms( absint( $request['id'] ), $request->get_body_params() );
 		return is_wp_error( $result ) ? $result : rest_ensure_response( $result );
 	}
 

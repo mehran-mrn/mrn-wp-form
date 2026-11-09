@@ -348,6 +348,7 @@ final class Admin {
 						</div>
 						<div class="mrnf-builder__tab" data-mrnf-tab-panel="appearance">
 							<?php $this->appearance_panel( $form['settings'] ); ?>
+							<?php $this->anar_panel( $form['settings'] ); ?>
 						</div>
 						<div class="mrnf-builder__tab" data-mrnf-tab-panel="notifications">
 								<?php $this->notifications_panel( $form['notifications'], $form['fields'] ); ?>
@@ -625,6 +626,42 @@ final class Admin {
 				<div class="mrnf-toggle-list"><?php $this->builder_toggle( 'storeEntries', __( 'ذخیره ارسال‌ها در صندوق ورودی', 'mrn-forms' ), $settings['storeEntries'] ); ?><?php $this->builder_toggle( 'emailNotifications', __( 'ارسال اعلان‌های ایمیلی', 'mrn-forms' ), $settings['emailNotifications'] ); ?></div>
 			</section>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Render the Anar integration settings.
+	 *
+	 * @param array<string, mixed> $settings Form settings.
+	 * @return void
+	 */
+	private function anar_panel( array $settings ): void {
+		$connected = class_exists( \Anar\Login\Integrations\MrnForm::class );
+		?>
+		<section class="mrnf-panel mrnf-anar-card">
+			<div class="mrnf-panel__head">
+				<div><span><?php esc_html_e( 'اتصال افزونه‌ها', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'انار و MRN Forms', 'mrn-forms' ); ?></h2></div>
+				<strong class="mrnf-anar-card__badge"><?php echo esc_html( $connected ? __( 'انار در دسترس است', 'mrn-forms' ) : __( 'نیاز به نسخهٔ سازگار انار', 'mrn-forms' ) ); ?></strong>
+			</div>
+			<p><?php esc_html_e( 'برای فرم‌های معمولی شمارهٔ همراه را با پیامک تأیید کنید، یا فرم ثبت‌نامی بسازید که پس از تأیید شماره، حساب وردپرس ایجاد می‌کند.', 'mrn-forms' ); ?></p>
+			<div class="mrnf-field-grid">
+				<label class="mrnf-input"><span><?php esc_html_e( 'کاربرد فرم با انار', 'mrn-forms' ); ?></span>
+					<select data-mrnf-setting="anarMode">
+						<option value="off" <?php selected( $settings['anarMode'], 'off' ); ?>><?php esc_html_e( 'غیرفعال', 'mrn-forms' ); ?></option>
+						<option value="sms" <?php selected( $settings['anarMode'], 'sms' ); ?>><?php esc_html_e( 'تأیید پیامکی پیش از ارسال', 'mrn-forms' ); ?></option>
+						<option value="registration" <?php selected( $settings['anarMode'], 'registration' ); ?>><?php esc_html_e( 'ثبت‌نام در انار', 'mrn-forms' ); ?></option>
+					</select>
+				</label>
+				<label class="mrnf-input"><span><?php esc_html_e( 'فیلد شمارهٔ همراه', 'mrn-forms' ); ?></span>
+					<select data-mrnf-setting="anarPhoneField"><option value=""><?php esc_html_e( 'انتخاب فیلد تلفن', 'mrn-forms' ); ?></option></select>
+					<small><?php esc_html_e( 'از نوع تلفن، الزامی و بدون شرط نمایش.', 'mrn-forms' ); ?></small>
+				</label>
+			</div>
+			<p><?php esc_html_e( 'برای ثبت‌نام، فرم را منتشر و در تنظیمات انار انتخاب کنید. پاسخ‌های ثبت‌نام در صندوق ورودی همین فرم ذخیره می‌شوند.', 'mrn-forms' ); ?></p>
+			<?php if ( $connected ) : ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=anar-login-settings&section=general#anar-mrn-forms' ) ); ?>"><?php esc_html_e( 'رفتن به تنظیمات انار', 'mrn-forms' ); ?> <span aria-hidden="true">↗</span></a>
+			<?php endif; ?>
+		</section>
 		<?php
 	}
 

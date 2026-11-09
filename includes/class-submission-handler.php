@@ -41,11 +41,9 @@ final class Submission_Handler {
 		if ( ! $form || 'published' !== $form['status'] ) {
 			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-forms' ), array( 'status' => 404 ) );
 		}
-		if ( ! wp_verify_nonce( sanitize_text_field( $request['_mrnf_nonce'] ?? '' ), 'mrnf_submit_' . $form_id ) ) {
-			return new \WP_Error( 'mrnf_invalid_nonce', __( 'نشست فرم منقضی شده است؛ صفحه را تازه‌سازی کنید.', 'mrn-forms' ), array( 'status' => 403 ) );
-		}
-		if ( ! empty( $request['_mrnf_company'] ) ) {
-			return new \WP_Error( 'mrnf_spam', __( 'ارسال شناسایی نشد.', 'mrn-forms' ), array( 'status' => 400 ) );
+		$checked = $this->check_request( $form_id, $request );
+		if ( is_wp_error( $checked ) ) {
+			return $checked;
 		}
 		$loaded_at = absint( $request['_mrnf_loaded_at'] ?? 0 );
 		if ( $loaded_at && time() - $loaded_at < 2 ) {
@@ -55,27 +53,53 @@ final class Submission_Handler {
 			return new \WP_Error( 'mrnf_rate_limit', __( 'تعداد تلاش‌ها بیش از حد مجاز است؛ چند دقیقه دیگر دوباره امتحان کنید.', 'mrn-forms' ), array( 'status' => 429 ) );
 		}
 
-		$raw    = isset( $request['mrnf'] ) && is_array( $request['mrnf'] ) ? wp_unslash( $request['mrnf'] ) : array();
-		$result = $this->validator->validate( $form['fields'], $raw, $files );
-		$this->handle_files( $form['fields'], $files, $result['values'], $result['errors'] );
-		if ( $result['errors'] ) {
-			return new \WP_Error(
-				'mrnf_validation',
-				$form['settings']['errorMessage'],
-				array(
-					'status' => 422,
-					'fields' => $result['errors'],
-				)
-			);
+		$mode = Anar_Integration::mode( $form );
+		if ( 'off' !== $mode && ! Anar_Integration::available( $form ) ) {
+			return Anar_Integration::unavailable();
 		}
 
-		$values      = apply_filters( 'mrnf_submission_values', $result['values'], $form );
+		$raw     = isset( $request['mrnf'] ) && is_array( $request['mrnf'] ) ? wp_unslash( $request['mrnf'] ) : array();
+		$result  = $this->validator->validate( $form['fields'], $raw, $files );
+		$pending = $this->validate_files( $form['fields'], $files, $result['values'], $result['errors'] );
+		if ( $result['errors'] ) {
+			return $this->validation_error( $form, $result['errors'] );
+		}
+
+		if ( 'off' !== $mode ) {
+			$phone_key = Anar_Integration::phone_key( $form );
+			$identity  = \Anar\Login\Integrations\MrnForm::verify( $form, $result['values'][ $phone_key ] ?? '', $request );
+			if ( is_wp_error( $identity ) ) {
+				return $identity;
+			}
+		}
+
+		$attachments = $this->upload_files( $pending, $result['values'], $result['errors'] );
+		if ( $result['errors'] ) {
+			$this->remove_uploads( $attachments );
+			return $this->validation_error( $form, $result['errors'] );
+		}
+
+		$values = apply_filters( 'mrnf_submission_values', $result['values'], $form );
+		if ( isset( $identity ) ) {
+			$values[ $phone_key ] = $identity['identity'];
+		}
 		$attribution = Settings::get( 'collect_attribution', false ) ? Attribution::from_request( $request ) : array();
 		$entry_id    = 0;
 		if ( ! empty( $form['settings']['storeEntries'] ) ) {
 			$entry_id = $this->entries->create( $form_id, $values, $attribution );
 			if ( is_wp_error( $entry_id ) ) {
+				$this->remove_uploads( $attachments );
 				return $entry_id;
+			}
+		}
+
+		$registration = array();
+		if ( 'registration' === $mode ) {
+			$registration = \Anar\Login\Integrations\MrnForm::complete_registration( $form, $identity, (int) $entry_id );
+			if ( is_wp_error( $registration ) ) {
+				$this->entries->delete( $entry_id );
+				$this->remove_uploads( $attachments );
+				return $registration;
 			}
 		}
 
@@ -104,7 +128,74 @@ final class Submission_Handler {
 			$response['redirect'] = esc_url_raw( (string) ( $filtered['redirect'] ?? $response['redirect'] ) );
 		}
 
-		return $response;
+		return array_replace( $response, $registration );
+	}
+
+	/**
+	 * Issue an Anar code for the saved phone field on a published form.
+	 *
+	 * @param int                  $form_id Form ID.
+	 * @param array<string, mixed> $request Request values.
+	 * @return array<string, mixed>|\WP_Error
+	 */
+	public function request_sms( int $form_id, array $request ): array|\WP_Error {
+		$form = $this->forms->find( $form_id );
+		if ( ! $form || 'published' !== $form['status'] || 'off' === Anar_Integration::mode( $form ) ) {
+			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-forms' ), array( 'status' => 404 ) );
+		}
+		$checked = $this->check_request( $form_id, $request );
+		if ( is_wp_error( $checked ) ) {
+			return $checked;
+		}
+		if ( ! Anar_Integration::available( $form ) ) {
+			return Anar_Integration::unavailable();
+		}
+		$key    = Anar_Integration::phone_key( $form );
+		$fields = array_filter( $form['fields'], static fn( array $field ): bool => $key === $field['key'] );
+		$raw    = is_array( $request['mrnf'] ?? null ) ? $request['mrnf'] : array();
+		$result = $this->validator->validate( $fields, $raw );
+		if ( $result['errors'] ) {
+			return $this->validation_error( $form, $result['errors'] );
+		}
+		$proof = $request['proof'] ?? '';
+		$proof = is_string( $proof ) && strlen( $proof ) < 2048 ? json_decode( $proof, true, 4 ) : null;
+		return \Anar\Login\Integrations\MrnForm::send( $form, $result['values'][ $key ] ?? '', is_array( $proof ) ? $proof : array() );
+	}
+
+	/**
+	 * Check the form nonce and honeypot.
+	 *
+	 * @param int                  $form_id Form ID.
+	 * @param array<string, mixed> $request Request values.
+	 * @return bool|\WP_Error
+	 */
+	private function check_request( int $form_id, array $request ): bool|\WP_Error {
+		$nonce = $request['_mrnf_nonce'] ?? '';
+		if ( ! is_string( $nonce ) || ! wp_verify_nonce( sanitize_text_field( $nonce ), 'mrnf_submit_' . $form_id ) ) {
+			return new \WP_Error( 'mrnf_invalid_nonce', __( 'نشست فرم منقضی شده است؛ صفحه را تازه‌سازی کنید.', 'mrn-forms' ), array( 'status' => 403 ) );
+		}
+		if ( ! empty( $request['_mrnf_company'] ) ) {
+			return new \WP_Error( 'mrnf_spam', __( 'ارسال شناسایی نشد.', 'mrn-forms' ), array( 'status' => 400 ) );
+		}
+		return true;
+	}
+
+	/**
+	 * Build the REST error with per-field validation messages.
+	 *
+	 * @param array<string, mixed>  $form Stored form.
+	 * @param array<string, string> $errors Field errors.
+	 * @return \WP_Error
+	 */
+	private function validation_error( array $form, array $errors ): \WP_Error {
+		return new \WP_Error(
+			'mrnf_validation',
+			$form['settings']['errorMessage'],
+			array(
+				'status' => 422,
+				'fields' => $errors,
+			)
+		);
 	}
 
 	/**
@@ -135,15 +226,15 @@ final class Submission_Handler {
 	}
 
 	/**
-	 * Validate and move uploads into the media library.
+	 * Validate uploads before consuming the verification code.
 	 *
 	 * @param array<int, array<string, mixed>> $fields Fields.
 	 * @param array<string, mixed>             $files Files.
-	 * @param array<string, mixed>             $values Values, updated by reference.
+	 * @param array<string, mixed>             $values Validated values.
 	 * @param array<string, string>            $errors Errors, updated by reference.
-	 * @return void
+	 * @return array
 	 */
-	private function handle_files( array $fields, array $files, array &$values, array &$errors ): void {
+	private function validate_files( array $fields, array $files, array $values, array &$errors ): array {
 		$pending = array();
 		foreach ( $fields as $field ) {
 			if ( 'file' !== $field['type'] || ! $this->validator->is_visible( $field, $values ) ) {
@@ -176,11 +267,19 @@ final class Submission_Handler {
 			);
 		}
 
-		// Never move a file when any field is invalid; this prevents orphaned uploads.
-		if ( $errors ) {
-			return;
-		}
+		return $pending;
+	}
 
+	/**
+	 * Store files and return attachment IDs so a failed submission can roll them back.
+	 *
+	 * @param array<int, array<string, mixed>> $pending Validated uploads.
+	 * @param array<string, mixed>             $values Values, updated by reference.
+	 * @param array<string, string>            $errors Errors, updated by reference.
+	 * @return int[]
+	 */
+	private function upload_files( array $pending, array &$values, array &$errors ): array {
+		$attachments = array();
 		foreach ( $pending as $upload_item ) {
 			$field = $upload_item['field'];
 			$file  = $upload_item['file'];
@@ -199,14 +298,31 @@ final class Submission_Handler {
 					'post_title'     => sanitize_file_name( pathinfo( $file['name'], PATHINFO_FILENAME ) ),
 					'post_status'    => 'private',
 				),
-				$upload['file']
+				$upload['file'],
+				0,
+				true
 			);
 			if ( is_wp_error( $attachment_id ) ) {
+				wp_delete_file( $upload['file'] );
 				$errors[ $key ] = __( 'ذخیره فایل ناموفق بود.', 'mrn-forms' );
 				continue;
 			}
 			wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );
+			$attachments[]  = $attachment_id;
 			$values[ $key ] = esc_url_raw( $upload['url'] );
+		}
+		return $attachments;
+	}
+
+	/**
+	 * Clean up media created by a failed submission.
+	 *
+	 * @param int[] $attachments Newly created attachment IDs.
+	 * @return void
+	 */
+	private function remove_uploads( array $attachments ): void {
+		foreach ( $attachments as $attachment_id ) {
+			wp_delete_attachment( $attachment_id, true );
 		}
 	}
 }

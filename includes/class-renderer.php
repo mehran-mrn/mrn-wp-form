@@ -43,13 +43,16 @@ final class Renderer {
 				'processing'      => __( 'در حال ارسال…', 'mrn-forms' ),
 				'network'         => __( 'ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', 'mrn-forms' ),
 				'close'           => __( 'بستن', 'mrn-forms' ),
+				'smsCodeRequired' => __( 'ابتدا کد پیامکی را دریافت و وارد کنید.', 'mrn-forms' ),
 				/* translators: 1: field label, 2: related field label. */
 				'requiredWithout' => __( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-forms' ),
 			)
 		);
 
-		$settings = wp_parse_args( $args, $form['settings'] );
-		$style    = sprintf(
+		$settings  = wp_parse_args( $args, $form['settings'] );
+		$needs_sms = 'off' !== Anar_Integration::mode( $form );
+		$sms_ready = $needs_sms && Anar_Integration::available( $form );
+		$style     = sprintf(
 			'--mrnf-primary:%1$s;--mrnf-accent:%2$s;--mrnf-bg:%3$s;--mrnf-text:%4$s;--mrnf-gap:%5$dpx;--mrnf-radius:%6$dpx',
 			esc_attr( $settings['primaryColor'] ),
 			esc_attr( $settings['accentColor'] ),
@@ -58,7 +61,7 @@ final class Renderer {
 			absint( $settings['layoutGap'] ),
 			absint( $settings['borderRadius'] )
 		);
-		$classes  = array( 'mrnf-form', 'mrnf-labels--' . sanitize_html_class( $settings['labelPosition'] ) );
+		$classes   = array( 'mrnf-form', 'mrnf-labels--' . sanitize_html_class( $settings['labelPosition'] ) );
 		if ( ! empty( $settings['buttonFullWidth'] ) ) {
 			$classes[] = 'mrnf-form--wide-button';
 		}
@@ -70,7 +73,7 @@ final class Renderer {
 		ob_start();
 		?>
 		<div class="mrnf-shell" style="<?php echo esc_attr( $style ); ?>" dir="<?php echo esc_attr( $direction ); ?>">
-			<form class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-mrnf-form="<?php echo esc_attr( (string) $form['id'] ); ?>" data-ajax="<?php echo ! empty( $settings['ajax'] ) ? '1' : '0'; ?>" method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" novalidate>
+			<form class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-mrnf-form="<?php echo esc_attr( (string) $form['id'] ); ?>" data-ajax="<?php echo $needs_sms || ! empty( $settings['ajax'] ) ? '1' : '0'; ?>" method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" novalidate>
 				<input type="hidden" name="action" value="mrnf_submit">
 				<input type="hidden" name="form_id" value="<?php echo esc_attr( (string) $form['id'] ); ?>">
 				<input type="hidden" name="_mrnf_nonce" value="<?php echo esc_attr( wp_create_nonce( 'mrnf_submit_' . $form['id'] ) ); ?>">
@@ -93,8 +96,13 @@ final class Renderer {
 						<?php echo $this->field( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Field method escapes values. ?>
 					<?php endforeach; ?>
 				</div>
+				<?php if ( $sms_ready ) : ?>
+					<?php Anar_Integration::controls( Anar_Integration::phone_key( $form ) ); ?>
+				<?php elseif ( $needs_sms ) : ?>
+					<p class="mrnf-form__notice is-error" role="status"><?php echo esc_html( Anar_Integration::unavailable()->get_error_message() ); ?></p>
+				<?php endif; ?>
 				<div class="mrnf-form__actions">
-					<button class="mrnf-submit" type="submit"><span><?php echo esc_html( $settings['submitLabel'] ); ?></span><i aria-hidden="true">←</i></button>
+					<button class="mrnf-submit" type="submit" <?php disabled( $needs_sms && ! $sms_ready ); ?>><span><?php echo esc_html( $settings['submitLabel'] ); ?></span><i aria-hidden="true">←</i></button>
 				</div>
 			</form>
 		</div>

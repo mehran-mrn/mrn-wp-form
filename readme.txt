@@ -4,7 +4,7 @@ Tags: form builder, contact form, conditional logic, email notifications, rtl
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.4.3
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,8 @@ MRN Forms lets you build and style WordPress forms without a page builder. It in
 * Administrator notifications and respondent receipts with HTML templates and merge tags.
 * Conditional notification recipients.
 * Shortcodes, a dynamic Gutenberg block, and a theme function.
-* JavaScript submission with a standard POST fallback.
+* JavaScript submission with a standard POST fallback for regular forms.
+* Optional custom registration and SMS verification with [Anar Toolkit](https://wordpress.org/plugins/anar-toolkit/) 1.5.0 or later.
 * Optional traffic attribution and events for an existing Google Analytics installation. Both are off by default.
 * No paid license, external account, or external runtime library is required for the form builder.
 
@@ -52,11 +53,16 @@ MRN Forms برای سایت‌هایی ساخته شده که یک فرم‌سا
 * مسیریابی شرطی اعلان‌ها بر اساس پاسخ هر فیلد
 * قالب HTML واکنش‌گرا با رنگ و لوگوی برند
 * Merge Tag برای اطلاعات فرم و فیلدها
-* ارسال AJAX با fallback کامل بدون JavaScript
+* ارسال AJAX با امکان ارسال استاندارد برای فرم‌های عادی
+* ثبت‌نام با فیلدهای دلخواه و تأیید پیامکی فرم‌ها از طریق انار ۱.۵.۰ یا بالاتر
 * Honeypot، nonce، محدودسازی نرخ و هش کردن IP
 * شورت‌کد، بلوک گوتنبرگ و تابع قالب
 * RTL/LTR خودکار و دسترس‌پذیری پایه
 * بدون وابستگی runtime خارجی
+
+= ثبت‌نام و تأیید پیامکی با انار =
+
+در «ظاهر و رفتار ← انار و MRN Forms» یک فیلد تلفن الزامی و بدون شرط نمایش انتخاب کنید. حالت «تأیید پیامکی پیش از ارسال» برای فرم‌های عادی است. برای ثبت‌نام، حالت «ثبت‌نام در انار» را انتخاب کنید، فرم را منتشر کنید و آن را در «انار ← تنظیمات ← عمومی» انتخاب کنید. هر دو حالت از سرویس کد تأیید انار استفاده می‌کنند و به جاوااسکریپت نیاز دارند.
 
 == Installation ==
 
@@ -127,6 +133,8 @@ MRN Forms برای سایت‌هایی ساخته شده که یک فرم‌سا
 
 == Privacy ==
 
+When Anar verification is enabled for a form, Anar sends the mobile number and verification message to the SMS provider configured by the site administrator. Custom field answers are stored according to the form settings and registration answers are saved in the form inbox.
+
 Form definitions, submitted values, and delivery logs are stored in this site's database. Entry metadata includes submission time, the logged-in user ID when present, browser user agent, referring URL, and a keyed one-way IP hash. Raw IP addresses are not saved with entries; the hash is used for abuse control. Notifications use WordPress `wp_mail()` and the site's configured mail transport, and are sent to configured recipients. The plugin does not send entries or usage statistics to MRNWP or the developer.
 
 Traffic attribution and analytics events are separate opt-in settings under Forms > Settings, and are off by default. Configure privacy notices and any required visitor consent before enabling them.
@@ -168,6 +176,11 @@ PHP, JavaScript, and CSS sources are included in the plugin. No build step is re
 3. Email settings and optional attribution and analytics controls.
 
 == Changelog ==
+
+= 1.5.0 =
+* Build custom registration forms for Anar with a required mobile field and save the answers in the form inbox.
+* Verify mobile numbers by SMS before submission using Anar’s configured verification service.
+* Add a bilingual integration card and a mobile-friendly verification step.
 
 = 1.4.3 =
 * Correct the WordPress.org contributor username to mrnwp.

@@ -161,10 +161,123 @@
       if (!response.ok) {
         var error = new Error(data.message || mrnfFrontend.network);
         error.fields = data.data && data.data.fields ? data.data.fields : {};
+        error.challenge = response.status === 428 && data.data && data.data.challenge;
         throw error;
       }
       return data;
     });
+  }
+
+  function setupSms(form) {
+    var panel = form.querySelector('[data-mrnf-sms]');
+    if (!panel) { return null; }
+
+    var key = panel.dataset.mrnfSms;
+    var phone = form.elements.namedItem('mrnf[' + key + ']');
+    var button = panel.querySelector('[data-mrnf-send-code]');
+    var codeField = panel.querySelector('[data-mrnf-code-field]');
+    var code = form.elements.namedItem('_mrnf_sms_code');
+    var challenge = form.elements.namedItem('_mrnf_sms_challenge');
+    var status = panel.querySelector('.mrnf-sms__status');
+    var initialLabel = button.textContent;
+    var timer;
+    var pending = false;
+
+    function reset() {
+      challenge.value = '';
+      code.value = '';
+      codeField.hidden = true;
+      code.required = false;
+      status.textContent = '';
+      status.classList.remove('is-error');
+      window.clearInterval(timer);
+      button.disabled = pending;
+      button.textContent = initialLabel;
+    }
+
+    function countdown(seconds) {
+      var deadline = Date.now() + seconds * 1000;
+      function tick() {
+        var remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+        button.textContent = button.dataset.resendLabel + (remaining ? ' (' + remaining.toLocaleString(document.documentElement.lang || undefined) + ')' : '');
+        button.disabled = remaining > 0;
+        if (!remaining) { window.clearInterval(timer); }
+      }
+      timer = window.setInterval(tick, 1000);
+      tick();
+    }
+
+    phone.addEventListener('input', reset);
+    phone.addEventListener('change', function () {
+      if (challenge.value && phone.value !== phone.mrnfCodePhone) { reset(); }
+    });
+    button.addEventListener('click', function () {
+      if (pending || button.disabled) { return; }
+      if (!phone.reportValidity()) { return; }
+      var requestedPhone = phone.value;
+      pending = true;
+      reset();
+      panel.setAttribute('aria-busy', 'true');
+      button.textContent = mrnfFrontend.processing;
+
+      refreshNonce(form).then(function () {
+        var payload = new URLSearchParams();
+        payload.set(phone.name, requestedPhone);
+        payload.set('_mrnf_nonce', form.elements.namedItem('_mrnf_nonce').value);
+        payload.set('_mrnf_company', form.elements.namedItem('_mrnf_company').value);
+        function send() {
+          return window.fetch(mrnfFrontend.restUrl + form.dataset.mrnfForm + '/sms', {
+            method: 'POST',
+            body: payload,
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'Accept': 'application/json' }
+          }).then(responseData);
+        }
+        return send().catch(function (error) {
+          if (!error.challenge) { throw error; }
+          return import(error.challenge.script).then(function () {
+            return window.AnarChallenge.solve(error.challenge);
+          }).then(function (proof) {
+            if (phone.value !== requestedPhone) { return null; }
+            payload.set('proof', JSON.stringify(proof));
+            return send();
+          });
+        });
+      }).then(function (data) {
+        if (!data || phone.value !== requestedPhone) { return; }
+        phone.mrnfCodePhone = requestedPhone;
+        challenge.value = data.challenge;
+        codeField.hidden = false;
+        code.required = true;
+        status.textContent = data.message;
+        countdown(Number(data.resendAfter) || 0);
+        code.focus();
+      }).catch(function (error) {
+        if (phone.value !== requestedPhone) { return; }
+        status.textContent = error.message || mrnfFrontend.network;
+        status.classList.add('is-error');
+        showErrors(form, error.fields);
+      }).finally(function () {
+        pending = false;
+        panel.removeAttribute('aria-busy');
+        if (!challenge.value) {
+          button.textContent = initialLabel;
+          button.disabled = false;
+        }
+      });
+    });
+
+    return {
+      ready: function () {
+        if (challenge.value && phone.value === phone.mrnfCodePhone) { return true; }
+        status.textContent = mrnfFrontend.smsCodeRequired;
+        status.classList.add('is-error');
+        if (!button.disabled) { button.focus(); }
+        return false;
+      },
+      reset: reset
+    };
   }
 
   document.querySelectorAll('[data-mrnf-form]').forEach(function (form) {
@@ -181,6 +294,8 @@
     }
 
     updateConditions(form);
+    var sms = setupSms(form);
+    var submitting = false;
     form.addEventListener('input', function () { updateConditions(form); });
     form.addEventListener('change', function () { updateConditions(form); });
 
@@ -189,6 +304,7 @@
         return;
       }
       event.preventDefault();
+      if (submitting) { return; }
       clearErrors(form);
       updateConditions(form);
 
@@ -202,11 +318,14 @@
         form.reportValidity();
         return;
       }
+      if (sms && !sms.ready()) { return; }
 
       var button = form.querySelector('.mrnf-submit');
+      if (button.disabled) { return; }
       var label = button.querySelector('span');
       var original = label.textContent;
       button.disabled = true;
+      submitting = true;
       label.textContent = mrnfFrontend.processing;
 
       refreshNonce(form).then(function () {
@@ -228,6 +347,7 @@
         }
         showNotice(form, data.message, 'success');
         form.reset();
+        if (sms) { sms.reset(); }
         updateConditions(form);
         if (data.redirect) {
           window.setTimeout(function () { window.location.assign(data.redirect); }, 500);
@@ -238,6 +358,7 @@
         showErrors(form, error.fields);
         form.dispatchEvent(new CustomEvent('mrnf:error', { detail: error, bubbles: true }));
       }).finally(function () {
+        submitting = false;
         button.disabled = false;
         label.textContent = original;
       });

@@ -40,6 +40,8 @@
   var selectedId = fields.length ? fields[0].id : '';
   var draggedId = '';
   var typeDefinitions = mrnfAdmin.fieldTypes || {};
+  var anarPhone = builder.querySelector('[data-mrnf-setting="anarPhoneField"]');
+  var storeEntries = builder.querySelector('[data-mrnf-setting="storeEntries"]');
 
   function safeParse(value, fallback) {
     try {
@@ -91,10 +93,29 @@
   }
 
   function sync() {
+    updateAnarControls();
     fieldsInput.value = JSON.stringify(fields);
     settingsInput.value = JSON.stringify(settings);
     notificationsInput.value = JSON.stringify(notifications);
     dirty = true;
+  }
+
+  function updateAnarControls() {
+    if (!anarPhone) { return; }
+    anarPhone.options.length = 1;
+    fields.filter(function (field) {
+      return field.type === 'tel' && field.required && !(field.condition && field.condition.enabled);
+    }).forEach(function (field) {
+      anarPhone.add(new Option(field.label + ' (' + field.key + ')', field.key));
+    });
+    anarPhone.value = settings.anarPhoneField || '';
+    if (anarPhone.selectedIndex < 0) { anarPhone.selectedIndex = 0; }
+    anarPhone.disabled = !settings.anarMode || settings.anarMode === 'off';
+    anarPhone.setCustomValidity('');
+    if (storeEntries) {
+      storeEntries.disabled = settings.anarMode === 'registration';
+      storeEntries.checked = storeEntries.disabled || Boolean(settings.storeEntries);
+    }
   }
 
   function selectedField() {
@@ -493,7 +514,15 @@
     previewModal.querySelector('[data-mrnf-close-preview]').addEventListener('click', function () { previewModal.hidden = true; });
   }
 
-  form.addEventListener('submit', function () {
+  form.addEventListener('submit', function (event) {
+    if (anarPhone && !anarPhone.disabled && !anarPhone.value && form.elements.namedItem('status').value === 'published') {
+      event.preventDefault();
+      builder.querySelector('[data-mrnf-tab="appearance"]').click();
+      anarPhone.setCustomValidity(anarPhone.options[0].textContent);
+      anarPhone.reportValidity();
+      anarPhone.setCustomValidity('');
+      return;
+    }
     fieldsInput.value = JSON.stringify(fields);
     settingsInput.value = JSON.stringify(settings);
     notificationsInput.value = JSON.stringify(notifications);
@@ -508,4 +537,5 @@
   });
 
   render();
+  updateAnarControls();
 }());

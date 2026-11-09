@@ -286,3 +286,83 @@
   .mrnf-shell * { scroll-behavior: auto !important; transition: none !important; }
   .mrnf-form__notice.is-toast { transform: none; }
 }
+.mrnf-sms {
+  display: grid;
+  gap: 12px;
+  margin-block-start: var(--mrnf-gap);
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--mrnf-primary), transparent 74%);
+  border-radius: var(--mrnf-radius);
+  background: color-mix(in srgb, var(--mrnf-primary) 6%, var(--mrnf-bg));
+}
+
+.mrnf-sms__heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+
+.mrnf-sms__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mrnf-sms__heading > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  color: var(--mrnf-bg);
+  background: var(--mrnf-primary);
+  border-radius: 50%;
+}
+
+.mrnf-sms p {
+  margin: 0;
+  font-size: .88em;
+}
+
+.mrnf-sms__actions label {
+  display: flex;
+  flex: 1 1 12rem;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mrnf-sms__actions input {
+  max-width: 9rem;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--mrnf-primary);
+  border-radius: var(--mrnf-radius);
+  text-align: center;
+  letter-spacing: .18em;
+}
+
+.mrnf-sms__actions button {
+  padding: 8px 12px;
+  border: 1px solid var(--mrnf-primary);
+  border-radius: var(--mrnf-radius);
+  background: var(--mrnf-bg);
+  color: var(--mrnf-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mrnf-sms__actions button:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+.mrnf-sms__actions [hidden],
+.mrnf-sms__status:empty {
+  display: none;
+}
+
+.mrnf-sms__status.is-error {
+  color: #a12034;
+}
