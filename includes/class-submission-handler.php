@@ -39,7 +39,7 @@ final class Submission_Handler {
 	public function submit( int $form_id, array $request, array $files = array() ): array|\WP_Error {
 		$form = $this->forms->find( $form_id );
 		if ( ! $form || 'published' !== $form['status'] ) {
-			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-forms' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'mrnf_form_unavailable', __( 'This form is unavailable.', 'mrn-forms' ), array( 'status' => 404 ) );
 		}
 		$checked = $this->check_request( $form_id, $request );
 		if ( is_wp_error( $checked ) ) {
@@ -47,10 +47,10 @@ final class Submission_Handler {
 		}
 		$loaded_at = absint( $request['_mrnf_loaded_at'] ?? 0 );
 		if ( $loaded_at && time() - $loaded_at < 2 ) {
-			return new \WP_Error( 'mrnf_too_fast', __( 'لطفاً پس از تکمیل فرم دوباره تلاش کنید.', 'mrn-forms' ), array( 'status' => 429 ) );
+			return new \WP_Error( 'mrnf_too_fast', __( 'Please try again after completing the form.', 'mrn-forms' ), array( 'status' => 429 ) );
 		}
 		if ( ! $this->within_rate_limit( $form_id ) ) {
-			return new \WP_Error( 'mrnf_rate_limit', __( 'تعداد تلاش‌ها بیش از حد مجاز است؛ چند دقیقه دیگر دوباره امتحان کنید.', 'mrn-forms' ), array( 'status' => 429 ) );
+			return new \WP_Error( 'mrnf_rate_limit', __( 'Too many attempts. Please try again in a few minutes.', 'mrn-forms' ), array( 'status' => 429 ) );
 		}
 
 		$mode = Anar_Integration::mode( $form );
@@ -141,7 +141,7 @@ final class Submission_Handler {
 	public function request_sms( int $form_id, array $request ): array|\WP_Error {
 		$form = $this->forms->find( $form_id );
 		if ( ! $form || 'published' !== $form['status'] || 'off' === Anar_Integration::mode( $form ) ) {
-			return new \WP_Error( 'mrnf_form_unavailable', __( 'این فرم در دسترس نیست.', 'mrn-forms' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'mrnf_form_unavailable', __( 'This form is unavailable.', 'mrn-forms' ), array( 'status' => 404 ) );
 		}
 		$checked = $this->check_request( $form_id, $request );
 		if ( is_wp_error( $checked ) ) {
@@ -172,10 +172,10 @@ final class Submission_Handler {
 	private function check_request( int $form_id, array $request ): bool|\WP_Error {
 		$nonce = $request['_mrnf_nonce'] ?? '';
 		if ( ! is_string( $nonce ) || ! wp_verify_nonce( sanitize_text_field( $nonce ), 'mrnf_submit_' . $form_id ) ) {
-			return new \WP_Error( 'mrnf_invalid_nonce', __( 'نشست فرم منقضی شده است؛ صفحه را تازه‌سازی کنید.', 'mrn-forms' ), array( 'status' => 403 ) );
+			return new \WP_Error( 'mrnf_invalid_nonce', __( 'The form session has expired. Please refresh the page.', 'mrn-forms' ), array( 'status' => 403 ) );
 		}
 		if ( ! empty( $request['_mrnf_company'] ) ) {
-			return new \WP_Error( 'mrnf_spam', __( 'ارسال شناسایی نشد.', 'mrn-forms' ), array( 'status' => 400 ) );
+			return new \WP_Error( 'mrnf_spam', __( 'Submission could not be verified.', 'mrn-forms' ), array( 'status' => 400 ) );
 		}
 		return true;
 	}
@@ -245,7 +245,7 @@ final class Submission_Handler {
 			if ( empty( $file['name'] ) ) {
 				if ( ! empty( $field['required'] ) ) {
 					/* translators: %s: upload field label. */
-					$errors[ $key ] = sprintf( __( 'بارگذاری «%s» الزامی است.', 'mrn-forms' ), $field['label'] );
+					$errors[ $key ] = sprintf( __( 'Uploading “%s” is required.', 'mrn-forms' ), $field['label'] );
 				}
 				continue;
 			}
@@ -253,12 +253,12 @@ final class Submission_Handler {
 			$extensions = array_filter( array_map( 'sanitize_key', explode( ',', $rules['extensions'] ?? '' ) ) );
 			$extension  = strtolower( pathinfo( sanitize_file_name( $file['name'] ), PATHINFO_EXTENSION ) );
 			if ( ! in_array( $extension, $extensions, true ) ) {
-				$errors[ $key ] = __( 'نوع فایل مجاز نیست.', 'mrn-forms' );
+				$errors[ $key ] = __( 'This file type is not allowed.', 'mrn-forms' );
 				continue;
 			}
 			if ( (int) $file['size'] > (int) ( $rules['maxFileMB'] ?? 5 ) * MB_IN_BYTES ) {
 				/* translators: %d: maximum file size in megabytes. */
-				$errors[ $key ] = sprintf( __( 'حجم فایل نباید بیشتر از %d مگابایت باشد.', 'mrn-forms' ), (int) $rules['maxFileMB'] );
+				$errors[ $key ] = sprintf( __( 'The file must not be larger than %d MB.', 'mrn-forms' ), (int) $rules['maxFileMB'] );
 				continue;
 			}
 			$pending[] = array(
@@ -304,7 +304,7 @@ final class Submission_Handler {
 			);
 			if ( is_wp_error( $attachment_id ) ) {
 				wp_delete_file( $upload['file'] );
-				$errors[ $key ] = __( 'ذخیره فایل ناموفق بود.', 'mrn-forms' );
+				$errors[ $key ] = __( 'Could not save the file.', 'mrn-forms' );
 				continue;
 			}
 			wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );

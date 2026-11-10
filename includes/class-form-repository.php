@@ -78,12 +78,12 @@ final class Form_Repository {
 		$id    = absint( $data['id'] ?? 0 );
 		$title = sanitize_text_field( $data['title'] ?? '' );
 		if ( '' === $title ) {
-			return new \WP_Error( 'mrnf_title_required', __( 'عنوان فرم الزامی است.', 'mrn-forms' ) );
+			return new \WP_Error( 'mrnf_title_required', __( 'The form title is required.', 'mrn-forms' ) );
 		}
 		$fields   = Field_Registry::normalize_many( (array) ( $data['fields'] ?? array() ) );
 		$settings = $this->sanitize_form_settings( (array) ( $data['settings'] ?? array() ) );
 		if ( 'published' === ( $data['status'] ?? '' ) && 'off' !== $settings['anarMode'] && ! Anar_Integration::phone_key( compact( 'fields', 'settings' ) ) ) {
-			return new \WP_Error( 'mrnf_anar_phone_field', __( 'در تنظیمات انار، یک فیلد تلفنِ الزامی و بدون شرط نمایش انتخاب کنید.', 'mrn-forms' ) );
+			return new \WP_Error( 'mrnf_anar_phone_field', __( 'Select a required phone field with no visibility condition in the Anar settings.', 'mrn-forms' ) );
 		}
 
 		$slug_source = $data['slug'] ?? '';
@@ -126,10 +126,10 @@ final class Form_Repository {
 	public function duplicate( int $id ): int|\WP_Error {
 		$form = $this->find( $id );
 		if ( ! $form ) {
-			return new \WP_Error( 'mrnf_not_found', __( 'فرم پیدا نشد.', 'mrn-forms' ) );
+			return new \WP_Error( 'mrnf_not_found', __( 'Form not found.', 'mrn-forms' ) );
 		}
 		unset( $form['id'], $form['created_at'], $form['updated_at'] );
-		$form['title']  = $form['title'] . ' ' . __( '(کپی)', 'mrn-forms' );
+		$form['title']  = $form['title'] . ' ' . __( '(Copy)', 'mrn-forms' );
 		$form['slug']   = $form['slug'] . '-copy';
 		$form['status'] = 'draft';
 		return $this->save( $form );
@@ -182,9 +182,9 @@ final class Form_Repository {
 	 */
 	public static function default_settings(): array {
 		return array(
-			'submitLabel'        => __( 'ارسال فرم', 'mrn-forms' ),
-			'successMessage'     => __( 'سپاس! اطلاعات شما با موفقیت دریافت شد.', 'mrn-forms' ),
-			'errorMessage'       => __( 'لطفاً خطاهای مشخص‌شده را برطرف کنید.', 'mrn-forms' ),
+			'submitLabel'        => __( 'Submit form', 'mrn-forms' ),
+			'successMessage'     => __( 'Thank you! Your information was received successfully.', 'mrn-forms' ),
+			'errorMessage'       => __( 'Please correct the highlighted errors.', 'mrn-forms' ),
 			'redirectUrl'        => '',
 			'ajax'               => true,
 			'showTitle'          => true,
@@ -215,11 +215,11 @@ final class Form_Repository {
 		return array(
 			array(
 				'id'        => 'admin',
-				'name'      => __( 'اعلان مدیر', 'mrn-forms' ),
+				'name'      => __( 'Administrator notification', 'mrn-forms' ),
 				'enabled'   => true,
 				'to'        => '{admin_email}',
-				'subject'   => __( 'ارسال جدید از {form_title}', 'mrn-forms' ),
-				'body'      => __( 'یک ارسال جدید در فرم «{form_title}» دریافت شد.<br><br>{all_fields}', 'mrn-forms' ),
+				'subject'   => __( 'New submission from {form_title}', 'mrn-forms' ),
+				'body'      => __( 'A new submission was received from “{form_title}”.<br><br>{all_fields}', 'mrn-forms' ),
 				'replyTo'   => '{field:email}',
 				'condition' => array(
 					'enabled'  => false,
@@ -230,11 +230,11 @@ final class Form_Repository {
 			),
 			array(
 				'id'        => 'submitter',
-				'name'      => __( 'رسید برای کاربر', 'mrn-forms' ),
+				'name'      => __( 'Submitter receipt', 'mrn-forms' ),
 				'enabled'   => true,
 				'to'        => '{field:email}',
-				'subject'   => __( 'اطلاعات شما دریافت شد | {site_name}', 'mrn-forms' ),
-				'body'      => __( 'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}', 'mrn-forms' ),
+				'subject'   => __( 'We received your information | {site_name}', 'mrn-forms' ),
+				'body'      => __( 'Hello {field:name},<br><br>We received your information successfully. A copy of your responses appears below.<br><br>{all_fields}', 'mrn-forms' ),
 				'replyTo'   => '{admin_email}',
 				'condition' => array(
 					'enabled'  => false,
@@ -294,7 +294,7 @@ final class Form_Repository {
 			}
 			$output[] = array(
 				'id'        => sanitize_key( $raw['id'] ?? 'notification_' . $index ),
-				'name'      => sanitize_text_field( $raw['name'] ?? __( 'اعلان ایمیلی', 'mrn-forms' ) ),
+				'name'      => sanitize_text_field( $raw['name'] ?? __( 'Email notification', 'mrn-forms' ) ),
 				'enabled'   => ! empty( $raw['enabled'] ),
 				'to'        => sanitize_text_field( $raw['to'] ?? '' ),
 				'subject'   => sanitize_text_field( $raw['subject'] ?? '' ),

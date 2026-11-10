@@ -49,12 +49,12 @@ final class Admin {
 	 */
 	public function menu(): void {
 		$capability = 'manage_options';
-		add_menu_page( __( 'MRN Forms', 'mrn-forms' ), __( 'فرم‌ها', 'mrn-forms' ), $capability, self::PAGE, array( $this, 'render_dashboard' ), MRNF_URL . 'assets/images/logo-menu.png' );
-		add_submenu_page( self::PAGE, __( 'داشبورد فرم‌ها', 'mrn-forms' ), __( 'داشبورد', 'mrn-forms' ), $capability, self::PAGE, array( $this, 'render_dashboard' ) );
-		add_submenu_page( self::PAGE, __( 'همه فرم‌ها', 'mrn-forms' ), __( 'همه فرم‌ها', 'mrn-forms' ), $capability, self::PAGE . '-forms', array( $this, 'render_forms' ) );
-		add_submenu_page( self::PAGE, __( 'فرم جدید', 'mrn-forms' ), __( 'فرم جدید', 'mrn-forms' ), $capability, self::PAGE . '-builder', array( $this, 'render_builder' ) );
-		add_submenu_page( self::PAGE, __( 'صندوق ورودی', 'mrn-forms' ), __( 'صندوق ورودی', 'mrn-forms' ), $capability, self::PAGE . '-entries', array( $this, 'render_entries' ) );
-		add_submenu_page( self::PAGE, __( 'تنظیمات MRN Forms', 'mrn-forms' ), __( 'تنظیمات', 'mrn-forms' ), $capability, self::PAGE . '-settings', array( $this, 'render_settings' ) );
+		add_menu_page( __( 'MRN Forms', 'mrn-forms' ), __( 'Forms', 'mrn-forms' ), $capability, self::PAGE, array( $this, 'render_dashboard' ), MRNF_URL . 'assets/images/logo-menu.png' );
+		add_submenu_page( self::PAGE, __( 'Forms dashboard', 'mrn-forms' ), __( 'Dashboard', 'mrn-forms' ), $capability, self::PAGE, array( $this, 'render_dashboard' ) );
+		add_submenu_page( self::PAGE, __( 'All forms', 'mrn-forms' ), __( 'All forms', 'mrn-forms' ), $capability, self::PAGE . '-forms', array( $this, 'render_forms' ) );
+		add_submenu_page( self::PAGE, __( 'New form', 'mrn-forms' ), __( 'New form', 'mrn-forms' ), $capability, self::PAGE . '-builder', array( $this, 'render_builder' ) );
+		add_submenu_page( self::PAGE, __( 'Inbox', 'mrn-forms' ), __( 'Inbox', 'mrn-forms' ), $capability, self::PAGE . '-entries', array( $this, 'render_entries' ) );
+		add_submenu_page( self::PAGE, __( 'MRN Forms settings', 'mrn-forms' ), __( 'Settings', 'mrn-forms' ), $capability, self::PAGE . '-settings', array( $this, 'render_settings' ) );
 	}
 
 	/**
@@ -78,77 +78,77 @@ final class Admin {
 				'starterField' => Field_Registry::normalize( 'text' ),
 				'direction'    => is_rtl() ? 'rtl' : 'ltr',
 				'i18n'         => array(
-					'addChoice'                 => __( 'افزودن گزینه', 'mrn-forms' ),
-					'allowedExtensions'         => __( 'پسوندهای مجاز', 'mrn-forms' ),
-					'addAlternativeField'       => __( 'برای استفاده از الزام وابسته، ابتدا یک فیلد ورودی دیگر به فرم اضافه کنید.', 'mrn-forms' ),
-					'alternativeField'          => __( 'فیلد جایگزین', 'mrn-forms' ),
-					'alwaysRequired'            => __( 'همیشه الزامی', 'mrn-forms' ),
-					'alwaysRequiredHelp'        => __( 'کاربر همیشه باید این فیلد را تکمیل کند.', 'mrn-forms' ),
-					'choice'                    => __( 'گزینه', 'mrn-forms' ),
-					'choice1'                   => __( 'گزینه ۱', 'mrn-forms' ),
-					'choice2'                   => __( 'گزینه ۲', 'mrn-forms' ),
-					'choice3'                   => __( 'گزینه ۳', 'mrn-forms' ),
-					'choices'                   => __( 'گزینه‌ها', 'mrn-forms' ),
-					'conditionalLogic'          => __( 'منطق شرطی', 'mrn-forms' ),
-					'conditionallyRequired'     => __( 'الزامی وقتی فیلد دیگری خالی است', 'mrn-forms' ),
-					'conditionallyRequiredHelp' => __( 'تکمیل این فیلد به مقدار فیلد جایگزین بستگی دارد.', 'mrn-forms' ),
-					'confirmAction'             => __( 'این عملیات قابل بازگشت نیست. ادامه می‌دهید؟', 'mrn-forms' ),
-					'content'                   => __( 'محتوا', 'mrn-forms' ),
-					'copySuccess'               => __( 'کپی شد', 'mrn-forms' ),
-					'defaultValue'              => __( 'مقدار پیش‌فرض', 'mrn-forms' ),
-					'delete'                    => __( 'حذف', 'mrn-forms' ),
-					'deleteField'               => __( 'این فیلد حذف شود؟', 'mrn-forms' ),
-					'description'               => __( 'توضیح راهنما', 'mrn-forms' ),
-					'duplicate'                 => __( 'تکثیر', 'mrn-forms' ),
-					'emptyCanvas'               => __( 'فیلدها را از ستون کناری بکشید یا روی آن‌ها کلیک کنید.', 'mrn-forms' ),
+					'addChoice'                 => __( 'Add option', 'mrn-forms' ),
+					'allowedExtensions'         => __( 'Allowed extensions', 'mrn-forms' ),
+					'addAlternativeField'       => __( 'Add another input field before using a dependent requirement.', 'mrn-forms' ),
+					'alternativeField'          => __( 'Alternative field', 'mrn-forms' ),
+					'alwaysRequired'            => __( 'Always required', 'mrn-forms' ),
+					'alwaysRequiredHelp'        => __( 'Users must always complete this field.', 'mrn-forms' ),
+					'choice'                    => __( 'Option', 'mrn-forms' ),
+					'choice1'                   => __( 'Option 1', 'mrn-forms' ),
+					'choice2'                   => __( 'Option 2', 'mrn-forms' ),
+					'choice3'                   => __( 'Option 3', 'mrn-forms' ),
+					'choices'                   => __( 'Options', 'mrn-forms' ),
+					'conditionalLogic'          => __( 'Conditional logic', 'mrn-forms' ),
+					'conditionallyRequired'     => __( 'Required when another field is empty', 'mrn-forms' ),
+					'conditionallyRequiredHelp' => __( 'This field is required based on the alternative field value.', 'mrn-forms' ),
+					'confirmAction'             => __( 'This action cannot be undone. Continue?', 'mrn-forms' ),
+					'content'                   => __( 'Content', 'mrn-forms' ),
+					'copySuccess'               => __( 'Copied', 'mrn-forms' ),
+					'defaultValue'              => __( 'Default value', 'mrn-forms' ),
+					'delete'                    => __( 'Delete', 'mrn-forms' ),
+					'deleteField'               => __( 'Delete this field?', 'mrn-forms' ),
+					'description'               => __( 'Help text', 'mrn-forms' ),
+					'duplicate'                 => __( 'Duplicate', 'mrn-forms' ),
+					'emptyCanvas'               => __( 'Drag fields from the sidebar or click them.', 'mrn-forms' ),
 					/* translators: %d: Number of fields in the form. */
-					'fieldCount'                => __( '%d فیلد', 'mrn-forms' ),
-					'fieldLabel'                => __( 'برچسب', 'mrn-forms' ),
-					'fieldWidth'                => __( 'عرض فیلد', 'mrn-forms' ),
-					'fileSelect'                => __( 'انتخاب فایل…', 'mrn-forms' ),
+					'fieldCount'                => __( '%d fields', 'mrn-forms' ),
+					'fieldLabel'                => __( 'Label', 'mrn-forms' ),
+					'fieldWidth'                => __( 'Field width', 'mrn-forms' ),
+					'fileSelect'                => __( 'Choose a file…', 'mrn-forms' ),
 					/* translators: %s: Field key used in a merge tag. */
-					'helpMergeTag'              => __( 'برای merge tag: {field:%s}', 'mrn-forms' ),
-					'hidden'                    => __( 'پنهان', 'mrn-forms' ),
+					'helpMergeTag'              => __( 'Merge tag: {field:%s}', 'mrn-forms' ),
+					'hidden'                    => __( 'Hidden', 'mrn-forms' ),
 					/* translators: %s: Field type label. */
-					'input'                     => __( 'ورودی %s', 'mrn-forms' ),
-					'layout'                    => __( 'چیدمان', 'mrn-forms' ),
-					'maxFileSize'               => __( 'حداکثر حجم (MB)', 'mrn-forms' ),
-					'maximum'                   => __( 'بیشینه', 'mrn-forms' ),
-					'maxLength'                 => __( 'حداکثر نویسه', 'mrn-forms' ),
-					'minimum'                   => __( 'کمینه', 'mrn-forms' ),
-					'minLength'                 => __( 'حداقل نویسه', 'mrn-forms' ),
-					'newSection'                => __( 'عنوان یک بخش تازه', 'mrn-forms' ),
-					'noOptions'                 => __( 'بدون گزینه', 'mrn-forms' ),
-					'noValue'                   => __( 'بدون مقدار', 'mrn-forms' ),
-					'optionalField'             => __( 'اختیاری', 'mrn-forms' ),
-					'optionalFieldHelp'         => __( 'تکمیل این فیلد برای کاربر اختیاری است.', 'mrn-forms' ),
-					'pattern'                   => __( 'الگوی RegEx', 'mrn-forms' ),
-					'placeholderContent'        => __( 'متن توضیحی یا HTML', 'mrn-forms' ),
-					'placeholderLong'           => __( 'متن بلند…', 'mrn-forms' ),
-					'requiredField'             => __( 'تکمیل این فیلد الزامی است', 'mrn-forms' ),
-					'requiredWithoutHelp'       => __( 'اگر فیلد جایگزین خالی باشد، تکمیل این فیلد الزامی می‌شود.', 'mrn-forms' ),
-					'requirementMode'           => __( 'وضعیت الزامی بودن', 'mrn-forms' ),
-					'selectField'               => __( 'برای ویرایش تنظیمات، یک فیلد را انتخاب کنید.', 'mrn-forms' ),
-					'selectFieldOption'         => __( 'انتخاب فیلد…', 'mrn-forms' ),
-					'showConditionally'         => __( 'نمایش شرطی این فیلد', 'mrn-forms' ),
-					'startsHere'                => __( 'فرم شما از اینجا شروع می‌شود', 'mrn-forms' ),
-					'uniqueKey'                 => __( 'کلید یکتا', 'mrn-forms' ),
-					'unsaved'                   => __( 'تغییرات ذخیره‌نشده دارید.', 'mrn-forms' ),
-					'validation'                => __( 'اعتبارسنجی', 'mrn-forms' ),
-					'width25'                   => __( '۲۵٪', 'mrn-forms' ),
-					'width33'                   => __( '۳۳٪', 'mrn-forms' ),
-					'width50'                   => __( '۵۰٪', 'mrn-forms' ),
-					'width66'                   => __( '۶۶٪', 'mrn-forms' ),
-					'width75'                   => __( '۷۵٪', 'mrn-forms' ),
-					'width100'                  => __( '۱۰۰٪', 'mrn-forms' ),
-					'condition'                 => __( 'شرط', 'mrn-forms' ),
-					'compareValue'              => __( 'مقدار مقایسه', 'mrn-forms' ),
-					'equals'                    => __( 'برابر باشد با', 'mrn-forms' ),
-					'notEquals'                 => __( 'برابر نباشد با', 'mrn-forms' ),
-					'contains'                  => __( 'شامل باشد', 'mrn-forms' ),
-					'notEmpty'                  => __( 'خالی نباشد', 'mrn-forms' ),
-					'empty'                     => __( 'خالی باشد', 'mrn-forms' ),
-					'sourceField'               => __( 'فیلد مبنا', 'mrn-forms' ),
+					'input'                     => __( '%s input', 'mrn-forms' ),
+					'layout'                    => __( 'Layout', 'mrn-forms' ),
+					'maxFileSize'               => __( 'Maximum size (MB)', 'mrn-forms' ),
+					'maximum'                   => __( 'Maximum', 'mrn-forms' ),
+					'maxLength'                 => __( 'Maximum characters', 'mrn-forms' ),
+					'minimum'                   => __( 'Minimum', 'mrn-forms' ),
+					'minLength'                 => __( 'Minimum characters', 'mrn-forms' ),
+					'newSection'                => __( 'A new section heading', 'mrn-forms' ),
+					'noOptions'                 => __( 'No options', 'mrn-forms' ),
+					'noValue'                   => __( 'No value', 'mrn-forms' ),
+					'optionalField'             => __( 'Optional', 'mrn-forms' ),
+					'optionalFieldHelp'         => __( 'Users may leave this field empty.', 'mrn-forms' ),
+					'pattern'                   => __( 'RegEx pattern', 'mrn-forms' ),
+					'placeholderContent'        => __( 'Descriptive text or HTML', 'mrn-forms' ),
+					'placeholderLong'           => __( 'Long text…', 'mrn-forms' ),
+					'requiredField'             => __( 'This field is required', 'mrn-forms' ),
+					'requiredWithoutHelp'       => __( 'If the alternative field is empty, this field becomes required.', 'mrn-forms' ),
+					'requirementMode'           => __( 'Requirement mode', 'mrn-forms' ),
+					'selectField'               => __( 'Select a field to edit its settings.', 'mrn-forms' ),
+					'selectFieldOption'         => __( 'Select a field…', 'mrn-forms' ),
+					'showConditionally'         => __( 'Show this field conditionally', 'mrn-forms' ),
+					'startsHere'                => __( 'Your form starts here', 'mrn-forms' ),
+					'uniqueKey'                 => __( 'Unique key', 'mrn-forms' ),
+					'unsaved'                   => __( 'You have unsaved changes.', 'mrn-forms' ),
+					'validation'                => __( 'Validation', 'mrn-forms' ),
+					'width25'                   => __( '25%', 'mrn-forms' ),
+					'width33'                   => __( '33%', 'mrn-forms' ),
+					'width50'                   => __( '50%', 'mrn-forms' ),
+					'width66'                   => __( '66%', 'mrn-forms' ),
+					'width75'                   => __( '75%', 'mrn-forms' ),
+					'width100'                  => __( '100%', 'mrn-forms' ),
+					'condition'                 => __( 'Condition', 'mrn-forms' ),
+					'compareValue'              => __( 'Comparison value', 'mrn-forms' ),
+					'equals'                    => __( 'Equals', 'mrn-forms' ),
+					'notEquals'                 => __( 'Does not equal', 'mrn-forms' ),
+					'contains'                  => __( 'Contains', 'mrn-forms' ),
+					'notEmpty'                  => __( 'Is not empty', 'mrn-forms' ),
+					'empty'                     => __( 'Is empty', 'mrn-forms' ),
+					'sourceField'               => __( 'Source field', 'mrn-forms' ),
 				),
 			)
 		);
@@ -161,7 +161,7 @@ final class Admin {
 	 * @return string[]
 	 */
 	public function plugin_links( array $links ): array {
-		array_unshift( $links, '<a href="' . esc_url( admin_url( 'admin.php?page=' . self::PAGE ) ) . '">' . esc_html__( 'داشبورد', 'mrn-forms' ) . '</a>' );
+		array_unshift( $links, '<a href="' . esc_url( admin_url( 'admin.php?page=' . self::PAGE ) ) . '">' . esc_html__( 'Dashboard', 'mrn-forms' ) . '</a>' );
 		return $links;
 	}
 
@@ -190,46 +190,46 @@ final class Admin {
 			<section class="mrnf-stats">
 				<?php
 				/* translators: %d: number of published forms. */
-				$this->stat( __( 'کل فرم‌ها', 'mrn-forms' ), $forms, sprintf( __( '%d فرم منتشرشده', 'mrn-forms' ), $published ), 'forms' );
+				$this->stat( __( 'Total forms', 'mrn-forms' ), $forms, sprintf( __( '%d published forms', 'mrn-forms' ), $published ), 'forms' );
 				?>
-				<?php $this->stat( __( 'کل ارسال‌ها', 'mrn-forms' ), $entries, __( 'آرشیو امن و قابل خروجی', 'mrn-forms' ), 'entries' ); ?>
-				<?php $this->stat( __( 'خوانده‌نشده', 'mrn-forms' ), $unread, __( 'نیازمند بررسی شما', 'mrn-forms' ), 'unread' ); ?>
-				<?php $this->stat( __( 'اعلان ایمیلی', 'mrn-forms' ), __( 'فعال', 'mrn-forms' ), __( 'مدیر و تکمیل‌کننده فرم', 'mrn-forms' ), 'mail' ); ?>
+				<?php $this->stat( __( 'Total entries', 'mrn-forms' ), $entries, __( 'Secure, exportable archive', 'mrn-forms' ), 'entries' ); ?>
+				<?php $this->stat( __( 'Unread', 'mrn-forms' ), $unread, __( 'Needs your review', 'mrn-forms' ), 'unread' ); ?>
+				<?php $this->stat( __( 'Email notification', 'mrn-forms' ), __( 'Active', 'mrn-forms' ), __( 'Administrator and form submitter', 'mrn-forms' ), 'mail' ); ?>
 			</section>
 			<section class="mrnf-dashboard-grid">
 				<article class="mrnf-panel">
 					<div class="mrnf-panel__head">
-						<div><span><?php esc_html_e( 'فعالیت اخیر', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'آخرین ارسال‌ها', 'mrn-forms' ); ?></h2></div>
-						<a class="mrnf-button" href="<?php echo esc_url( $this->page_url( 'entries' ) ); ?>"><?php esc_html_e( 'مشاهده صندوق ورودی', 'mrn-forms' ); ?></a>
+						<div><span><?php esc_html_e( 'Recent activity', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Latest entries', 'mrn-forms' ); ?></h2></div>
+						<a class="mrnf-button" href="<?php echo esc_url( $this->page_url( 'entries' ) ); ?>"><?php esc_html_e( 'View inbox', 'mrn-forms' ); ?></a>
 					</div>
 					<?php $this->entries_table( $latest, true ); ?>
 				</article>
 				<aside class="mrnf-panel mrnf-quick">
-					<span class="mrnf-kicker"><?php esc_html_e( 'شروع سریع', 'mrn-forms' ); ?></span>
-					<h2><?php esc_html_e( 'یک تجربه روان برای دریافت اطلاعات', 'mrn-forms' ); ?></h2>
-					<p><?php esc_html_e( 'فرم را بسازید، ظاهرش را با قالب هماهنگ کنید و با شورت‌کد یا بلوک MRN Forms نمایش دهید.', 'mrn-forms' ); ?></p>
-					<a class="mrnf-button mrnf-button--primary mrnf-button--large" href="<?php echo esc_url( $this->page_url( 'builder' ) ); ?>"><span class="dashicons dashicons-plus-alt2"></span><?php esc_html_e( 'ساخت فرم جدید', 'mrn-forms' ); ?></a>
+					<span class="mrnf-kicker"><?php esc_html_e( 'Quick start', 'mrn-forms' ); ?></span>
+					<h2><?php esc_html_e( 'A smooth way to collect information', 'mrn-forms' ); ?></h2>
+					<p><?php esc_html_e( 'Build your form, match it to your theme, and display it with the shortcode or MRN Forms block.', 'mrn-forms' ); ?></p>
+					<a class="mrnf-button mrnf-button--primary mrnf-button--large" href="<?php echo esc_url( $this->page_url( 'builder' ) ); ?>"><span class="dashicons dashicons-plus-alt2"></span><?php esc_html_e( 'Create a new form', 'mrn-forms' ); ?></a>
 					<div class="mrnf-health">
-						<div class="<?php echo $published ? 'is-ok' : ''; ?>"><i></i><span><b><?php esc_html_e( 'فرم منتشرشده', 'mrn-forms' ); ?></b><small>
+						<div class="<?php echo $published ? 'is-ok' : ''; ?>"><i></i><span><b><?php esc_html_e( 'Published form', 'mrn-forms' ); ?></b><small>
 						<?php
 						/* translators: %d: number of forms ready to collect entries. */
-						echo $published ? esc_html( sprintf( __( '%d فرم آماده دریافت', 'mrn-forms' ), $published ) ) : esc_html__( 'هنوز فرمی منتشر نشده', 'mrn-forms' );
+						echo $published ? esc_html( sprintf( __( '%d forms ready to collect entries', 'mrn-forms' ), $published ) ) : esc_html__( 'No forms have been published yet', 'mrn-forms' );
 						?>
 						</small></span></div>
-						<div class="is-ok"><i></i><span><b><?php esc_html_e( 'ذخیره‌سازی اختصاصی', 'mrn-forms' ); ?></b><small><?php esc_html_e( 'جدول‌های بهینه و مستقل', 'mrn-forms' ); ?></small></span></div>
-						<div class="is-ok"><i></i><span><b><?php esc_html_e( 'محافظت ضداسپم', 'mrn-forms' ); ?></b><small><?php esc_html_e( 'Honeypot و محدودسازی نرخ', 'mrn-forms' ); ?></small></span></div>
+						<div class="is-ok"><i></i><span><b><?php esc_html_e( 'Dedicated storage', 'mrn-forms' ); ?></b><small><?php esc_html_e( 'Optimized, independent tables', 'mrn-forms' ); ?></small></span></div>
+						<div class="is-ok"><i></i><span><b><?php esc_html_e( 'Spam protection', 'mrn-forms' ); ?></b><small><?php esc_html_e( 'Honeypot and rate limiting', 'mrn-forms' ); ?></small></span></div>
 					</div>
 				</aside>
 			</section>
 			<?php if ( $active_forms ) : ?>
 				<section class="mrnf-panel">
-					<div class="mrnf-panel__head"><div><span><?php esc_html_e( 'فرم‌های آنلاین', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'دسترسی سریع و کد نمایش', 'mrn-forms' ); ?></h2></div></div>
+					<div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Online forms', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Quick access and embed code', 'mrn-forms' ); ?></h2></div></div>
 					<div class="mrnf-shortcode-grid">
 						<?php foreach ( $active_forms as $form ) : ?>
 							<article><div><b><?php echo esc_html( $form['title'] ); ?></b><small>
 							<?php
 							/* translators: %d: number of entries for a form. */
-							echo esc_html( sprintf( __( '%d ارسال', 'mrn-forms' ), $this->entries->count( $form['id'] ) ) );
+							echo esc_html( sprintf( __( '%d entries', 'mrn-forms' ), $this->entries->count( $form['id'] ) ) );
 							?>
 							</small></div><code>[mrn_form id="<?php echo esc_html( (string) $form['id'] ); ?>"]</code><button type="button" data-mrnf-copy="[mrn_form id=&quot;<?php echo esc_attr( (string) $form['id'] ); ?>&quot;]"><span class="dashicons dashicons-admin-page"></span></button></article>
 						<?php endforeach; ?>
@@ -256,26 +256,26 @@ final class Admin {
 		<main class="mrnf-admin__content">
 			<section class="mrnf-panel">
 				<div class="mrnf-panel__head">
-					<div><span><?php esc_html_e( 'کتابخانه', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'همه فرم‌ها', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'ساخت، ویرایش، تکثیر و مدیریت فرم‌ها از یک فضای یکپارچه.', 'mrn-forms' ); ?></p></div>
-					<a class="mrnf-button mrnf-button--primary" href="<?php echo esc_url( $this->page_url( 'builder' ) ); ?>"><span class="dashicons dashicons-plus-alt2"></span><?php esc_html_e( 'فرم جدید', 'mrn-forms' ); ?></a>
+					<div><span><?php esc_html_e( 'Library', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'All forms', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'Create, edit, duplicate, and manage forms in one workspace.', 'mrn-forms' ); ?></p></div>
+					<a class="mrnf-button mrnf-button--primary" href="<?php echo esc_url( $this->page_url( 'builder' ) ); ?>"><span class="dashicons dashicons-plus-alt2"></span><?php esc_html_e( 'New form', 'mrn-forms' ); ?></a>
 				</div>
-				<form class="mrnf-search" method="get"><input type="hidden" name="page" value="mrn-form-forms"><input name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'جست‌وجوی فرم…', 'mrn-forms' ); ?>"><button class="mrnf-button" type="submit"><?php esc_html_e( 'جست‌وجو', 'mrn-forms' ); ?></button></form>
+				<form class="mrnf-search" method="get"><input type="hidden" name="page" value="mrn-form-forms"><input name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search forms…', 'mrn-forms' ); ?>"><button class="mrnf-button" type="submit"><?php esc_html_e( 'Search', 'mrn-forms' ); ?></button></form>
 				<div class="mrnf-table-wrap">
 					<table class="mrnf-table">
-						<thead><tr><th><?php esc_html_e( 'فرم', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'وضعیت', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'ارسال‌ها', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'کد نمایش', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'آخرین تغییر', 'mrn-forms' ); ?></th><th></th></tr></thead>
+						<thead><tr><th><?php esc_html_e( 'Form', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Status', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Entries', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Embed code', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Last updated', 'mrn-forms' ); ?></th><th></th></tr></thead>
 						<tbody>
 						<?php
 						if ( ! $forms ) :
 							?>
-							<tr><td colspan="6"><div class="mrnf-empty"><span class="dashicons dashicons-feedback"></span><b><?php esc_html_e( 'هنوز فرمی ندارید', 'mrn-forms' ); ?></b><p><?php esc_html_e( 'اولین فرم را در چند دقیقه بسازید.', 'mrn-forms' ); ?></p></div></td></tr><?php endif; ?>
+							<tr><td colspan="6"><div class="mrnf-empty"><span class="dashicons dashicons-feedback"></span><b><?php esc_html_e( 'You do not have any forms yet', 'mrn-forms' ); ?></b><p><?php esc_html_e( 'Create your first form in minutes.', 'mrn-forms' ); ?></p></div></td></tr><?php endif; ?>
 						<?php foreach ( $forms as $form ) : ?>
 							<tr>
 								<td><a class="mrnf-table__title" href="<?php echo esc_url( add_query_arg( 'id', $form['id'], $this->page_url( 'builder' ) ) ); ?>"><?php echo esc_html( $form['title'] ); ?></a><small>#<?php echo esc_html( (string) $form['id'] ); ?> · <?php echo esc_html( $form['slug'] ); ?></small></td>
 								<td><?php echo $this->status_badge( $form['status'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 								<td><a href="<?php echo esc_url( add_query_arg( 'form_id', $form['id'], $this->page_url( 'entries' ) ) ); ?>"><?php echo esc_html( (string) $this->entries->count( $form['id'] ) ); ?></a></td>
 								<td><code>[mrn_form id="<?php echo esc_html( (string) $form['id'] ); ?>"]</code></td>
-								<td><?php echo esc_html( human_time_diff( strtotime( $form['updated_at'] . ' UTC' ), time() ) ); ?> <?php esc_html_e( 'پیش', 'mrn-forms' ); ?></td>
-								<td><div class="mrnf-row-actions"><a href="<?php echo esc_url( add_query_arg( 'id', $form['id'], $this->page_url( 'builder' ) ) ); ?>"><?php esc_html_e( 'ویرایش', 'mrn-forms' ); ?></a><a href="<?php echo esc_url( $this->form_action_url( $form['id'], 'duplicate' ) ); ?>"><?php esc_html_e( 'تکثیر', 'mrn-forms' ); ?></a><a class="is-danger" data-mrnf-confirm href="<?php echo esc_url( $this->form_action_url( $form['id'], 'delete' ) ); ?>"><?php esc_html_e( 'حذف', 'mrn-forms' ); ?></a></div></td>
+								<td><?php /* translators: %s: elapsed time since the form was updated or the entry was created. */ printf( esc_html__( '%s ago', 'mrn-forms' ), esc_html( human_time_diff( strtotime( $form['updated_at'] . ' UTC' ), time() ) ) ); ?></td>
+								<td><div class="mrnf-row-actions"><a href="<?php echo esc_url( add_query_arg( 'id', $form['id'], $this->page_url( 'builder' ) ) ); ?>"><?php esc_html_e( 'Edit', 'mrn-forms' ); ?></a><a href="<?php echo esc_url( $this->form_action_url( $form['id'], 'duplicate' ) ); ?>"><?php esc_html_e( 'Duplicate', 'mrn-forms' ); ?></a><a class="is-danger" data-mrnf-confirm href="<?php echo esc_url( $this->form_action_url( $form['id'], 'delete' ) ); ?>"><?php esc_html_e( 'Delete', 'mrn-forms' ); ?></a></div></td>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>
@@ -299,16 +299,16 @@ final class Admin {
 		if ( ! $form ) {
 			$form = array(
 				'id'            => 0,
-				'title'         => __( 'فرم تماس جدید', 'mrn-forms' ),
+				'title'         => __( 'New contact form', 'mrn-forms' ),
 				'slug'          => '',
 				'status'        => 'draft',
-				'description'   => __( 'لطفاً فرم زیر را تکمیل کنید؛ در اولین فرصت با شما تماس می‌گیریم.', 'mrn-forms' ),
+				'description'   => __( 'Please complete the form below and we will contact you as soon as possible.', 'mrn-forms' ),
 				'fields'        => Field_Registry::starter_fields(),
 				'settings'      => Form_Repository::default_settings(),
 				'notifications' => Form_Repository::default_notifications(),
 			);
 		}
-		$this->header( 'builder', $form['id'] ? __( 'ویرایش فرم', 'mrn-forms' ) : __( 'فرم تازه', 'mrn-forms' ) );
+		$this->header( 'builder', $form['id'] ? __( 'Edit form', 'mrn-forms' ) : __( 'New form', 'mrn-forms' ) );
 		$this->notice();
 		?>
 		<main class="mrnf-builder" data-mrnf-builder>
@@ -320,30 +320,30 @@ final class Admin {
 				<input type="hidden" name="notifications_json" value="<?php echo esc_attr( Database::encode( $form['notifications'] ) ); ?>" data-mrnf-notifications-json>
 				<?php wp_nonce_field( 'mrnf_save_form' ); ?>
 				<div class="mrnf-builder__top">
-					<div class="mrnf-builder__identity"><input name="title" value="<?php echo esc_attr( $form['title'] ); ?>" aria-label="<?php esc_attr_e( 'عنوان فرم', 'mrn-forms' ); ?>" required><span>#<?php echo $form['id'] ? esc_html( (string) $form['id'] ) : esc_html__( 'جدید', 'mrn-forms' ); ?></span></div>
+					<div class="mrnf-builder__identity"><input name="title" value="<?php echo esc_attr( $form['title'] ); ?>" aria-label="<?php esc_attr_e( 'Form title', 'mrn-forms' ); ?>" required><span>#<?php echo $form['id'] ? esc_html( (string) $form['id'] ) : esc_html__( 'New', 'mrn-forms' ); ?></span></div>
 					<div class="mrnf-builder__actions">
-						<select name="status" aria-label="<?php esc_attr_e( 'وضعیت فرم', 'mrn-forms' ); ?>"><option value="draft" <?php selected( $form['status'], 'draft' ); ?>><?php esc_html_e( 'پیش‌نویس', 'mrn-forms' ); ?></option><option value="published" <?php selected( $form['status'], 'published' ); ?>><?php esc_html_e( 'منتشرشده', 'mrn-forms' ); ?></option><option value="archived" <?php selected( $form['status'], 'archived' ); ?>><?php esc_html_e( 'بایگانی', 'mrn-forms' ); ?></option></select>
+						<select name="status" aria-label="<?php esc_attr_e( 'Form status', 'mrn-forms' ); ?>"><option value="draft" <?php selected( $form['status'], 'draft' ); ?>><?php esc_html_e( 'Draft', 'mrn-forms' ); ?></option><option value="published" <?php selected( $form['status'], 'published' ); ?>><?php esc_html_e( 'Published', 'mrn-forms' ); ?></option><option value="archived" <?php selected( $form['status'], 'archived' ); ?>><?php esc_html_e( 'Archived', 'mrn-forms' ); ?></option></select>
 						<?php
 						if ( $form['id'] ) :
 							?>
-							<button type="button" class="mrnf-button" data-mrnf-preview><?php esc_html_e( 'پیش‌نمایش', 'mrn-forms' ); ?></button><?php endif; ?>
-						<button type="submit" class="mrnf-button mrnf-button--primary"><?php esc_html_e( 'ذخیره فرم', 'mrn-forms' ); ?></button>
+							<button type="button" class="mrnf-button" data-mrnf-preview><?php esc_html_e( 'Preview', 'mrn-forms' ); ?></button><?php endif; ?>
+						<button type="submit" class="mrnf-button mrnf-button--primary"><?php esc_html_e( 'Save form', 'mrn-forms' ); ?></button>
 					</div>
 				</div>
 				<div class="mrnf-builder__workspace">
 					<aside class="mrnf-builder__palette">
-						<div class="mrnf-builder__panel-title"><span><?php esc_html_e( 'فیلدها', 'mrn-forms' ); ?></span><small><?php esc_html_e( 'برای افزودن کلیک یا Drag کنید', 'mrn-forms' ); ?></small></div>
+						<div class="mrnf-builder__panel-title"><span><?php esc_html_e( 'Fields', 'mrn-forms' ); ?></span><small><?php esc_html_e( 'Click or drag to add', 'mrn-forms' ); ?></small></div>
 						<div class="mrnf-palette">
 							<?php foreach ( Field_Registry::all() as $type => $definition ) : ?>
 								<button type="button" draggable="true" data-mrnf-add-field="<?php echo esc_attr( $type ); ?>"><span class="dashicons dashicons-<?php echo esc_attr( $definition['icon'] ); ?>"></span><b><?php echo esc_html( $definition['label'] ); ?></b></button>
 							<?php endforeach; ?>
 						</div>
-						<div class="mrnf-builder__tips"><b><?php esc_html_e( 'نمایش در سایت', 'mrn-forms' ); ?></b><code>[mrn_form id="<?php echo $form['id'] ? esc_html( (string) $form['id'] ) : 'ID'; ?>"]</code><small><?php esc_html_e( 'یا از بلوک MRN Forms و تابع mrn_form() استفاده کنید.', 'mrn-forms' ); ?></small></div>
+						<div class="mrnf-builder__tips"><b><?php esc_html_e( 'Display on site', 'mrn-forms' ); ?></b><code>[mrn_form id="<?php echo $form['id'] ? esc_html( (string) $form['id'] ) : 'ID'; ?>"]</code><small><?php esc_html_e( 'Or use the MRN Forms block or the mrn_form() function.', 'mrn-forms' ); ?></small></div>
 					</aside>
 					<section class="mrnf-builder__stage">
-						<div class="mrnf-builder__tabs"><button type="button" class="is-active" data-mrnf-tab="fields"><?php esc_html_e( 'ساختار', 'mrn-forms' ); ?></button><button type="button" data-mrnf-tab="appearance"><?php esc_html_e( 'ظاهر و رفتار', 'mrn-forms' ); ?></button><button type="button" data-mrnf-tab="notifications"><?php esc_html_e( 'اعلان‌ها', 'mrn-forms' ); ?></button></div>
+						<div class="mrnf-builder__tabs"><button type="button" class="is-active" data-mrnf-tab="fields"><?php esc_html_e( 'Structure', 'mrn-forms' ); ?></button><button type="button" data-mrnf-tab="appearance"><?php esc_html_e( 'Appearance and behavior', 'mrn-forms' ); ?></button><button type="button" data-mrnf-tab="notifications"><?php esc_html_e( 'Notifications', 'mrn-forms' ); ?></button></div>
 						<div class="mrnf-builder__tab is-active" data-mrnf-tab-panel="fields">
-							<div class="mrnf-canvas-head"><div><input name="description" value="<?php echo esc_attr( $form['description'] ); ?>" placeholder="<?php esc_attr_e( 'توضیح کوتاه فرم…', 'mrn-forms' ); ?>"></div><span data-mrnf-field-count></span></div>
+							<div class="mrnf-canvas-head"><div><input name="description" value="<?php echo esc_attr( $form['description'] ); ?>" placeholder="<?php esc_attr_e( 'Short form description…', 'mrn-forms' ); ?>"></div><span data-mrnf-field-count></span></div>
 							<div class="mrnf-canvas" data-mrnf-canvas></div>
 						</div>
 						<div class="mrnf-builder__tab" data-mrnf-tab-panel="appearance">
@@ -355,12 +355,12 @@ final class Admin {
 						</div>
 					</section>
 					<aside class="mrnf-builder__inspector">
-						<div class="mrnf-builder__panel-title"><span><?php esc_html_e( 'تنظیمات فیلد', 'mrn-forms' ); ?></span><small><?php esc_html_e( 'تغییرات همان لحظه اعمال می‌شود', 'mrn-forms' ); ?></small></div>
-						<div data-mrnf-inspector><div class="mrnf-inspector-empty"><span class="dashicons dashicons-admin-generic"></span><p><?php esc_html_e( 'یک فیلد را برای تنظیم انتخاب کنید.', 'mrn-forms' ); ?></p></div></div>
+						<div class="mrnf-builder__panel-title"><span><?php esc_html_e( 'Field settings', 'mrn-forms' ); ?></span><small><?php esc_html_e( 'Changes are applied immediately', 'mrn-forms' ); ?></small></div>
+						<div data-mrnf-inspector><div class="mrnf-inspector-empty"><span class="dashicons dashicons-admin-generic"></span><p><?php esc_html_e( 'Select a field to configure it.', 'mrn-forms' ); ?></p></div></div>
 					</aside>
 				</div>
 			</form>
-			<div class="mrnf-preview-modal" data-mrnf-preview-modal hidden><div><button type="button" data-mrnf-close-preview>×</button><iframe title="<?php esc_attr_e( 'پیش‌نمایش فرم', 'mrn-forms' ); ?>"></iframe></div></div>
+			<div class="mrnf-preview-modal" data-mrnf-preview-modal hidden><div><button type="button" data-mrnf-close-preview>×</button><iframe title="<?php esc_attr_e( 'Form preview', 'mrn-forms' ); ?>"></iframe></div></div>
 		</main>
 		<?php $this->footer(); ?>
 		<?php
@@ -393,7 +393,7 @@ final class Admin {
 		?>
 		<main class="mrnf-admin__content">
 			<section class="mrnf-panel">
-				<div class="mrnf-panel__head"><div><span><?php esc_html_e( 'ارسال‌های ثبت‌شده', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'صندوق ورودی', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'بررسی، دسته‌بندی و خروجی گرفتن از پاسخ‌ها.', 'mrn-forms' ); ?></p></div><a class="mrnf-button" href="
+				<div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Saved entries', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Inbox', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'Review, organize, and export submissions.', 'mrn-forms' ); ?></p></div><a class="mrnf-button" href="
 				<?php
 				echo esc_url(
 					wp_nonce_url(
@@ -408,12 +408,12 @@ final class Admin {
 					)
 				);
 				?>
-															"><span class="dashicons dashicons-download"></span><?php esc_html_e( 'خروجی CSV', 'mrn-forms' ); ?></a></div>
-				<form class="mrnf-filters" method="get"><input type="hidden" name="page" value="mrn-form-entries"><select name="form_id"><option value="0"><?php esc_html_e( 'همه فرم‌ها', 'mrn-forms' ); ?></option>
+															"><span class="dashicons dashicons-download"></span><?php esc_html_e( 'Export CSV', 'mrn-forms' ); ?></a></div>
+				<form class="mrnf-filters" method="get"><input type="hidden" name="page" value="mrn-form-entries"><select name="form_id"><option value="0"><?php esc_html_e( 'All forms', 'mrn-forms' ); ?></option>
 				<?php
 				foreach ( $forms as $form ) :
 					?>
-					<option value="<?php echo esc_attr( (string) $form['id'] ); ?>" <?php selected( $form_id, $form['id'] ); ?>><?php echo esc_html( $form['title'] ); ?></option><?php endforeach; ?></select><select name="status"><option value=""><?php esc_html_e( 'همه وضعیت‌ها', 'mrn-forms' ); ?></option><option value="unread" <?php selected( $status, 'unread' ); ?>><?php esc_html_e( 'خوانده‌نشده', 'mrn-forms' ); ?></option><option value="read" <?php selected( $status, 'read' ); ?>><?php esc_html_e( 'خوانده‌شده', 'mrn-forms' ); ?></option><option value="spam" <?php selected( $status, 'spam' ); ?>><?php esc_html_e( 'هرزنامه', 'mrn-forms' ); ?></option></select><button class="mrnf-button" type="submit"><?php esc_html_e( 'اعمال فیلتر', 'mrn-forms' ); ?></button></form>
+					<option value="<?php echo esc_attr( (string) $form['id'] ); ?>" <?php selected( $form_id, $form['id'] ); ?>><?php echo esc_html( $form['title'] ); ?></option><?php endforeach; ?></select><select name="status"><option value=""><?php esc_html_e( 'All statuses', 'mrn-forms' ); ?></option><option value="unread" <?php selected( $status, 'unread' ); ?>><?php esc_html_e( 'Unread', 'mrn-forms' ); ?></option><option value="read" <?php selected( $status, 'read' ); ?>><?php esc_html_e( 'Read', 'mrn-forms' ); ?></option><option value="spam" <?php selected( $status, 'spam' ); ?>><?php esc_html_e( 'Spam', 'mrn-forms' ); ?></option></select><button class="mrnf-button" type="submit"><?php esc_html_e( 'Apply filter', 'mrn-forms' ); ?></button></form>
 				<?php $this->entries_table( $entries ); ?>
 			</section>
 		</main>
@@ -435,19 +435,19 @@ final class Admin {
 		<main class="mrnf-admin__content">
 			<form class="mrnf-settings" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="mrnf_save_settings"><?php wp_nonce_field( 'mrnf_save_settings' ); ?>
-				<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'هویت ایمیل', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'فرستنده و برند', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'مشخصات فرستنده و رنگ‌های قالب HTML همه ایمیل‌ها.', 'mrn-forms' ); ?></p></div></div><div class="mrnf-field-grid">
-					<?php $this->setting_field( 'brand_name', __( 'نام برند', 'mrn-forms' ), $settings['brand_name'] ); ?>
-					<?php $this->setting_field( 'email_logo', __( 'نشانی لوگو', 'mrn-forms' ), $settings['email_logo'], 'url', __( 'تصویر مربع با HTTPS پیشنهاد می‌شود.', 'mrn-forms' ) ); ?>
-					<?php $this->setting_field( 'from_name', __( 'نام فرستنده', 'mrn-forms' ), $settings['from_name'] ); ?>
-					<?php $this->setting_field( 'from_email', __( 'ایمیل فرستنده', 'mrn-forms' ), $settings['from_email'], 'email' ); ?>
-					<?php $this->setting_field( 'admin_email', __( 'ایمیل پیش‌فرض مدیر', 'mrn-forms' ), $settings['admin_email'], 'email', __( 'در merge tag با {admin_email} قابل استفاده است.', 'mrn-forms' ) ); ?>
-				</div><div class="mrnf-color-row"><label><span><?php esc_html_e( 'رنگ اصلی', 'mrn-forms' ); ?></span><input type="color" name="settings[primary_color]" value="<?php echo esc_attr( $settings['primary_color'] ); ?>"></label><label><span><?php esc_html_e( 'رنگ تأکیدی', 'mrn-forms' ); ?></span><input type="color" name="settings[accent_color]" value="<?php echo esc_attr( $settings['accent_color'] ); ?>"></label></div></section>
-				<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'امنیت و داده', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'کنترل ارسال و حذف اطلاعات', 'mrn-forms' ); ?></h2></div></div><div class="mrnf-field-grid"><?php $this->setting_field( 'rate_limit', __( 'حداکثر ارسال در ۱۰ دقیقه', 'mrn-forms' ), $settings['rate_limit'], 'number', __( 'برای هر IP و هر فرم؛ بین ۱ تا ۵۰.', 'mrn-forms' ) ); ?></div><?php $this->toggle( 'delete_on_uninstall', __( 'حذف کامل داده‌ها هنگام uninstall', 'mrn-forms' ), __( 'فرم‌ها، ارسال‌ها، لاگ ایمیل و تنظیمات برای همیشه حذف می‌شوند.', 'mrn-forms' ), (bool) $settings['delete_on_uninstall'], true ); ?></section>
-				<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'حریم خصوصی', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'منبع بازدید و رویدادهای آماری', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'هر دو قابلیت پیش‌فرض خاموش هستند. پیش از فعال‌سازی، اطلاع‌رسانی حریم خصوصی و رضایت لازم را در سایت تنظیم کنید.', 'mrn-forms' ); ?></p></div></div>
-					<?php $this->toggle( 'collect_attribution', __( 'ثبت منبع بازدید', 'mrn-forms' ), __( 'منبع، کمپین و صفحه فرود در نشست مرورگر و همراه ارسال فرم روی همین سایت ذخیره می‌شوند.', 'mrn-forms' ), (bool) $settings['collect_attribution'] ); ?>
-					<?php $this->toggle( 'analytics_events', __( 'ارسال رویداد به Google Analytics', 'mrn-forms' ), __( 'رویدادهای تماس، واتساپ و ارسال موفق را به gtag موجود در سایت می‌فرستد. افزونه کد گوگل را نصب نمی‌کند و پاسخ فرم یا شماره تماس را نمی‌فرستد.', 'mrn-forms' ), (bool) $settings['analytics_events'] ); ?>
+				<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Email identity', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Sender and brand', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'Sender details and HTML template colors for every email.', 'mrn-forms' ); ?></p></div></div><div class="mrnf-field-grid">
+					<?php $this->setting_field( 'brand_name', __( 'Brand name', 'mrn-forms' ), $settings['brand_name'] ); ?>
+					<?php $this->setting_field( 'email_logo', __( 'Logo URL', 'mrn-forms' ), $settings['email_logo'], 'url', __( 'A square HTTPS image is recommended.', 'mrn-forms' ) ); ?>
+					<?php $this->setting_field( 'from_name', __( 'Sender name', 'mrn-forms' ), $settings['from_name'] ); ?>
+					<?php $this->setting_field( 'from_email', __( 'Sender email', 'mrn-forms' ), $settings['from_email'], 'email' ); ?>
+					<?php $this->setting_field( 'admin_email', __( 'Default administrator email', 'mrn-forms' ), $settings['admin_email'], 'email', __( 'Available in merge tags as {admin_email}.', 'mrn-forms' ) ); ?>
+				</div><div class="mrnf-color-row"><label><span><?php esc_html_e( 'Primary color', 'mrn-forms' ); ?></span><input type="color" name="settings[primary_color]" value="<?php echo esc_attr( $settings['primary_color'] ); ?>"></label><label><span><?php esc_html_e( 'Accent color', 'mrn-forms' ); ?></span><input type="color" name="settings[accent_color]" value="<?php echo esc_attr( $settings['accent_color'] ); ?>"></label></div></section>
+				<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Security and data', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Submission and data-deletion controls', 'mrn-forms' ); ?></h2></div></div><div class="mrnf-field-grid"><?php $this->setting_field( 'rate_limit', __( 'Maximum submissions per 10 minutes', 'mrn-forms' ), $settings['rate_limit'], 'number', __( 'Between 1 and 50 per IP address and form.', 'mrn-forms' ) ); ?></div><?php $this->toggle( 'delete_on_uninstall', __( 'Delete all data on uninstall', 'mrn-forms' ), __( 'Forms, entries, email logs, and settings will be deleted permanently.', 'mrn-forms' ), (bool) $settings['delete_on_uninstall'], true ); ?></section>
+				<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Privacy', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Traffic attribution and analytics events', 'mrn-forms' ); ?></h2><p><?php esc_html_e( 'Both features are off by default. Set up privacy notices and any required consent on your site before enabling them.', 'mrn-forms' ); ?></p></div></div>
+					<?php $this->toggle( 'collect_attribution', __( 'Collect traffic attribution', 'mrn-forms' ), __( 'Source, campaign and landing page are stored in browser session storage and with form submissions on this site.', 'mrn-forms' ), (bool) $settings['collect_attribution'] ); ?>
+					<?php $this->toggle( 'analytics_events', __( 'Send events to Google Analytics', 'mrn-forms' ), __( 'Send phone, WhatsApp and successful submission events to the existing site gtag. The plugin does not install Google scripts or send form answers or contact numbers.', 'mrn-forms' ), (bool) $settings['analytics_events'] ); ?>
 				</section>
-				<div class="mrnf-settings__save"><button class="mrnf-button mrnf-button--primary mrnf-button--large" type="submit"><?php esc_html_e( 'ذخیره تنظیمات', 'mrn-forms' ); ?></button></div>
+				<div class="mrnf-settings__save"><button class="mrnf-button mrnf-button--primary mrnf-button--large" type="submit"><?php esc_html_e( 'Save settings', 'mrn-forms' ); ?></button></div>
 			</form>
 		</main>
 		<?php $this->footer(); ?>
@@ -480,7 +480,7 @@ final class Admin {
 			$this->set_notice( 'error', $result->get_error_message() );
 			$this->redirect( 'forms' );
 		}
-		$this->set_notice( 'success', __( 'فرم با موفقیت ذخیره شد.', 'mrn-forms' ) );
+		$this->set_notice( 'success', __( 'Form saved successfully.', 'mrn-forms' ) );
 		wp_safe_redirect( add_query_arg( 'id', $result, $this->page_url( 'builder' ) ) );
 		exit;
 	}
@@ -497,10 +497,10 @@ final class Admin {
 		check_admin_referer( 'mrnf_form_action_' . $id . '_' . $action );
 		if ( 'delete' === $action ) {
 			$this->forms->delete( $id );
-			$this->set_notice( 'success', __( 'فرم و ارسال‌های مرتبط حذف شدند.', 'mrn-forms' ) );
+			$this->set_notice( 'success', __( 'The form and its related entries were deleted.', 'mrn-forms' ) );
 		} elseif ( 'duplicate' === $action ) {
 			$result = $this->forms->duplicate( $id );
-			$this->set_notice( is_wp_error( $result ) ? 'error' : 'success', is_wp_error( $result ) ? $result->get_error_message() : __( 'یک نسخه پیش‌نویس ساخته شد.', 'mrn-forms' ) );
+			$this->set_notice( is_wp_error( $result ) ? 'error' : 'success', is_wp_error( $result ) ? $result->get_error_message() : __( 'A draft copy was created.', 'mrn-forms' ) );
 		}
 		$this->redirect( 'forms' );
 	}
@@ -517,10 +517,10 @@ final class Admin {
 		check_admin_referer( 'mrnf_entry_action_' . $id . '_' . $action );
 		if ( 'delete' === $action ) {
 			$this->entries->delete( $id );
-			$this->set_notice( 'success', __( 'ارسال حذف شد.', 'mrn-forms' ) );
+			$this->set_notice( 'success', __( 'Entry deleted.', 'mrn-forms' ) );
 		} elseif ( in_array( $action, array( 'read', 'unread', 'spam' ), true ) ) {
 			$this->entries->set_status( $id, $action );
-			$this->set_notice( 'success', __( 'وضعیت ارسال به‌روز شد.', 'mrn-forms' ) );
+			$this->set_notice( 'success', __( 'Entry status updated.', 'mrn-forms' ) );
 		}
 		$this->redirect( 'entries' );
 	}
@@ -583,7 +583,7 @@ final class Admin {
 		check_admin_referer( 'mrnf_save_settings' );
 		$input = isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Settings::sanitize validates every member.
 		update_option( Settings::OPTION, Settings::sanitize( $input ) );
-		$this->set_notice( 'success', __( 'تنظیمات ذخیره شد.', 'mrn-forms' ) );
+		$this->set_notice( 'success', __( 'Settings saved.', 'mrn-forms' ) );
 		$this->redirect( 'settings' );
 	}
 
@@ -596,34 +596,34 @@ final class Admin {
 	private function appearance_panel( array $settings ): void {
 		?>
 		<div class="mrnf-config-grid">
-			<section class="mrnf-config-card"><div class="mrnf-config-card__head"><span class="dashicons dashicons-admin-appearance"></span><div><b><?php esc_html_e( 'ظاهر فرم', 'mrn-forms' ); ?></b><small><?php esc_html_e( 'هماهنگ با هر قالب MRN و قابل Override با CSS', 'mrn-forms' ); ?></small></div></div>
+			<section class="mrnf-config-card"><div class="mrnf-config-card__head"><span class="dashicons dashicons-admin-appearance"></span><div><b><?php esc_html_e( 'Form appearance', 'mrn-forms' ); ?></b><small><?php esc_html_e( 'Compatible with any MRN theme and customizable with CSS', 'mrn-forms' ); ?></small></div></div>
 				<div class="mrnf-field-grid">
-					<label class="mrnf-input"><span><?php esc_html_e( 'رنگ اصلی', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['primaryColor'] ); ?>" data-mrnf-setting="primaryColor"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'رنگ تأکیدی', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['accentColor'] ); ?>" data-mrnf-setting="accentColor"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'پس‌زمینه', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['backgroundColor'] ); ?>" data-mrnf-setting="backgroundColor"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'رنگ متن', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['textColor'] ); ?>" data-mrnf-setting="textColor"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'فاصله فیلدها (px)', 'mrn-forms' ); ?></span><input type="number" min="0" max="48" value="<?php echo esc_attr( (string) $settings['layoutGap'] ); ?>" data-mrnf-setting="layoutGap"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'گردی گوشه‌ها (px)', 'mrn-forms' ); ?></span><input type="number" min="0" max="40" value="<?php echo esc_attr( (string) $settings['borderRadius'] ); ?>" data-mrnf-setting="borderRadius"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Primary color', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['primaryColor'] ); ?>" data-mrnf-setting="primaryColor"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Accent color', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['accentColor'] ); ?>" data-mrnf-setting="accentColor"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Background', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['backgroundColor'] ); ?>" data-mrnf-setting="backgroundColor"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Text color', 'mrn-forms' ); ?></span><input type="color" value="<?php echo esc_attr( $settings['textColor'] ); ?>" data-mrnf-setting="textColor"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Field spacing (px)', 'mrn-forms' ); ?></span><input type="number" min="0" max="48" value="<?php echo esc_attr( (string) $settings['layoutGap'] ); ?>" data-mrnf-setting="layoutGap"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Corner radius (px)', 'mrn-forms' ); ?></span><input type="number" min="0" max="40" value="<?php echo esc_attr( (string) $settings['borderRadius'] ); ?>" data-mrnf-setting="borderRadius"></label>
 				</div>
 			</section>
-			<section class="mrnf-config-card"><div class="mrnf-config-card__head"><span class="dashicons dashicons-editor-alignleft"></span><div><b><?php esc_html_e( 'چیدمان و متن‌ها', 'mrn-forms' ); ?></b></div></div>
+			<section class="mrnf-config-card"><div class="mrnf-config-card__head"><span class="dashicons dashicons-editor-alignleft"></span><div><b><?php esc_html_e( 'Layout and text', 'mrn-forms' ); ?></b></div></div>
 				<div class="mrnf-field-grid">
-					<label class="mrnf-input"><span><?php esc_html_e( 'متن دکمه', 'mrn-forms' ); ?></span><input value="<?php echo esc_attr( $settings['submitLabel'] ); ?>" data-mrnf-setting="submitLabel"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'جایگاه برچسب', 'mrn-forms' ); ?></span><select data-mrnf-setting="labelPosition"><option value="top" <?php selected( $settings['labelPosition'], 'top' ); ?>><?php esc_html_e( 'بالای فیلد', 'mrn-forms' ); ?></option><option value="inline" <?php selected( $settings['labelPosition'], 'inline' ); ?>><?php esc_html_e( 'کنار فیلد', 'mrn-forms' ); ?></option><option value="hidden" <?php selected( $settings['labelPosition'], 'hidden' ); ?>><?php esc_html_e( 'مخفی', 'mrn-forms' ); ?></option></select></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'جهت', 'mrn-forms' ); ?></span><select data-mrnf-setting="direction"><option value="auto" <?php selected( $settings['direction'], 'auto' ); ?>><?php esc_html_e( 'خودکار', 'mrn-forms' ); ?></option><option value="rtl" <?php selected( $settings['direction'], 'rtl' ); ?>>RTL</option><option value="ltr" <?php selected( $settings['direction'], 'ltr' ); ?>>LTR</option></select></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'کلاس CSS سفارشی', 'mrn-forms' ); ?></span><input dir="ltr" value="<?php echo esc_attr( $settings['customClass'] ); ?>" data-mrnf-setting="customClass"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Button text', 'mrn-forms' ); ?></span><input value="<?php echo esc_attr( $settings['submitLabel'] ); ?>" data-mrnf-setting="submitLabel"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Label position', 'mrn-forms' ); ?></span><select data-mrnf-setting="labelPosition"><option value="top" <?php selected( $settings['labelPosition'], 'top' ); ?>><?php esc_html_e( 'Above the field', 'mrn-forms' ); ?></option><option value="inline" <?php selected( $settings['labelPosition'], 'inline' ); ?>><?php esc_html_e( 'Beside the field', 'mrn-forms' ); ?></option><option value="hidden" <?php selected( $settings['labelPosition'], 'hidden' ); ?>><?php esc_html_e( 'Hidden', 'mrn-forms' ); ?></option></select></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Direction', 'mrn-forms' ); ?></span><select data-mrnf-setting="direction"><option value="auto" <?php selected( $settings['direction'], 'auto' ); ?>><?php esc_html_e( 'Automatic', 'mrn-forms' ); ?></option><option value="rtl" <?php selected( $settings['direction'], 'rtl' ); ?>>RTL</option><option value="ltr" <?php selected( $settings['direction'], 'ltr' ); ?>>LTR</option></select></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Custom CSS class', 'mrn-forms' ); ?></span><input dir="ltr" value="<?php echo esc_attr( $settings['customClass'] ); ?>" data-mrnf-setting="customClass"></label>
 				</div>
 				<div class="mrnf-toggle-list">
-					<?php $this->builder_toggle( 'showTitle', __( 'نمایش عنوان فرم', 'mrn-forms' ), $settings['showTitle'] ); ?>
-					<?php $this->builder_toggle( 'showDescription', __( 'نمایش توضیحات فرم', 'mrn-forms' ), $settings['showDescription'] ); ?>
-					<?php $this->builder_toggle( 'buttonFullWidth', __( 'دکمه تمام‌عرض', 'mrn-forms' ), $settings['buttonFullWidth'] ); ?>
+					<?php $this->builder_toggle( 'showTitle', __( 'Show form title', 'mrn-forms' ), $settings['showTitle'] ); ?>
+					<?php $this->builder_toggle( 'showDescription', __( 'Show form description', 'mrn-forms' ), $settings['showDescription'] ); ?>
+					<?php $this->builder_toggle( 'buttonFullWidth', __( 'Full-width button', 'mrn-forms' ), $settings['buttonFullWidth'] ); ?>
 				</div>
 			</section>
-			<section class="mrnf-config-card"><div class="mrnf-config-card__head"><span class="dashicons dashicons-yes-alt"></span><div><b><?php esc_html_e( 'پس از ارسال', 'mrn-forms' ); ?></b></div></div>
-				<label class="mrnf-input"><span><?php esc_html_e( 'پیام موفقیت', 'mrn-forms' ); ?></span><textarea data-mrnf-setting="successMessage"><?php echo esc_textarea( $settings['successMessage'] ); ?></textarea></label>
-				<label class="mrnf-input"><span><?php esc_html_e( 'پیام خطا', 'mrn-forms' ); ?></span><textarea data-mrnf-setting="errorMessage"><?php echo esc_textarea( $settings['errorMessage'] ); ?></textarea></label>
-				<label class="mrnf-input"><span><?php esc_html_e( 'انتقال به نشانی (اختیاری)', 'mrn-forms' ); ?></span><input type="url" dir="ltr" value="<?php echo esc_attr( $settings['redirectUrl'] ); ?>" data-mrnf-setting="redirectUrl"></label>
-				<div class="mrnf-toggle-list"><?php $this->builder_toggle( 'storeEntries', __( 'ذخیره ارسال‌ها در صندوق ورودی', 'mrn-forms' ), $settings['storeEntries'] ); ?><?php $this->builder_toggle( 'emailNotifications', __( 'ارسال اعلان‌های ایمیلی', 'mrn-forms' ), $settings['emailNotifications'] ); ?></div>
+			<section class="mrnf-config-card"><div class="mrnf-config-card__head"><span class="dashicons dashicons-yes-alt"></span><div><b><?php esc_html_e( 'After submission', 'mrn-forms' ); ?></b></div></div>
+				<label class="mrnf-input"><span><?php esc_html_e( 'Success message', 'mrn-forms' ); ?></span><textarea data-mrnf-setting="successMessage"><?php echo esc_textarea( $settings['successMessage'] ); ?></textarea></label>
+				<label class="mrnf-input"><span><?php esc_html_e( 'Error message', 'mrn-forms' ); ?></span><textarea data-mrnf-setting="errorMessage"><?php echo esc_textarea( $settings['errorMessage'] ); ?></textarea></label>
+				<label class="mrnf-input"><span><?php esc_html_e( 'Redirect URL (optional)', 'mrn-forms' ); ?></span><input type="url" dir="ltr" value="<?php echo esc_attr( $settings['redirectUrl'] ); ?>" data-mrnf-setting="redirectUrl"></label>
+				<div class="mrnf-toggle-list"><?php $this->builder_toggle( 'storeEntries', __( 'Store submissions in the inbox', 'mrn-forms' ), $settings['storeEntries'] ); ?><?php $this->builder_toggle( 'emailNotifications', __( 'Send email notifications', 'mrn-forms' ), $settings['emailNotifications'] ); ?></div>
 			</section>
 		</div>
 		<?php
@@ -640,26 +640,26 @@ final class Admin {
 		?>
 		<section class="mrnf-panel mrnf-anar-card">
 			<div class="mrnf-panel__head">
-				<div><span><?php esc_html_e( 'اتصال افزونه‌ها', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'انار و MRN Forms', 'mrn-forms' ); ?></h2></div>
-				<strong class="mrnf-anar-card__badge"><?php echo esc_html( $connected ? __( 'انار در دسترس است', 'mrn-forms' ) : __( 'نیاز به نسخهٔ سازگار انار', 'mrn-forms' ) ); ?></strong>
+				<div><span><?php esc_html_e( 'Plugin integration', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Anar and MRN Forms', 'mrn-forms' ); ?></h2></div>
+				<strong class="mrnf-anar-card__badge"><?php echo esc_html( $connected ? __( 'Anar available', 'mrn-forms' ) : __( 'Compatible Anar required', 'mrn-forms' ) ); ?></strong>
 			</div>
-			<p><?php esc_html_e( 'برای فرم‌های معمولی شمارهٔ همراه را با پیامک تأیید کنید، یا فرم ثبت‌نامی بسازید که پس از تأیید شماره، حساب وردپرس ایجاد می‌کند.', 'mrn-forms' ); ?></p>
+			<p><?php esc_html_e( 'Verify mobile numbers by SMS on regular forms, or build a registration form that creates a WordPress account after verification.', 'mrn-forms' ); ?></p>
 			<div class="mrnf-field-grid">
-				<label class="mrnf-input"><span><?php esc_html_e( 'کاربرد فرم با انار', 'mrn-forms' ); ?></span>
+				<label class="mrnf-input"><span><?php esc_html_e( 'How this form uses Anar', 'mrn-forms' ); ?></span>
 					<select data-mrnf-setting="anarMode">
-						<option value="off" <?php selected( $settings['anarMode'], 'off' ); ?>><?php esc_html_e( 'غیرفعال', 'mrn-forms' ); ?></option>
-						<option value="sms" <?php selected( $settings['anarMode'], 'sms' ); ?>><?php esc_html_e( 'تأیید پیامکی پیش از ارسال', 'mrn-forms' ); ?></option>
-						<option value="registration" <?php selected( $settings['anarMode'], 'registration' ); ?>><?php esc_html_e( 'ثبت‌نام در انار', 'mrn-forms' ); ?></option>
+						<option value="off" <?php selected( $settings['anarMode'], 'off' ); ?>><?php esc_html_e( 'Off', 'mrn-forms' ); ?></option>
+						<option value="sms" <?php selected( $settings['anarMode'], 'sms' ); ?>><?php esc_html_e( 'SMS verification before submission', 'mrn-forms' ); ?></option>
+						<option value="registration" <?php selected( $settings['anarMode'], 'registration' ); ?>><?php esc_html_e( 'Anar registration', 'mrn-forms' ); ?></option>
 					</select>
 				</label>
-				<label class="mrnf-input"><span><?php esc_html_e( 'فیلد شمارهٔ همراه', 'mrn-forms' ); ?></span>
-					<select data-mrnf-setting="anarPhoneField"><option value=""><?php esc_html_e( 'انتخاب فیلد تلفن', 'mrn-forms' ); ?></option></select>
-					<small><?php esc_html_e( 'از نوع تلفن، الزامی و بدون شرط نمایش.', 'mrn-forms' ); ?></small>
+				<label class="mrnf-input"><span><?php esc_html_e( 'Mobile number field', 'mrn-forms' ); ?></span>
+					<select data-mrnf-setting="anarPhoneField"><option value=""><?php esc_html_e( 'Select a phone field', 'mrn-forms' ); ?></option></select>
+					<small><?php esc_html_e( 'Use a required phone field with no visibility condition.', 'mrn-forms' ); ?></small>
 				</label>
 			</div>
-			<p><?php esc_html_e( 'برای ثبت‌نام، فرم را منتشر و در تنظیمات انار انتخاب کنید. پاسخ‌های ثبت‌نام در صندوق ورودی همین فرم ذخیره می‌شوند.', 'mrn-forms' ); ?></p>
+			<p><?php esc_html_e( 'For registration, publish this form and select it in Anar settings. Registration answers are saved in this form’s inbox.', 'mrn-forms' ); ?></p>
 			<?php if ( $connected ) : ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=anar-login-settings&section=general#anar-mrn-forms' ) ); ?>"><?php esc_html_e( 'رفتن به تنظیمات انار', 'mrn-forms' ); ?> <span aria-hidden="true">↗</span></a>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=anar-login-settings&section=general#anar-mrn-forms' ) ); ?>"><?php esc_html_e( 'Open Anar settings', 'mrn-forms' ); ?> <span aria-hidden="true">↗</span></a>
 			<?php endif; ?>
 		</section>
 		<?php
@@ -675,7 +675,7 @@ final class Admin {
 	private function notifications_panel( array $notifications, array $fields ): void {
 		?>
 		<div class="mrnf-notifications" data-mrnf-notifications>
-			<div class="mrnf-merge-help"><b><?php esc_html_e( 'Merge Tagها', 'mrn-forms' ); ?></b><code>{form_title}</code><code>{entry_id}</code><code>{site_name}</code><code>{admin_email}</code><code>{all_fields}</code><code>{field:email}</code><small><?php esc_html_e( 'برای هر فیلد از کلید آن استفاده کنید؛ مانند {field:phone}.', 'mrn-forms' ); ?></small></div>
+			<div class="mrnf-merge-help"><b><?php esc_html_e( 'Merge tags', 'mrn-forms' ); ?></b><code>{form_title}</code><code>{entry_id}</code><code>{site_name}</code><code>{admin_email}</code><code>{all_fields}</code><code>{field:email}</code><small><?php esc_html_e( 'Use each field key, for example {field:phone}.', 'mrn-forms' ); ?></small></div>
 			<?php foreach ( $notifications as $index => $notification ) : ?>
 				<?php
 				$condition = wp_parse_args(
@@ -690,22 +690,22 @@ final class Admin {
 				?>
 				<article class="mrnf-notification" data-notification-index="<?php echo esc_attr( (string) $index ); ?>">
 					<header><div><span class="dashicons dashicons-email-alt"></span><input value="<?php echo esc_attr( $notification['name'] ); ?>" data-notification-key="name"></div><label class="mrnf-mini-switch"><input type="checkbox" <?php checked( $notification['enabled'] ); ?> data-notification-key="enabled"><i></i></label></header>
-					<div class="mrnf-field-grid"><label class="mrnf-input"><span><?php esc_html_e( 'گیرنده', 'mrn-forms' ); ?></span><input dir="ltr" value="<?php echo esc_attr( $notification['to'] ); ?>" data-notification-key="to"></label><label class="mrnf-input"><span><?php esc_html_e( 'Reply-To', 'mrn-forms' ); ?></span><input dir="ltr" value="<?php echo esc_attr( $notification['replyTo'] ); ?>" data-notification-key="replyTo"></label></div>
-					<label class="mrnf-input"><span><?php esc_html_e( 'موضوع', 'mrn-forms' ); ?></span><input value="<?php echo esc_attr( $notification['subject'] ); ?>" data-notification-key="subject"></label>
-					<label class="mrnf-input"><span><?php esc_html_e( 'متن ایمیل (HTML ساده مجاز است)', 'mrn-forms' ); ?></span><textarea rows="6" data-notification-key="body"><?php echo esc_textarea( $notification['body'] ); ?></textarea></label>
+					<div class="mrnf-field-grid"><label class="mrnf-input"><span><?php esc_html_e( 'Recipient', 'mrn-forms' ); ?></span><input dir="ltr" value="<?php echo esc_attr( $notification['to'] ); ?>" data-notification-key="to"></label><label class="mrnf-input"><span><?php esc_html_e( 'Reply-To', 'mrn-forms' ); ?></span><input dir="ltr" value="<?php echo esc_attr( $notification['replyTo'] ); ?>" data-notification-key="replyTo"></label></div>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Subject', 'mrn-forms' ); ?></span><input value="<?php echo esc_attr( $notification['subject'] ); ?>" data-notification-key="subject"></label>
+					<label class="mrnf-input"><span><?php esc_html_e( 'Email body (basic HTML is allowed)', 'mrn-forms' ); ?></span><textarea rows="6" data-notification-key="body"><?php echo esc_textarea( $notification['body'] ); ?></textarea></label>
 					<div class="mrnf-notification__routing">
-						<label class="mrnf-builder-toggle"><input type="checkbox" <?php checked( $condition['enabled'] ); ?> data-notification-key="condition.enabled"><i></i><span><?php esc_html_e( 'ارسال شرطی این اعلان', 'mrn-forms' ); ?></span></label>
+						<label class="mrnf-builder-toggle"><input type="checkbox" <?php checked( $condition['enabled'] ); ?> data-notification-key="condition.enabled"><i></i><span><?php esc_html_e( 'Send this notification conditionally', 'mrn-forms' ); ?></span></label>
 						<div class="mrnf-field-grid">
-							<label class="mrnf-input"><span><?php esc_html_e( 'فیلد مبنا', 'mrn-forms' ); ?></span><select data-notification-key="condition.field"><option value=""><?php esc_html_e( 'انتخاب فیلد…', 'mrn-forms' ); ?></option>
+							<label class="mrnf-input"><span><?php esc_html_e( 'Source field', 'mrn-forms' ); ?></span><select data-notification-key="condition.field"><option value=""><?php esc_html_e( 'Select a field…', 'mrn-forms' ); ?></option>
 							<?php foreach ( $fields as $field ) : ?>
 								<?php if ( ! in_array( $field['type'], array( 'heading', 'html', 'file' ), true ) ) : ?>
 									<option value="<?php echo esc_attr( $field['key'] ); ?>" <?php selected( $condition['field'], $field['key'] ); ?>><?php echo esc_html( $field['label'] ); ?></option>
 								<?php endif; ?>
 							<?php endforeach; ?>
 							</select></label>
-							<label class="mrnf-input"><span><?php esc_html_e( 'شرط', 'mrn-forms' ); ?></span><select data-notification-key="condition.operator"><option value="equals" <?php selected( $condition['operator'], 'equals' ); ?>><?php esc_html_e( 'برابر باشد با', 'mrn-forms' ); ?></option><option value="not_equals" <?php selected( $condition['operator'], 'not_equals' ); ?>><?php esc_html_e( 'برابر نباشد با', 'mrn-forms' ); ?></option><option value="contains" <?php selected( $condition['operator'], 'contains' ); ?>><?php esc_html_e( 'شامل باشد', 'mrn-forms' ); ?></option><option value="not_empty" <?php selected( $condition['operator'], 'not_empty' ); ?>><?php esc_html_e( 'خالی نباشد', 'mrn-forms' ); ?></option><option value="empty" <?php selected( $condition['operator'], 'empty' ); ?>><?php esc_html_e( 'خالی باشد', 'mrn-forms' ); ?></option></select></label>
+							<label class="mrnf-input"><span><?php esc_html_e( 'Condition', 'mrn-forms' ); ?></span><select data-notification-key="condition.operator"><option value="equals" <?php selected( $condition['operator'], 'equals' ); ?>><?php esc_html_e( 'Equals', 'mrn-forms' ); ?></option><option value="not_equals" <?php selected( $condition['operator'], 'not_equals' ); ?>><?php esc_html_e( 'Does not equal', 'mrn-forms' ); ?></option><option value="contains" <?php selected( $condition['operator'], 'contains' ); ?>><?php esc_html_e( 'Contains', 'mrn-forms' ); ?></option><option value="not_empty" <?php selected( $condition['operator'], 'not_empty' ); ?>><?php esc_html_e( 'Is not empty', 'mrn-forms' ); ?></option><option value="empty" <?php selected( $condition['operator'], 'empty' ); ?>><?php esc_html_e( 'Is empty', 'mrn-forms' ); ?></option></select></label>
 						</div>
-						<label class="mrnf-input"><span><?php esc_html_e( 'مقدار مقایسه', 'mrn-forms' ); ?></span><input value="<?php echo esc_attr( $condition['value'] ); ?>" data-notification-key="condition.value"></label>
+						<label class="mrnf-input"><span><?php esc_html_e( 'Comparison value', 'mrn-forms' ); ?></span><input value="<?php echo esc_attr( $condition['value'] ); ?>" data-notification-key="condition.value"></label>
 					</div>
 				</article>
 			<?php endforeach; ?>
@@ -722,7 +722,7 @@ final class Admin {
 	private function render_entry_detail( int $entry_id ): void {
 		$entry = $this->entries->find( $entry_id );
 		if ( ! $entry ) {
-			wp_die( esc_html__( 'ارسال پیدا نشد.', 'mrn-forms' ) );
+			wp_die( esc_html__( 'Entry not found.', 'mrn-forms' ) );
 		}
 		$form        = $this->forms->find( $entry['form_id'] );
 		$attribution = (array) ( $entry['attribution'] ?? array() );
@@ -731,18 +731,18 @@ final class Admin {
 			$entry['status'] = 'read';
 		}
 		$labels = $form ? array_column( $form['fields'], 'label', 'key' ) : array();
-		$this->header( 'entries', __( 'جزئیات ارسال', 'mrn-forms' ) );
+		$this->header( 'entries', __( 'Entry details', 'mrn-forms' ) );
 		?>
 		<main class="mrnf-admin__content">
-			<div class="mrnf-detail-head"><a class="mrnf-button" href="<?php echo esc_url( $this->page_url( 'entries' ) ); ?>"><?php echo esc_html( is_rtl() ? '→' : '←' ); ?> <?php esc_html_e( 'بازگشت به صندوق ورودی', 'mrn-forms' ); ?></a><div><?php echo $this->status_badge( $entry['status'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span>#<?php echo esc_html( (string) $entry['id'] ); ?></span></div></div>
+			<div class="mrnf-detail-head"><a class="mrnf-button" href="<?php echo esc_url( $this->page_url( 'entries' ) ); ?>"><?php echo esc_html( is_rtl() ? '→' : '←' ); ?> <?php esc_html_e( 'Back to inbox', 'mrn-forms' ); ?></a><div><?php echo $this->status_badge( $entry['status'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span>#<?php echo esc_html( (string) $entry['id'] ); ?></span></div></div>
 			<section class="mrnf-detail-grid">
-				<article class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'پاسخ‌ها', 'mrn-forms' ); ?></span><h2><?php echo esc_html( $form['title'] ?? __( 'فرم حذف‌شده', 'mrn-forms' ) ); ?></h2></div></div><dl class="mrnf-entry-values">
+				<article class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Responses', 'mrn-forms' ); ?></span><h2><?php echo esc_html( $form['title'] ?? __( 'Deleted form', 'mrn-forms' ) ); ?></h2></div></div><dl class="mrnf-entry-values">
 				<?php
 				foreach ( $entry['values'] as $key => $value ) :
 					?>
 					<div><dt><?php echo esc_html( $labels[ $key ] ?? $key ); ?></dt><dd><?php $this->entry_value( $value ); ?></dd></div><?php endforeach; ?></dl></article>
 				<aside>
-					<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'مشخصات', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'اطلاعات ثبت', 'mrn-forms' ); ?></h2></div></div><dl class="mrnf-meta"><div><dt><?php esc_html_e( 'زمان', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( get_date_from_gmt( $entry['created_at'], 'Y/m/d H:i' ) ); ?></dd></div><div><dt><?php esc_html_e( 'منبع ورود', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( Attribution::label( $attribution ) ); ?></dd></div><div><dt><?php esc_html_e( 'کمپین', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( $attribution['campaign'] ?? '—' ); ?></dd></div><div><dt><?php esc_html_e( 'صفحه ورود', 'mrn-forms' ); ?></dt><dd><?php $this->entry_url( (string) ( $attribution['landing_page'] ?? '' ) ); ?></dd></div><div><dt><?php esc_html_e( 'ارجاع‌دهنده بیرونی', 'mrn-forms' ); ?></dt><dd><?php $this->entry_url( (string) ( $attribution['referrer'] ?? '' ) ); ?></dd></div><div><dt><?php esc_html_e( 'صفحه ارسال فرم', 'mrn-forms' ); ?></dt><dd><?php $this->entry_url( (string) $entry['referer'] ); ?></dd></div><div><dt><?php esc_html_e( 'مرورگر', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( $entry['user_agent'] ? $entry['user_agent'] : '—' ); ?></dd></div></dl></section>
+					<section class="mrnf-panel"><div class="mrnf-panel__head"><div><span><?php esc_html_e( 'Metadata', 'mrn-forms' ); ?></span><h2><?php esc_html_e( 'Submission details', 'mrn-forms' ); ?></h2></div></div><dl class="mrnf-meta"><div><dt><?php esc_html_e( 'Time', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( get_date_from_gmt( $entry['created_at'], 'Y/m/d H:i' ) ); ?></dd></div><div><dt><?php esc_html_e( 'Traffic source', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( Attribution::label( $attribution ) ); ?></dd></div><div><dt><?php esc_html_e( 'Campaign', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( $attribution['campaign'] ?? '—' ); ?></dd></div><div><dt><?php esc_html_e( 'Landing page', 'mrn-forms' ); ?></dt><dd><?php $this->entry_url( (string) ( $attribution['landing_page'] ?? '' ) ); ?></dd></div><div><dt><?php esc_html_e( 'External referrer', 'mrn-forms' ); ?></dt><dd><?php $this->entry_url( (string) ( $attribution['referrer'] ?? '' ) ); ?></dd></div><div><dt><?php esc_html_e( 'Form submission page', 'mrn-forms' ); ?></dt><dd><?php $this->entry_url( (string) $entry['referer'] ); ?></dd></div><div><dt><?php esc_html_e( 'Browser', 'mrn-forms' ); ?></dt><dd><?php echo esc_html( $entry['user_agent'] ? $entry['user_agent'] : '—' ); ?></dd></div></dl></section>
 					<?php
 					/**
 					 * Render integration panels, such as payment status, beside one entry.
@@ -752,7 +752,7 @@ final class Admin {
 					 */
 					do_action( 'mrnf_entry_detail_aside', $entry, $form );
 					?>
-					<section class="mrnf-panel"><div class="mrnf-row-actions mrnf-row-actions--stack"><a href="<?php echo esc_url( $this->entry_action_url( $entry_id, 'unread' ) ); ?>"><?php esc_html_e( 'علامت‌گذاری خوانده‌نشده', 'mrn-forms' ); ?></a><a href="<?php echo esc_url( $this->entry_action_url( $entry_id, 'spam' ) ); ?>"><?php esc_html_e( 'انتقال به هرزنامه', 'mrn-forms' ); ?></a><a class="is-danger" data-mrnf-confirm href="<?php echo esc_url( $this->entry_action_url( $entry_id, 'delete' ) ); ?>"><?php esc_html_e( 'حذف دائمی', 'mrn-forms' ); ?></a></div></section>
+					<section class="mrnf-panel"><div class="mrnf-row-actions mrnf-row-actions--stack"><a href="<?php echo esc_url( $this->entry_action_url( $entry_id, 'unread' ) ); ?>"><?php esc_html_e( 'Mark as unread', 'mrn-forms' ); ?></a><a href="<?php echo esc_url( $this->entry_action_url( $entry_id, 'spam' ) ); ?>"><?php esc_html_e( 'Move to spam', 'mrn-forms' ); ?></a><a class="is-danger" data-mrnf-confirm href="<?php echo esc_url( $this->entry_action_url( $entry_id, 'delete' ) ); ?>"><?php esc_html_e( 'Delete permanently', 'mrn-forms' ); ?></a></div></section>
 				</aside>
 			</section>
 		</main>
@@ -769,7 +769,7 @@ final class Admin {
 	 */
 	private function entries_table( array $entries, bool $compact = false ): void {
 		?>
-		<div class="mrnf-table-wrap"><table class="mrnf-table"><thead><tr><th><?php esc_html_e( 'وضعیت', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'فرم', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'خلاصه پاسخ', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'منبع ورود', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'زمان', 'mrn-forms' ); ?></th>
+		<div class="mrnf-table-wrap"><table class="mrnf-table"><thead><tr><th><?php esc_html_e( 'Status', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Form', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Response summary', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Traffic source', 'mrn-forms' ); ?></th><th><?php esc_html_e( 'Time', 'mrn-forms' ); ?></th>
 		<?php
 		if ( ! $compact ) :
 			?>
@@ -777,7 +777,7 @@ final class Admin {
 		<?php
 		if ( ! $entries ) :
 			?>
-			<tr><td colspan="<?php echo esc_attr( $compact ? '5' : '6' ); ?>"><div class="mrnf-empty"><span class="dashicons dashicons-email"></span><b><?php esc_html_e( 'صندوق ورودی خالی است', 'mrn-forms' ); ?></b><p><?php esc_html_e( 'ارسال‌های جدید اینجا نمایش داده می‌شوند.', 'mrn-forms' ); ?></p></div></td></tr><?php endif; ?>
+			<tr><td colspan="<?php echo esc_attr( $compact ? '5' : '6' ); ?>"><div class="mrnf-empty"><span class="dashicons dashicons-email"></span><b><?php esc_html_e( 'The inbox is empty', 'mrn-forms' ); ?></b><p><?php esc_html_e( 'New submissions will appear here.', 'mrn-forms' ); ?></p></div></td></tr><?php endif; ?>
 		<?php
 		foreach ( $entries as $entry ) :
 			$preview = array_slice( $entry['values'], 0, 2, true );
@@ -786,11 +786,11 @@ final class Admin {
 			<?php
 			foreach ( $preview as $value ) :
 				?>
-				<i><?php echo esc_html( wp_trim_words( is_array( $value ) ? implode( __( '، ', 'mrn-forms' ), $value ) : $value, 7 ) ); ?></i><?php endforeach; ?></span></td><td><?php echo esc_html( Attribution::label( (array) ( $entry['attribution'] ?? array() ) ) ); ?></td><td><?php echo esc_html( human_time_diff( strtotime( $entry['created_at'] . ' UTC' ), time() ) ); ?> <?php esc_html_e( 'پیش', 'mrn-forms' ); ?></td>
+				<i><?php echo esc_html( wp_trim_words( is_array( $value ) ? implode( __( ', ', 'mrn-forms' ), $value ) : $value, 7 ) ); ?></i><?php endforeach; ?></span></td><td><?php echo esc_html( Attribution::label( (array) ( $entry['attribution'] ?? array() ) ) ); ?></td><td><?php /* translators: %s: elapsed time since the form was updated or the entry was created. */ printf( esc_html__( '%s ago', 'mrn-forms' ), esc_html( human_time_diff( strtotime( $entry['created_at'] . ' UTC' ), time() ) ) ); ?></td>
 				<?php
 				if ( ! $compact ) :
 					?>
-				<td><div class="mrnf-row-actions"><a href="<?php echo esc_url( add_query_arg( 'entry_id', $entry['id'], $this->page_url( 'entries' ) ) ); ?>"><?php esc_html_e( 'مشاهده', 'mrn-forms' ); ?></a><a class="is-danger" data-mrnf-confirm href="<?php echo esc_url( $this->entry_action_url( $entry['id'], 'delete' ) ); ?>"><?php esc_html_e( 'حذف', 'mrn-forms' ); ?></a></div></td><?php endif; ?></tr>
+				<td><div class="mrnf-row-actions"><a href="<?php echo esc_url( add_query_arg( 'entry_id', $entry['id'], $this->page_url( 'entries' ) ) ); ?>"><?php esc_html_e( 'View', 'mrn-forms' ); ?></a><a class="is-danger" data-mrnf-confirm href="<?php echo esc_url( $this->entry_action_url( $entry['id'], 'delete' ) ); ?>"><?php esc_html_e( 'Delete', 'mrn-forms' ); ?></a></div></td><?php endif; ?></tr>
 		<?php endforeach; ?>
 		</tbody></table></div>
 		<?php
@@ -805,16 +805,16 @@ final class Admin {
 	 */
 	private function header( string $active, string $context = '' ): void {
 		$tabs = array(
-			'dashboard' => array( self::PAGE, __( 'داشبورد', 'mrn-forms' ) ),
-			'forms'     => array( self::PAGE . '-forms', __( 'فرم‌ها', 'mrn-forms' ) ),
-			'builder'   => array( self::PAGE . '-builder', __( 'فرم‌ساز', 'mrn-forms' ) ),
-			'entries'   => array( self::PAGE . '-entries', __( 'صندوق ورودی', 'mrn-forms' ) ),
-			'settings'  => array( self::PAGE . '-settings', __( 'تنظیمات', 'mrn-forms' ) ),
+			'dashboard' => array( self::PAGE, __( 'Dashboard', 'mrn-forms' ) ),
+			'forms'     => array( self::PAGE . '-forms', __( 'Forms', 'mrn-forms' ) ),
+			'builder'   => array( self::PAGE . '-builder', __( 'Form builder', 'mrn-forms' ) ),
+			'entries'   => array( self::PAGE . '-entries', __( 'Inbox', 'mrn-forms' ) ),
+			'settings'  => array( self::PAGE . '-settings', __( 'Settings', 'mrn-forms' ) ),
 		);
 		?>
 		<div class="wrap mrnf-admin" dir="<?php echo esc_attr( is_rtl() ? 'rtl' : 'ltr' ); ?>">
 			<header class="mrnf-admin__hero">
-				<div class="mrnf-admin__brand"><span class="mrnf-admin__mark"><img src="<?php echo esc_url( MRNF_URL . 'assets/images/logo.png' ); ?>" width="56" height="56" alt="" aria-hidden="true"></span><div><small>MRN FORMS</small><h1><?php esc_html_e( 'فرم‌ساز هوشمند', 'mrn-forms' ); ?></h1><p><?php echo esc_html( $context ? $context : __( 'از اولین کلیک تا یک گفت‌وگوی واقعی با مخاطب', 'mrn-forms' ) ); ?></p></div></div>
+				<div class="mrnf-admin__brand"><span class="mrnf-admin__mark"><img src="<?php echo esc_url( MRNF_URL . 'assets/images/logo.png' ); ?>" width="56" height="56" alt="" aria-hidden="true"></span><div><small>MRN FORMS</small><h1><?php esc_html_e( 'Smart form builder', 'mrn-forms' ); ?></h1><p><?php echo esc_html( $context ? $context : __( 'From the first click to a real conversation with your audience', 'mrn-forms' ) ); ?></p></div></div>
 				<div class="mrnf-admin__art" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
 				<span class="mrnf-admin__version">v<?php echo esc_html( MRNF_VERSION ); ?></span>
 			</header>
@@ -837,7 +837,7 @@ final class Admin {
 	 */
 	private function footer(): void {
 		?>
-			<footer class="mrnf-admin__footer"><span>MRN Forms <b>v<?php echo esc_html( MRNF_VERSION ); ?></b> · <a href="https://mrnwp.ir/mrnforms" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'صفحه افزونه', 'mrn-forms' ); ?></a></span><span><a href="https://mrnwp.ir" target="_blank" rel="noopener noreferrer">MRNWP</a> · <a href="https://mehranmarandi.ir" target="_blank" rel="noopener noreferrer">Mehran Marandi</a></span></footer>
+			<footer class="mrnf-admin__footer"><span>MRN Forms <b>v<?php echo esc_html( MRNF_VERSION ); ?></b> · <a href="https://mrnwp.ir/mrnforms" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Plugin website', 'mrn-forms' ); ?></a></span><span><a href="https://mrnwp.ir" target="_blank" rel="noopener noreferrer">MRNWP</a> · <a href="https://mehranmarandi.ir" target="_blank" rel="noopener noreferrer">Mehran Marandi</a></span></footer>
 		</div>
 		<?php
 	}
@@ -865,12 +865,12 @@ final class Admin {
 	 */
 	private function status_badge( string $status ): string {
 		$labels = array(
-			'published' => __( 'منتشرشده', 'mrn-forms' ),
-			'draft'     => __( 'پیش‌نویس', 'mrn-forms' ),
-			'archived'  => __( 'بایگانی', 'mrn-forms' ),
-			'unread'    => __( 'جدید', 'mrn-forms' ),
-			'read'      => __( 'خوانده‌شده', 'mrn-forms' ),
-			'spam'      => __( 'هرزنامه', 'mrn-forms' ),
+			'published' => __( 'Published', 'mrn-forms' ),
+			'draft'     => __( 'Draft', 'mrn-forms' ),
+			'archived'  => __( 'Archived', 'mrn-forms' ),
+			'unread'    => __( 'New', 'mrn-forms' ),
+			'read'      => __( 'Read', 'mrn-forms' ),
+			'spam'      => __( 'Spam', 'mrn-forms' ),
 		);
 		return '<span class="mrnf-status mrnf-status--' . esc_attr( $status ) . '">' . esc_html( $labels[ $status ] ?? $status ) . '</span>';
 	}
@@ -932,7 +932,7 @@ final class Admin {
 	 * @return void
 	 */
 	private function entry_value( mixed $value ): void {
-		$value = is_array( $value ) ? implode( __( '، ', 'mrn-forms' ), $value ) : (string) $value;
+		$value = is_array( $value ) ? implode( __( ', ', 'mrn-forms' ), $value ) : (string) $value;
 		if ( is_email( $value ) ) {
 			echo '<a href="mailto:' . esc_attr( $value ) . '">' . esc_html( $value ) . '</a>';
 		} elseif ( filter_var( $value, FILTER_VALIDATE_URL ) ) {
@@ -1018,7 +1018,7 @@ final class Admin {
 	 */
 	private function authorize(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'اجازه دسترسی به این بخش را ندارید.', 'mrn-forms' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to access this area.', 'mrn-forms' ), '', array( 'response' => 403 ) );
 		}
 	}
 

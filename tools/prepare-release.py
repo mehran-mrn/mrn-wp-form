@@ -9,7 +9,7 @@ import zipfile
 
 
 def prepare(package: Path, output: Path, tag: str = '') -> str:
-    allowed = {'mrn-form.php', 'readme.txt', 'LICENSE', 'uninstall.php', 'includes', 'assets'}
+    allowed = {'mrn-form.php', 'readme.txt', 'LICENSE', 'uninstall.php', 'includes', 'assets', 'languages'}
     forbidden = {'.git', '.github', 'docs', 'tests', 'tools', 'vendor', 'node_modules'}
     required = {'mrn-form.php', 'readme.txt', 'LICENSE', 'uninstall.php'}
     with zipfile.ZipFile(package) as archive:

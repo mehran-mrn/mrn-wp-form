@@ -4,7 +4,7 @@ Tags: form builder, contact form, conditional logic, email notifications, rtl
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,50 +19,26 @@ MRN Forms lets you build and style WordPress forms without a page builder. It in
 = Features =
 
 * Drag-and-drop form builder with live preview and fourteen field types.
+* Field types include short text, email, phone, number, long text, select, radio, checkbox, date, file, consent, hidden, heading, and HTML.
 * Conditional visibility and fields required when another field is empty.
 * Client and server validation, honeypot protection, form nonces, and rate limits.
 * Configurable field widths, labels, colors, spacing, and custom CSS classes.
 * Entry inbox, read/spam statuses, and CSV exports.
-* Administrator notifications and respondent receipts with HTML templates and merge tags.
+* Administrator notifications and respondent receipts with responsive HTML templates, brand colors, logos, and merge tags.
 * Conditional notification recipients.
 * Shortcodes, a dynamic Gutenberg block, and a theme function.
 * JavaScript submission with a standard POST fallback for regular forms.
 * Optional custom registration and SMS verification with [Anar Toolkit](https://wordpress.org/plugins/anar-toolkit/) 1.5.0 or later.
 * Optional traffic attribution and events for an existing Google Analytics installation. Both are off by default.
+* Automatic RTL/LTR layouts and basic accessibility support.
+* Uploads with configurable file type and size limits.
 * No paid license, external account, or external runtime library is required for the form builder.
 
 MRN Forms is developed by [Mehran Marandi](https://mehranmarandi.ir) as a product of MRNWP.
 
-= فارسی =
+= Registration and SMS verification with Anar =
 
-MRN Forms برای سایت‌هایی ساخته شده که یک فرم‌ساز حرفه‌ای می‌خواهند، اما نمی‌خواهند برای نمایش و استایل فرم به صفحه‌ساز یا کتابخانه JavaScript سنگین وابسته باشند.
-
-= امکانات =
-
-* فرم‌ساز Drag & Drop با پیش‌نمایش زنده
-* رابط کامل فارسی و انگلیسی با تشخیص خودکار RTL/LTR بر اساس زبان وردپرس
-* ۱۴ نوع فیلد: متن، ایمیل، تلفن، عدد، متن بلند، انتخابی، رادیویی، چک‌باکس، تاریخ، فایل، رضایت، پنهان، عنوان و HTML
-* عرض‌های واکنش‌گرا، رنگ، فاصله، گردی گوشه، محل برچسب و کلاس CSS اختصاصی
-* منطق شرطی برای نمایش فیلدها
-* اعتبارسنجی هم‌زمان مرورگر و سرور
-* آپلود امن با کنترل پسوند و حجم
-* ثبت اختیاری منبع ورود، کمپین، صفحه فرود و ارجاع‌دهنده برای هر ارسال؛ پیش‌فرض خاموش
-* رویدادهای اختیاری GA4 برای کلیک تماس، واتساپ و ارسال موفق فرم؛ پیش‌فرض خاموش
-* ذخیره ارسال‌ها، وضعیت خوانده‌شده/هرزنامه و خروجی CSV
-* دو اعلان آماده: ایمیل مدیر و رسید تکمیل‌کننده
-* مسیریابی شرطی اعلان‌ها بر اساس پاسخ هر فیلد
-* قالب HTML واکنش‌گرا با رنگ و لوگوی برند
-* Merge Tag برای اطلاعات فرم و فیلدها
-* ارسال AJAX با امکان ارسال استاندارد برای فرم‌های عادی
-* ثبت‌نام با فیلدهای دلخواه و تأیید پیامکی فرم‌ها از طریق انار ۱.۵.۰ یا بالاتر
-* Honeypot، nonce، محدودسازی نرخ و هش کردن IP
-* شورت‌کد، بلوک گوتنبرگ و تابع قالب
-* RTL/LTR خودکار و دسترس‌پذیری پایه
-* بدون وابستگی runtime خارجی
-
-= ثبت‌نام و تأیید پیامکی با انار =
-
-در «ظاهر و رفتار ← انار و MRN Forms» یک فیلد تلفن الزامی و بدون شرط نمایش انتخاب کنید. حالت «تأیید پیامکی پیش از ارسال» برای فرم‌های عادی است. برای ثبت‌نام، حالت «ثبت‌نام در انار» را انتخاب کنید، فرم را منتشر کنید و آن را در «انار ← تنظیمات ← عمومی» انتخاب کنید. هر دو حالت از سرویس کد تأیید انار استفاده می‌کنند و به جاوااسکریپت نیاز دارند.
+In Appearance and behavior > Anar and MRN Forms, select a required phone field with no visibility condition. Choose SMS verification before submission for regular forms. For registration, select Anar registration, publish the form, and select it under Anar > Settings > General. Both modes use Anar’s verification service and require JavaScript.
 
 == Installation ==
 
@@ -77,7 +53,7 @@ MRN Forms برای سایت‌هایی ساخته شده که یک فرم‌سا
 
 `[mrn_form id="1"]`
 
-یا:
+Or use a form slug
 
 `[mrn_form slug="contact-us"]`
 
@@ -85,51 +61,49 @@ MRN Forms برای سایت‌هایی ساخته شده که یک فرم‌سا
 
 `<?php mrn_form( 1 ); ?>`
 
-یا با تنظیمات نمایشی:
+Or pass display options
 
 `<?php mrn_form( 'contact-us', array( 'showTitle' => false ) ); ?>`
 
 = Gutenberg =
 
-بلوک «MRN Forms» را اضافه و فرم منتشرشده را انتخاب کنید.
+Add the MRN Forms block and select a published form.
 
 == Merge Tags ==
 
-* `{form_title}` عنوان فرم
-* `{form_id}` شناسه فرم
-* `{entry_id}` شناسه ارسال
-* `{site_name}` نام سایت
-* `{site_url}` نشانی سایت
-* `{admin_email}` ایمیل پیش‌فرض مدیر
-* `{all_fields}` جدول زیبای همه پاسخ‌ها
-* `{field:email}` مقدار فیلدی با کلید `email`
+* `{form_title}` — Form title
+* `{form_id}` — Form ID
+* `{entry_id}` — Entry ID
+* `{site_name}` — Site name
+* `{site_url}` — Site URL
+* `{admin_email}` — Default administrator email address
+* `{all_fields}` — Table of all responses
+* `{field:email}` — Value of the field with the key `email`
 
-چند گیرنده ایمیل را با ویرگول یا `;` جدا کنید.
+Separate multiple email recipients with a comma or a `;`.
 
 == Theme customization ==
 
-هر فرم تنظیمات بصری مستقل دارد. برای کنترل کامل‌تر، متغیرهای CSS زیر روی `.mrnf-shell` قابل override هستند:
+Each form has its own appearance settings. You can override these CSS variables on `.mrnf-shell` for finer control.
 
 `--mrnf-primary`, `--mrnf-accent`, `--mrnf-bg`, `--mrnf-text`, `--mrnf-gap`, `--mrnf-radius`
 
-نمونه:
+For example
 
 `.my-form { --mrnf-primary: #222; --mrnf-radius: 4px; }`
 
-کلاس `my-form` را در بخش «ظاهر و رفتار ← کلاس CSS سفارشی» ثبت کنید.
+Add the `my-form` class under Appearance and behavior > Custom CSS class.
 
 == Developer API ==
 
-فیلترها و اکشن‌های اصلی:
+The main filters and actions are listed below.
 
-* `mrnf_submission_values` — تغییر مقادیر اعتبارسنجی‌شده پیش از ذخیره
-* `mrnf_after_entry_created` — پس از ثبت ارسال
-* `mrnf_after_submission` — پس از تلاش برای ارسال اعلان‌ها
-* `mrnf_after_notification` — پس از ارسال هر اعلان
-* `mrnf_notification_results` — تغییر نتیجه کانال‌های اعلان
-* `mrnf_rendered_form` — تغییر HTML نهایی فرم
-
-ساختار اعلان‌ها طوری جدا شده که کانال SMS در نسخه بعد بدون تغییر فرم‌ها قابل اضافه شدن باشد.
+* `mrnf_submission_values` — Filter validated values before saving
+* `mrnf_after_entry_created` — Runs after an entry is saved
+* `mrnf_after_submission` — Runs after notification delivery is attempted
+* `mrnf_after_notification` — Runs after each notification is sent
+* `mrnf_notification_results` — Filter the results from notification channels
+* `mrnf_rendered_form` — Filter the final form HTML
 
 == Privacy ==
 
@@ -144,8 +118,6 @@ When attribution is enabled, source, medium, campaign, term, content, landing pa
 When analytics events are enabled and the site already provides a `gtag` function, phone-click, WhatsApp-click, and successful-submission events are passed to that function. Events include the interaction type, page URL without query parameters, form ID for a submission, and traffic source/medium when attribution is enabled. Form answers, phone numbers, email addresses, and clicked-link text are not included. MRN Forms does not install Google scripts. The site's existing analytics configuration controls delivery and consent, and Google may collect additional information under that configuration.
 
 Optional service: [Google Analytics](https://marketingplatform.google.com/about/analytics/), [Terms](https://marketingplatform.google.com/about/analytics/terms/us/), [Privacy policy](https://policies.google.com/privacy).
-
-داده‌ها روی سایت شما ذخیره می‌شوند. ثبت منبع بازدید و رویدادهای گوگل اختیاری و پیش‌فرض خاموش هستند. پیش از فعال‌سازی، اطلاع‌رسانی حریم خصوصی و رضایت لازم را در سایت تنظیم کنید. حذف داده‌ها هنگام uninstall اختیاری است.
 
 == Frequently Asked Questions ==
 
@@ -176,6 +148,9 @@ PHP, JavaScript, and CSS sources are included in the plugin. No build step is re
 3. Email settings and optional attribution and analytics controls.
 
 == Changelog ==
+
+= 1.5.1 =
+* Use English source strings and bundle the Persian translation for the WordPress locale.
 
 = 1.5.0 =
 * Build custom registration forms for Anar with a required mobile field and save the answers in the form inbox.
@@ -225,21 +200,21 @@ PHP, JavaScript, and CSS sources are included in the plugin. No build step is re
 
 = 1.1.0 =
 
-* افزودن رابط کامل انگلیسی برای مدیریت، فرم‌ساز، فرانت‌اند، اعتبارسنجی و ایمیل‌ها.
-* افزودن پشتیبانی خودکار و کامل LTR در کنار RTL.
-* ثبت Mehran Marandi و mehranmarandi.ir به‌عنوان سازنده افزونه.
+* Add the English interface for administration, the form builder, public forms, validation, and emails.
+* Add automatic LTR layouts alongside RTL support.
+* Credit Mehran Marandi and mehranmarandi.ir as the plugin developer.
 
 = 1.0.2 =
 
-* دریافت nonce تازه و غیرقابل‌کش پیش از ارسال فرم برای جلوگیری از خطای نشست در صفحات کش‌شده.
+* Fetch a fresh, uncached nonce before submission to prevent session errors on cached pages.
 
 = 1.0.1 =
 
-* اصلاح فاصله از سایدبار و حذف اسکرول افقی پنل مدیریت در چیدمان‌های RTL و LTR.
+* Fix sidebar spacing and horizontal scrolling in the admin area for RTL and LTR layouts.
 
 = 1.0.0 =
 
-* انتشار اولیه فرم‌ساز، مدیریت ارسال‌ها، اعلان ایمیل، منطق شرطی و امکانات توسعه‌دهنده.
+* Initial release with form building, entry management, email notifications, conditional logic, and developer tools.
 
 == Upgrade Notice ==
 

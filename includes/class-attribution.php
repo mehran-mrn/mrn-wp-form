@@ -60,15 +60,15 @@ final class Attribution {
 		$medium = strtolower( trim( (string) ( $attribution['medium'] ?? '' ) ) );
 
 		if ( '' === $source ) {
-			return __( 'نامشخص', 'mrn-forms' );
+			return __( 'Unknown', 'mrn-forms' );
 		}
 		if ( in_array( $source, array( 'direct', '(direct)' ), true ) ) {
-			return __( 'مستقیم', 'mrn-forms' );
+			return __( 'Direct', 'mrn-forms' );
 		}
 
 		$paid_media = array( 'cpc', 'ppc', 'paid', 'paid_search', 'paid-social', 'paid_social' );
 		if ( 'google' === $source && in_array( $medium, $paid_media, true ) ) {
-			return __( 'تبلیغات گوگل', 'mrn-forms' );
+			return __( 'Google Ads', 'mrn-forms' );
 		}
 
 		$source_labels = array(
@@ -83,10 +83,10 @@ final class Attribution {
 			'youtube'    => 'YouTube',
 		);
 		$medium_labels = array(
-			'organic'  => __( 'جست‌وجوی طبیعی', 'mrn-forms' ),
-			'social'   => __( 'شبکه اجتماعی', 'mrn-forms' ),
-			'referral' => __( 'ارجاعی', 'mrn-forms' ),
-			'email'    => __( 'ایمیل', 'mrn-forms' ),
+			'organic'  => __( 'Organic search', 'mrn-forms' ),
+			'social'   => __( 'Social network', 'mrn-forms' ),
+			'referral' => __( 'Referral', 'mrn-forms' ),
+			'email'    => __( 'Email', 'mrn-forms' ),
 		);
 
 		$source_label = $source_labels[ $source ] ?? self::display_source( $source );

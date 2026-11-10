@@ -3,12 +3,13 @@
  * Plugin Name:       MRN Forms
  * Plugin URI:        https://mrnwp.ir/mrnforms
  * Description:       Lightweight bilingual form builder with drag and drop, conditional logic, entries, and email notifications.
- * Version:           1.5.0
+ * Version:           1.5.1
  * Requires at least: 6.6
  * Requires PHP:      8.1
  * Author:            Mehran Marandi
  * Author URI:        https://mehranmarandi.ir
  * Text Domain:       mrn-forms
+ * Domain Path:       /languages
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -17,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MRNF_VERSION', '1.5.0' );
+define( 'MRNF_VERSION', '1.5.1' );
 define( 'MRNF_DB_VERSION', '1.1.0' );
 define( 'MRNF_FILE', __FILE__ );
 define( 'MRNF_PATH', plugin_dir_path( __FILE__ ) );

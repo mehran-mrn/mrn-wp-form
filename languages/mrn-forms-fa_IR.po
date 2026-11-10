@@ -1,0 +1,1433 @@
+# Translation of Plugins - MRN Forms - Stable (latest release) in Persian
+# This file is distributed under the same license as MRN Forms.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - MRN Forms - Stable (latest release)\n"
+"PO-Revision-Date: 2026-11-10 18:44+0000\n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. Plugin Name of the plugin
+#: mrn-form.php includes/class-admin.php:52 includes/class-blocks.php:63
+msgid "MRN Forms"
+msgstr "MRN Forms"
+
+#. Plugin URI of the plugin
+#: mrn-form.php
+msgid "https://mrnwp.ir/mrnforms"
+msgstr "https://mrnwp.ir/mrnforms"
+
+#. Description of the plugin
+#: mrn-form.php
+msgid ""
+"Lightweight bilingual form builder with drag and drop, conditional logic, "
+"entries, and email notifications."
+msgstr ""
+"فرم‌ساز سبک و دوزبانه با کشیدن و رها کردن، منطق شرطی، مدیریت ارسال‌ها و "
+"اعلان‌های ایمیلی."
+
+#. Author of the plugin
+#: mrn-form.php
+msgid "Mehran Marandi"
+msgstr "مهران مرندی"
+
+#. Author URI of the plugin
+#: mrn-form.php
+msgid "https://mehranmarandi.ir"
+msgstr "https://mehranmarandi.ir"
+
+#: includes/class-admin.php:52 includes/class-admin.php:809
+msgid "Forms"
+msgstr "فرم‌ها"
+
+#: includes/class-admin.php:53
+msgid "Forms dashboard"
+msgstr "داشبورد فرم‌ها"
+
+#: includes/class-admin.php:53 includes/class-admin.php:164
+#: includes/class-admin.php:808
+msgid "Dashboard"
+msgstr "داشبورد"
+
+#: includes/class-admin.php:54 includes/class-admin.php:259
+#: includes/class-admin.php:412
+msgid "All forms"
+msgstr "همه فرم‌ها"
+
+#: includes/class-admin.php:55 includes/class-admin.php:260
+#: includes/class-admin.php:311
+msgid "New form"
+msgstr "فرم جدید"
+
+#: includes/class-admin.php:56 includes/class-admin.php:396
+#: includes/class-admin.php:811
+msgid "Inbox"
+msgstr "صندوق ورودی"
+
+#: includes/class-admin.php:57
+msgid "MRN Forms settings"
+msgstr "تنظیمات MRN Forms"
+
+#: includes/class-admin.php:57 includes/class-admin.php:812
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: includes/class-admin.php:81
+msgid "Add option"
+msgstr "افزودن گزینه"
+
+#: includes/class-admin.php:82
+msgid "Allowed extensions"
+msgstr "پسوندهای مجاز"
+
+#: includes/class-admin.php:83
+msgid "Add another input field before using a dependent requirement."
+msgstr ""
+"برای استفاده از الزام وابسته، ابتدا یک فیلد ورودی دیگر به فرم اضافه کنید."
+
+#: includes/class-admin.php:84
+msgid "Alternative field"
+msgstr "فیلد جایگزین"
+
+#: includes/class-admin.php:85
+msgid "Always required"
+msgstr "همیشه الزامی"
+
+#: includes/class-admin.php:86
+msgid "Users must always complete this field."
+msgstr "کاربر همیشه باید این فیلد را تکمیل کند."
+
+#: includes/class-admin.php:87
+msgid "Option"
+msgstr "گزینه"
+
+#: includes/class-admin.php:88
+msgid "Option 1"
+msgstr "گزینه ۱"
+
+#: includes/class-admin.php:89
+msgid "Option 2"
+msgstr "گزینه ۲"
+
+#: includes/class-admin.php:90
+msgid "Option 3"
+msgstr "گزینه ۳"
+
+#: includes/class-admin.php:91
+msgid "Options"
+msgstr "گزینه‌ها"
+
+#: includes/class-admin.php:92
+msgid "Conditional logic"
+msgstr "منطق شرطی"
+
+#: includes/class-admin.php:93
+msgid "Required when another field is empty"
+msgstr "الزامی وقتی فیلد دیگری خالی است"
+
+#: includes/class-admin.php:94
+msgid "This field is required based on the alternative field value."
+msgstr "تکمیل این فیلد به مقدار فیلد جایگزین بستگی دارد."
+
+#: includes/class-admin.php:95
+msgid "This action cannot be undone. Continue?"
+msgstr "این عملیات قابل بازگشت نیست. ادامه می‌دهید؟"
+
+#: includes/class-admin.php:96
+msgid "Content"
+msgstr "محتوا"
+
+#: includes/class-admin.php:97
+msgid "Copied"
+msgstr "کپی شد"
+
+#: includes/class-admin.php:98
+msgid "Default value"
+msgstr "مقدار پیش‌فرض"
+
+#. translators: %s: elapsed time since the form was updated or the entry was
+#. created.
+#: includes/class-admin.php:99 includes/class-admin.php:278
+#: includes/class-admin.php:793
+msgid "Delete"
+msgstr "حذف"
+
+#: includes/class-admin.php:100
+msgid "Delete this field?"
+msgstr "این فیلد حذف شود؟"
+
+#: includes/class-admin.php:101
+msgid "Help text"
+msgstr "توضیح راهنما"
+
+#. translators: %s: elapsed time since the form was updated or the entry was
+#. created.
+#: includes/class-admin.php:102 includes/class-admin.php:278
+msgid "Duplicate"
+msgstr "تکثیر"
+
+#: includes/class-admin.php:103
+msgid "Drag fields from the sidebar or click them."
+msgstr "فیلدها را از ستون کناری بکشید یا روی آن‌ها کلیک کنید."
+
+#. translators: %d: Number of fields in the form.
+#: includes/class-admin.php:105
+#, php-format
+msgid "%d fields"
+msgstr "%d فیلد"
+
+#: includes/class-admin.php:106
+msgid "Label"
+msgstr "برچسب"
+
+#: includes/class-admin.php:107
+msgid "Field width"
+msgstr "عرض فیلد"
+
+#: includes/class-admin.php:108
+msgid "Choose a file…"
+msgstr "انتخاب فایل…"
+
+#. translators: %s: Field key used in a merge tag.
+#: includes/class-admin.php:110
+#, php-format
+msgid "Merge tag: {field:%s}"
+msgstr "برای merge tag: {field:%s}"
+
+#: includes/class-admin.php:111 includes/class-admin.php:612
+msgid "Hidden"
+msgstr "پنهان"
+
+#. translators: %s: Field type label.
+#: includes/class-admin.php:113
+#, php-format
+msgid "%s input"
+msgstr "ورودی %s"
+
+#: includes/class-admin.php:114
+msgid "Layout"
+msgstr "چیدمان"
+
+#: includes/class-admin.php:115
+msgid "Maximum size (MB)"
+msgstr "حداکثر حجم (MB)"
+
+#: includes/class-admin.php:116
+msgid "Maximum"
+msgstr "بیشینه"
+
+#: includes/class-admin.php:117
+msgid "Maximum characters"
+msgstr "حداکثر نویسه"
+
+#: includes/class-admin.php:118
+msgid "Minimum"
+msgstr "کمینه"
+
+#: includes/class-admin.php:119
+msgid "Minimum characters"
+msgstr "حداقل نویسه"
+
+#: includes/class-admin.php:120
+msgid "A new section heading"
+msgstr "عنوان یک بخش تازه"
+
+#: includes/class-admin.php:121
+msgid "No options"
+msgstr "بدون گزینه"
+
+#: includes/class-admin.php:122
+msgid "No value"
+msgstr "بدون مقدار"
+
+#: includes/class-admin.php:123
+msgid "Optional"
+msgstr "اختیاری"
+
+#: includes/class-admin.php:124
+msgid "Users may leave this field empty."
+msgstr "تکمیل این فیلد برای کاربر اختیاری است."
+
+#: includes/class-admin.php:125
+msgid "RegEx pattern"
+msgstr "الگوی RegEx"
+
+#: includes/class-admin.php:126
+msgid "Descriptive text or HTML"
+msgstr "متن توضیحی یا HTML"
+
+#: includes/class-admin.php:127
+msgid "Long text…"
+msgstr "متن بلند…"
+
+#: includes/class-admin.php:128
+msgid "This field is required"
+msgstr "تکمیل این فیلد الزامی است"
+
+#: includes/class-admin.php:129
+msgid "If the alternative field is empty, this field becomes required."
+msgstr "اگر فیلد جایگزین خالی باشد، تکمیل این فیلد الزامی می‌شود."
+
+#: includes/class-admin.php:130
+msgid "Requirement mode"
+msgstr "وضعیت الزامی بودن"
+
+#: includes/class-admin.php:131
+msgid "Select a field to edit its settings."
+msgstr "برای ویرایش تنظیمات، یک فیلد را انتخاب کنید."
+
+#: includes/class-admin.php:132 includes/class-admin.php:699
+msgid "Select a field…"
+msgstr "انتخاب فیلد…"
+
+#: includes/class-admin.php:133
+msgid "Show this field conditionally"
+msgstr "نمایش شرطی این فیلد"
+
+#: includes/class-admin.php:134
+msgid "Your form starts here"
+msgstr "فرم شما از اینجا شروع می‌شود"
+
+#: includes/class-admin.php:135
+msgid "Unique key"
+msgstr "کلید یکتا"
+
+#: includes/class-admin.php:136
+msgid "You have unsaved changes."
+msgstr "تغییرات ذخیره‌نشده دارید."
+
+#: includes/class-admin.php:137
+msgid "Validation"
+msgstr "اعتبارسنجی"
+
+#: includes/class-admin.php:138
+msgid "25%"
+msgstr "۲۵٪"
+
+#: includes/class-admin.php:139
+msgid "33%"
+msgstr "۳۳٪"
+
+#: includes/class-admin.php:140
+msgid "50%"
+msgstr "۵۰٪"
+
+#: includes/class-admin.php:141
+msgid "66%"
+msgstr "۶۶٪"
+
+#: includes/class-admin.php:142
+msgid "75%"
+msgstr "۷۵٪"
+
+#: includes/class-admin.php:143
+msgid "100%"
+msgstr "۱۰۰٪"
+
+#: includes/class-admin.php:144 includes/class-admin.php:706
+msgid "Condition"
+msgstr "شرط"
+
+#: includes/class-admin.php:145 includes/class-admin.php:708
+msgid "Comparison value"
+msgstr "مقدار مقایسه"
+
+#: includes/class-admin.php:146 includes/class-admin.php:706
+msgid "Equals"
+msgstr "برابر باشد با"
+
+#: includes/class-admin.php:147 includes/class-admin.php:706
+msgid "Does not equal"
+msgstr "برابر نباشد با"
+
+#: includes/class-admin.php:148 includes/class-admin.php:706
+msgid "Contains"
+msgstr "شامل باشد"
+
+#: includes/class-admin.php:149 includes/class-admin.php:706
+msgid "Is not empty"
+msgstr "خالی نباشد"
+
+#: includes/class-admin.php:150 includes/class-admin.php:706
+msgid "Is empty"
+msgstr "خالی باشد"
+
+#: includes/class-admin.php:151 includes/class-admin.php:699
+msgid "Source field"
+msgstr "فیلد مبنا"
+
+#. translators: %d: number of published forms.
+#: includes/class-admin.php:193
+msgid "Total forms"
+msgstr "کل فرم‌ها"
+
+#. translators: %d: number of published forms.
+#: includes/class-admin.php:193
+#, php-format
+msgid "%d published forms"
+msgstr "%d فرم منتشرشده"
+
+#: includes/class-admin.php:195
+msgid "Total entries"
+msgstr "کل ارسال‌ها"
+
+#: includes/class-admin.php:195
+msgid "Secure, exportable archive"
+msgstr "آرشیو امن و قابل خروجی"
+
+#: includes/class-admin.php:196 includes/class-admin.php:416
+msgid "Unread"
+msgstr "خوانده‌نشده"
+
+#: includes/class-admin.php:196
+msgid "Needs your review"
+msgstr "نیازمند بررسی شما"
+
+#: includes/class-admin.php:197 includes/class-form-repository.php:297
+msgid "Email notification"
+msgstr "اعلان ایمیلی"
+
+#: includes/class-admin.php:197
+msgid "Active"
+msgstr "فعال"
+
+#: includes/class-admin.php:197
+msgid "Administrator and form submitter"
+msgstr "مدیر و تکمیل‌کننده فرم"
+
+#: includes/class-admin.php:202
+msgid "Recent activity"
+msgstr "فعالیت اخیر"
+
+#: includes/class-admin.php:202
+msgid "Latest entries"
+msgstr "آخرین ارسال‌ها"
+
+#: includes/class-admin.php:203
+msgid "View inbox"
+msgstr "مشاهده صندوق ورودی"
+
+#: includes/class-admin.php:208
+msgid "Quick start"
+msgstr "شروع سریع"
+
+#: includes/class-admin.php:209
+msgid "A smooth way to collect information"
+msgstr "یک تجربه روان برای دریافت اطلاعات"
+
+#: includes/class-admin.php:210
+msgid ""
+"Build your form, match it to your theme, and display it with the shortcode "
+"or MRN Forms block."
+msgstr ""
+"فرم را بسازید، ظاهرش را با قالب هماهنگ کنید و با شورت‌کد یا بلوک MRN Forms "
+"نمایش دهید."
+
+#: includes/class-admin.php:211
+msgid "Create a new form"
+msgstr "ساخت فرم جدید"
+
+#: includes/class-admin.php:213
+msgid "Published form"
+msgstr "فرم منتشرشده"
+
+#. translators: %d: number of forms ready to collect entries.
+#: includes/class-admin.php:216
+#, php-format
+msgid "%d forms ready to collect entries"
+msgstr "%d فرم آماده دریافت"
+
+#. translators: %d: number of forms ready to collect entries.
+#: includes/class-admin.php:216
+msgid "No forms have been published yet"
+msgstr "هنوز فرمی منتشر نشده"
+
+#: includes/class-admin.php:219
+msgid "Dedicated storage"
+msgstr "ذخیره‌سازی اختصاصی"
+
+#: includes/class-admin.php:219
+msgid "Optimized, independent tables"
+msgstr "جدول‌های بهینه و مستقل"
+
+#: includes/class-admin.php:220
+msgid "Spam protection"
+msgstr "محافظت ضداسپم"
+
+#: includes/class-admin.php:220
+msgid "Honeypot and rate limiting"
+msgstr "Honeypot و محدودسازی نرخ"
+
+#: includes/class-admin.php:226
+msgid "Online forms"
+msgstr "فرم‌های آنلاین"
+
+#: includes/class-admin.php:226
+msgid "Quick access and embed code"
+msgstr "دسترسی سریع و کد نمایش"
+
+#. translators: %d: number of entries for a form.
+#: includes/class-admin.php:232
+#, php-format
+msgid "%d entries"
+msgstr "%d ارسال"
+
+#: includes/class-admin.php:259
+msgid "Library"
+msgstr "کتابخانه"
+
+#: includes/class-admin.php:259
+msgid "Create, edit, duplicate, and manage forms in one workspace."
+msgstr "ساخت، ویرایش، تکثیر و مدیریت فرم‌ها از یک فضای یکپارچه."
+
+#: includes/class-admin.php:262
+msgid "Search forms…"
+msgstr "جست‌وجوی فرم…"
+
+#: includes/class-admin.php:262
+msgid "Search"
+msgstr "جست‌وجو"
+
+#: includes/class-admin.php:265 includes/class-admin.php:772
+#: includes/class-blocks.php:64
+msgid "Form"
+msgstr "فرم"
+
+#: includes/class-admin.php:265 includes/class-admin.php:772
+msgid "Status"
+msgstr "وضعیت"
+
+#: includes/class-admin.php:265
+msgid "Entries"
+msgstr "ارسال‌ها"
+
+#: includes/class-admin.php:265
+msgid "Embed code"
+msgstr "کد نمایش"
+
+#: includes/class-admin.php:265
+msgid "Last updated"
+msgstr "آخرین تغییر"
+
+#: includes/class-admin.php:270
+msgid "You do not have any forms yet"
+msgstr "هنوز فرمی ندارید"
+
+#: includes/class-admin.php:270
+msgid "Create your first form in minutes."
+msgstr "اولین فرم را در چند دقیقه بسازید."
+
+#. translators: %s: elapsed time since the form was updated or the entry was
+#. created.
+#: includes/class-admin.php:277 includes/class-admin.php:789
+#, php-format
+msgid "%s ago"
+msgstr "%s پیش"
+
+#. translators: %s: elapsed time since the form was updated or the entry was
+#. created.
+#: includes/class-admin.php:278
+msgid "Edit"
+msgstr "ویرایش"
+
+#: includes/class-admin.php:302
+msgid "New contact form"
+msgstr "فرم تماس جدید"
+
+#: includes/class-admin.php:305
+msgid ""
+"Please complete the form below and we will contact you as soon as possible."
+msgstr "لطفاً فرم زیر را تکمیل کنید؛ در اولین فرصت با شما تماس می‌گیریم."
+
+#: includes/class-admin.php:311
+msgid "Edit form"
+msgstr "ویرایش فرم"
+
+#: includes/class-admin.php:323
+msgid "Form title"
+msgstr "عنوان فرم"
+
+#: includes/class-admin.php:323 includes/class-admin.php:871
+msgid "New"
+msgstr "جدید"
+
+#: includes/class-admin.php:325
+msgid "Form status"
+msgstr "وضعیت فرم"
+
+#: includes/class-admin.php:325 includes/class-admin.php:869
+msgid "Draft"
+msgstr "پیش‌نویس"
+
+#: includes/class-admin.php:325 includes/class-admin.php:868
+msgid "Published"
+msgstr "منتشرشده"
+
+#: includes/class-admin.php:325 includes/class-admin.php:870
+msgid "Archived"
+msgstr "بایگانی"
+
+#: includes/class-admin.php:329
+msgid "Preview"
+msgstr "پیش‌نمایش"
+
+#: includes/class-admin.php:330
+msgid "Save form"
+msgstr "ذخیره فرم"
+
+#: includes/class-admin.php:335
+msgid "Fields"
+msgstr "فیلدها"
+
+#: includes/class-admin.php:335
+msgid "Click or drag to add"
+msgstr "برای افزودن کلیک یا Drag کنید"
+
+#: includes/class-admin.php:341
+msgid "Display on site"
+msgstr "نمایش در سایت"
+
+#: includes/class-admin.php:341
+msgid "Or use the MRN Forms block or the mrn_form() function."
+msgstr "یا از بلوک MRN Forms و تابع mrn_form() استفاده کنید."
+
+#: includes/class-admin.php:344
+msgid "Structure"
+msgstr "ساختار"
+
+#: includes/class-admin.php:344
+msgid "Appearance and behavior"
+msgstr "ظاهر و رفتار"
+
+#: includes/class-admin.php:344
+msgid "Notifications"
+msgstr "اعلان‌ها"
+
+#: includes/class-admin.php:346
+msgid "Short form description…"
+msgstr "توضیح کوتاه فرم…"
+
+#: includes/class-admin.php:358
+msgid "Field settings"
+msgstr "تنظیمات فیلد"
+
+#: includes/class-admin.php:358
+msgid "Changes are applied immediately"
+msgstr "تغییرات همان لحظه اعمال می‌شود"
+
+#: includes/class-admin.php:359
+msgid "Select a field to configure it."
+msgstr "یک فیلد را برای تنظیم انتخاب کنید."
+
+#: includes/class-admin.php:363
+msgid "Form preview"
+msgstr "پیش‌نمایش فرم"
+
+#: includes/class-admin.php:396
+msgid "Saved entries"
+msgstr "ارسال‌های ثبت‌شده"
+
+#: includes/class-admin.php:396
+msgid "Review, organize, and export submissions."
+msgstr "بررسی، دسته‌بندی و خروجی گرفتن از پاسخ‌ها."
+
+#: includes/class-admin.php:411
+msgid "Export CSV"
+msgstr "خروجی CSV"
+
+#: includes/class-admin.php:416
+msgid "All statuses"
+msgstr "همه وضعیت‌ها"
+
+#: includes/class-admin.php:416 includes/class-admin.php:872
+msgid "Read"
+msgstr "خوانده‌شده"
+
+#: includes/class-admin.php:416 includes/class-admin.php:873
+msgid "Spam"
+msgstr "هرزنامه"
+
+#: includes/class-admin.php:416
+msgid "Apply filter"
+msgstr "اعمال فیلتر"
+
+#: includes/class-admin.php:438
+msgid "Email identity"
+msgstr "هویت ایمیل"
+
+#: includes/class-admin.php:438
+msgid "Sender and brand"
+msgstr "فرستنده و برند"
+
+#: includes/class-admin.php:438
+msgid "Sender details and HTML template colors for every email."
+msgstr "مشخصات فرستنده و رنگ‌های قالب HTML همه ایمیل‌ها."
+
+#: includes/class-admin.php:439
+msgid "Brand name"
+msgstr "نام برند"
+
+#: includes/class-admin.php:440
+msgid "Logo URL"
+msgstr "نشانی لوگو"
+
+#: includes/class-admin.php:440
+msgid "A square HTTPS image is recommended."
+msgstr "تصویر مربع با HTTPS پیشنهاد می‌شود."
+
+#: includes/class-admin.php:441
+msgid "Sender name"
+msgstr "نام فرستنده"
+
+#: includes/class-admin.php:442
+msgid "Sender email"
+msgstr "ایمیل فرستنده"
+
+#: includes/class-admin.php:443
+msgid "Default administrator email"
+msgstr "ایمیل پیش‌فرض مدیر"
+
+#: includes/class-admin.php:443
+msgid "Available in merge tags as {admin_email}."
+msgstr "در merge tag با {admin_email} قابل استفاده است."
+
+#: includes/class-admin.php:444 includes/class-admin.php:601
+msgid "Primary color"
+msgstr "رنگ اصلی"
+
+#: includes/class-admin.php:444 includes/class-admin.php:602
+msgid "Accent color"
+msgstr "رنگ تأکیدی"
+
+#: includes/class-admin.php:445
+msgid "Security and data"
+msgstr "امنیت و داده"
+
+#: includes/class-admin.php:445
+msgid "Submission and data-deletion controls"
+msgstr "کنترل ارسال و حذف اطلاعات"
+
+#: includes/class-admin.php:445
+msgid "Maximum submissions per 10 minutes"
+msgstr "حداکثر ارسال در ۱۰ دقیقه"
+
+#: includes/class-admin.php:445
+msgid "Between 1 and 50 per IP address and form."
+msgstr "برای هر IP و هر فرم؛ بین ۱ تا ۵۰."
+
+#: includes/class-admin.php:445
+msgid "Delete all data on uninstall"
+msgstr "حذف کامل داده‌ها هنگام uninstall"
+
+#: includes/class-admin.php:445
+msgid "Forms, entries, email logs, and settings will be deleted permanently."
+msgstr "فرم‌ها، ارسال‌ها، لاگ ایمیل و تنظیمات برای همیشه حذف می‌شوند."
+
+#: includes/class-admin.php:446
+msgid "Privacy"
+msgstr "حریم خصوصی"
+
+#: includes/class-admin.php:446
+msgid "Traffic attribution and analytics events"
+msgstr "منبع بازدید و رویدادهای آماری"
+
+#: includes/class-admin.php:446
+msgid ""
+"Both features are off by default. Set up privacy notices and any required "
+"consent on your site before enabling them."
+msgstr ""
+"هر دو قابلیت پیش‌فرض خاموش هستند. پیش از فعال‌سازی، اطلاع‌رسانی حریم خصوصی و"
+" رضایت لازم را در سایت تنظیم کنید."
+
+#: includes/class-admin.php:447
+msgid "Collect traffic attribution"
+msgstr "ثبت منبع بازدید"
+
+#: includes/class-admin.php:447
+msgid ""
+"Source, campaign and landing page are stored in browser session storage and "
+"with form submissions on this site."
+msgstr ""
+"منبع، کمپین و صفحه فرود در نشست مرورگر و همراه ارسال فرم روی همین سایت ذخیره"
+" می‌شوند."
+
+#: includes/class-admin.php:448
+msgid "Send events to Google Analytics"
+msgstr "ارسال رویداد به Google Analytics"
+
+#: includes/class-admin.php:448
+msgid ""
+"Send phone, WhatsApp and successful submission events to the existing site "
+"gtag. The plugin does not install Google scripts or send form answers or "
+"contact numbers."
+msgstr ""
+"رویدادهای تماس، واتساپ و ارسال موفق را به gtag موجود در سایت می‌فرستد. "
+"افزونه کد گوگل را نصب نمی‌کند و پاسخ فرم یا شماره تماس را نمی‌فرستد."
+
+#: includes/class-admin.php:450
+msgid "Save settings"
+msgstr "ذخیره تنظیمات"
+
+#: includes/class-admin.php:483
+msgid "Form saved successfully."
+msgstr "فرم با موفقیت ذخیره شد."
+
+#: includes/class-admin.php:500
+msgid "The form and its related entries were deleted."
+msgstr "فرم و ارسال‌های مرتبط حذف شدند."
+
+#: includes/class-admin.php:503
+msgid "A draft copy was created."
+msgstr "یک نسخه پیش‌نویس ساخته شد."
+
+#: includes/class-admin.php:520
+msgid "Entry deleted."
+msgstr "ارسال حذف شد."
+
+#: includes/class-admin.php:523
+msgid "Entry status updated."
+msgstr "وضعیت ارسال به‌روز شد."
+
+#: includes/class-admin.php:586
+msgid "Settings saved."
+msgstr "تنظیمات ذخیره شد."
+
+#: includes/class-admin.php:599
+msgid "Form appearance"
+msgstr "ظاهر فرم"
+
+#: includes/class-admin.php:599
+msgid "Compatible with any MRN theme and customizable with CSS"
+msgstr "هماهنگ با هر قالب MRN و قابل Override با CSS"
+
+#: includes/class-admin.php:603
+msgid "Background"
+msgstr "پس‌زمینه"
+
+#: includes/class-admin.php:604
+msgid "Text color"
+msgstr "رنگ متن"
+
+#: includes/class-admin.php:605
+msgid "Field spacing (px)"
+msgstr "فاصله فیلدها (px)"
+
+#: includes/class-admin.php:606
+msgid "Corner radius (px)"
+msgstr "گردی گوشه‌ها (px)"
+
+#: includes/class-admin.php:609
+msgid "Layout and text"
+msgstr "چیدمان و متن‌ها"
+
+#: includes/class-admin.php:611
+msgid "Button text"
+msgstr "متن دکمه"
+
+#: includes/class-admin.php:612
+msgid "Label position"
+msgstr "جایگاه برچسب"
+
+#: includes/class-admin.php:612
+msgid "Above the field"
+msgstr "بالای فیلد"
+
+#: includes/class-admin.php:612
+msgid "Beside the field"
+msgstr "کنار فیلد"
+
+#: includes/class-admin.php:613
+msgid "Direction"
+msgstr "جهت"
+
+#: includes/class-admin.php:613
+msgid "Automatic"
+msgstr "خودکار"
+
+#: includes/class-admin.php:614
+msgid "Custom CSS class"
+msgstr "کلاس CSS سفارشی"
+
+#: includes/class-admin.php:617
+msgid "Show form title"
+msgstr "نمایش عنوان فرم"
+
+#: includes/class-admin.php:618
+msgid "Show form description"
+msgstr "نمایش توضیحات فرم"
+
+#: includes/class-admin.php:619
+msgid "Full-width button"
+msgstr "دکمه تمام‌عرض"
+
+#: includes/class-admin.php:622
+msgid "After submission"
+msgstr "پس از ارسال"
+
+#: includes/class-admin.php:623
+msgid "Success message"
+msgstr "پیام موفقیت"
+
+#: includes/class-admin.php:624
+msgid "Error message"
+msgstr "پیام خطا"
+
+#: includes/class-admin.php:625
+msgid "Redirect URL (optional)"
+msgstr "انتقال به نشانی (اختیاری)"
+
+#: includes/class-admin.php:626
+msgid "Store submissions in the inbox"
+msgstr "ذخیره ارسال‌ها در صندوق ورودی"
+
+#: includes/class-admin.php:626
+msgid "Send email notifications"
+msgstr "ارسال اعلان‌های ایمیلی"
+
+#: includes/class-admin.php:643
+msgid "Plugin integration"
+msgstr "اتصال افزونه‌ها"
+
+#: includes/class-admin.php:643
+msgid "Anar and MRN Forms"
+msgstr "انار و MRN Forms"
+
+#: includes/class-admin.php:644
+msgid "Anar available"
+msgstr "انار در دسترس است"
+
+#: includes/class-admin.php:644
+msgid "Compatible Anar required"
+msgstr "نیاز به نسخهٔ سازگار انار"
+
+#: includes/class-admin.php:646
+msgid ""
+"Verify mobile numbers by SMS on regular forms, or build a registration form "
+"that creates a WordPress account after verification."
+msgstr ""
+"برای فرم‌های معمولی شمارهٔ همراه را با پیامک تأیید کنید، یا فرم ثبت‌نامی "
+"بسازید که پس از تأیید شماره، حساب وردپرس ایجاد می‌کند."
+
+#: includes/class-admin.php:648
+msgid "How this form uses Anar"
+msgstr "کاربرد فرم با انار"
+
+#: includes/class-admin.php:650
+msgid "Off"
+msgstr "غیرفعال"
+
+#: includes/class-admin.php:651
+msgid "SMS verification before submission"
+msgstr "تأیید پیامکی پیش از ارسال"
+
+#: includes/class-admin.php:652
+msgid "Anar registration"
+msgstr "ثبت‌نام در انار"
+
+#: includes/class-admin.php:655
+msgid "Mobile number field"
+msgstr "فیلد شمارهٔ همراه"
+
+#: includes/class-admin.php:656
+msgid "Select a phone field"
+msgstr "انتخاب فیلد تلفن"
+
+#: includes/class-admin.php:657
+msgid "Use a required phone field with no visibility condition."
+msgstr "از نوع تلفن، الزامی و بدون شرط نمایش."
+
+#: includes/class-admin.php:660
+msgid ""
+"For registration, publish this form and select it in Anar settings. "
+"Registration answers are saved in this form’s inbox."
+msgstr ""
+"برای ثبت‌نام، فرم را منتشر و در تنظیمات انار انتخاب کنید. پاسخ‌های ثبت‌نام "
+"در صندوق ورودی همین فرم ذخیره می‌شوند."
+
+#: includes/class-admin.php:662
+msgid "Open Anar settings"
+msgstr "رفتن به تنظیمات انار"
+
+#: includes/class-admin.php:678
+msgid "Merge tags"
+msgstr "Merge Tagها"
+
+#: includes/class-admin.php:678
+msgid "Use each field key, for example {field:phone}."
+msgstr "برای هر فیلد از کلید آن استفاده کنید؛ مانند {field:phone}."
+
+#: includes/class-admin.php:693
+msgid "Recipient"
+msgstr "گیرنده"
+
+#: includes/class-admin.php:693
+msgid "Reply-To"
+msgstr "پاسخ به"
+
+#: includes/class-admin.php:694 includes/class-field-registry.php:220
+msgid "Subject"
+msgstr "موضوع"
+
+#: includes/class-admin.php:695
+msgid "Email body (basic HTML is allowed)"
+msgstr "متن ایمیل (HTML ساده مجاز است)"
+
+#: includes/class-admin.php:697
+msgid "Send this notification conditionally"
+msgstr "ارسال شرطی این اعلان"
+
+#: includes/class-admin.php:725
+msgid "Entry not found."
+msgstr "ارسال پیدا نشد."
+
+#: includes/class-admin.php:734
+msgid "Entry details"
+msgstr "جزئیات ارسال"
+
+#: includes/class-admin.php:737
+msgid "Back to inbox"
+msgstr "بازگشت به صندوق ورودی"
+
+#: includes/class-admin.php:739
+msgid "Responses"
+msgstr "پاسخ‌ها"
+
+#: includes/class-admin.php:739
+msgid "Deleted form"
+msgstr "فرم حذف‌شده"
+
+#: includes/class-admin.php:745
+msgid "Metadata"
+msgstr "مشخصات"
+
+#: includes/class-admin.php:745
+msgid "Submission details"
+msgstr "اطلاعات ثبت"
+
+#: includes/class-admin.php:745 includes/class-admin.php:772
+msgid "Time"
+msgstr "زمان"
+
+#: includes/class-admin.php:745 includes/class-admin.php:772
+msgid "Traffic source"
+msgstr "منبع ورود"
+
+#: includes/class-admin.php:745
+msgid "Campaign"
+msgstr "کمپین"
+
+#: includes/class-admin.php:745
+msgid "Landing page"
+msgstr "صفحه ورود"
+
+#: includes/class-admin.php:745
+msgid "External referrer"
+msgstr "ارجاع‌دهنده بیرونی"
+
+#: includes/class-admin.php:745
+msgid "Form submission page"
+msgstr "صفحه ارسال فرم"
+
+#: includes/class-admin.php:745
+msgid "Browser"
+msgstr "مرورگر"
+
+#: includes/class-admin.php:755
+msgid "Mark as unread"
+msgstr "علامت‌گذاری خوانده‌نشده"
+
+#: includes/class-admin.php:755
+msgid "Move to spam"
+msgstr "انتقال به هرزنامه"
+
+#: includes/class-admin.php:755
+msgid "Delete permanently"
+msgstr "حذف دائمی"
+
+#: includes/class-admin.php:772
+msgid "Response summary"
+msgstr "خلاصه پاسخ"
+
+#: includes/class-admin.php:780
+msgid "The inbox is empty"
+msgstr "صندوق ورودی خالی است"
+
+#: includes/class-admin.php:780
+msgid "New submissions will appear here."
+msgstr "ارسال‌های جدید اینجا نمایش داده می‌شوند."
+
+#: includes/class-admin.php:789 includes/class-admin.php:935
+#: includes/class-template-engine.php:39 includes/class-template-engine.php:91
+msgid ", "
+msgstr "، "
+
+#: includes/class-admin.php:793
+msgid "View"
+msgstr "مشاهده"
+
+#: includes/class-admin.php:810
+msgid "Form builder"
+msgstr "فرم‌ساز"
+
+#: includes/class-admin.php:817
+msgid "Smart form builder"
+msgstr "فرم‌ساز هوشمند"
+
+#: includes/class-admin.php:817
+msgid "From the first click to a real conversation with your audience"
+msgstr "از اولین کلیک تا یک گفت‌وگوی واقعی با مخاطب"
+
+#: includes/class-admin.php:840
+msgid "Plugin website"
+msgstr "صفحه افزونه"
+
+#: includes/class-admin.php:1021
+msgid "You do not have permission to access this area."
+msgstr "اجازه دسترسی به این بخش را ندارید."
+
+#: includes/class-anar-integration.php:61
+msgid "SMS verification is currently unavailable for this form."
+msgstr "تأیید پیامکی این فرم در حال حاضر در دسترس نیست."
+
+#: includes/class-anar-integration.php:75
+msgid "Verify your mobile number"
+msgstr "تأیید شماره موبایل"
+
+#: includes/class-anar-integration.php:75
+msgid "Enter the code we send to your mobile number to submit the form."
+msgstr "کدی را که برای شمارهٔ واردشده می‌فرستیم، وارد کنید تا فرم ارسال شود."
+
+#: includes/class-anar-integration.php:78
+msgid "Resend code"
+msgstr "ارسال دوبارهٔ کد"
+
+#: includes/class-anar-integration.php:78
+msgid "Send SMS code"
+msgstr "دریافت کد پیامکی"
+
+#: includes/class-anar-integration.php:79
+msgid "SMS verification code"
+msgstr "کد تأیید پیامکی"
+
+#: includes/class-anar-integration.php:84
+msgid "Enable JavaScript in your browser for SMS verification."
+msgstr "برای تأیید پیامکی، جاوااسکریپت مرورگر را فعال کنید."
+
+#: includes/class-attribution.php:63
+msgid "Unknown"
+msgstr "نامشخص"
+
+#: includes/class-attribution.php:66
+msgid "Direct"
+msgstr "مستقیم"
+
+#: includes/class-attribution.php:71
+msgid "Google Ads"
+msgstr "تبلیغات گوگل"
+
+#: includes/class-attribution.php:86
+msgid "Organic search"
+msgstr "جست‌وجوی طبیعی"
+
+#: includes/class-attribution.php:87
+msgid "Social network"
+msgstr "شبکه اجتماعی"
+
+#: includes/class-attribution.php:88
+msgid "Referral"
+msgstr "ارجاعی"
+
+#: includes/class-attribution.php:89 includes/class-field-registry.php:29
+#: includes/class-field-registry.php:207
+msgid "Email"
+msgstr "ایمیل"
+
+#: includes/class-blocks.php:65
+msgid "Select a form…"
+msgstr "یک فرم انتخاب کنید…"
+
+#: includes/class-blocks.php:66
+msgid "Selected form:"
+msgstr "فرم انتخاب‌شده:"
+
+#: includes/class-entry-repository.php:39
+msgid "Unable to save your submission. Please try again."
+msgstr "ارسال شما ذخیره نشد. دوباره تلاش کنید."
+
+#: includes/class-field-registry.php:24
+msgid "Short text"
+msgstr "متن کوتاه"
+
+#: includes/class-field-registry.php:34 includes/class-field-registry.php:214
+msgid "Phone number"
+msgstr "شماره تماس"
+
+#: includes/class-field-registry.php:39
+msgid "Number"
+msgstr "عدد"
+
+#: includes/class-field-registry.php:44
+msgid "Long text"
+msgstr "متن بلند"
+
+#: includes/class-field-registry.php:49
+msgid "Select list"
+msgstr "فهرست انتخاب"
+
+#: includes/class-field-registry.php:55
+msgid "Single choice"
+msgstr "انتخاب تکی"
+
+#: includes/class-field-registry.php:61
+msgid "Multiple choice"
+msgstr "انتخاب چندتایی"
+
+#: includes/class-field-registry.php:67
+msgid "Date"
+msgstr "تاریخ"
+
+#: includes/class-field-registry.php:72
+msgid "File upload"
+msgstr "بارگذاری فایل"
+
+#: includes/class-field-registry.php:77
+msgid "Terms consent"
+msgstr "پذیرش قوانین"
+
+#: includes/class-field-registry.php:82
+msgid "Hidden field"
+msgstr "فیلد پنهان"
+
+#: includes/class-field-registry.php:87
+msgid "Section heading"
+msgstr "عنوان بخش"
+
+#: includes/class-field-registry.php:92
+msgid "Text and HTML"
+msgstr "متن و HTML"
+
+#: includes/class-field-registry.php:200
+msgid "Full name"
+msgstr "نام و نام خانوادگی"
+
+#: includes/class-field-registry.php:222
+msgid "Consultation request"
+msgstr "درخواست مشاوره"
+
+#: includes/class-field-registry.php:222
+msgid "Support"
+msgstr "پشتیبانی"
+
+#: includes/class-field-registry.php:222
+msgid "Partnership"
+msgstr "همکاری"
+
+#: includes/class-field-registry.php:227
+msgid "Your message"
+msgstr "پیام شما"
+
+#: includes/class-form-repository.php:81
+msgid "The form title is required."
+msgstr "عنوان فرم الزامی است."
+
+#: includes/class-form-repository.php:86
+msgid ""
+"Select a required phone field with no visibility condition in the Anar "
+"settings."
+msgstr "در تنظیمات انار، یک فیلد تلفنِ الزامی و بدون شرط نمایش انتخاب کنید."
+
+#: includes/class-form-repository.php:129
+msgid "Form not found."
+msgstr "فرم پیدا نشد."
+
+#: includes/class-form-repository.php:132
+msgid "(Copy)"
+msgstr "(کپی)"
+
+#: includes/class-form-repository.php:185
+msgid "Submit form"
+msgstr "ارسال فرم"
+
+#: includes/class-form-repository.php:186
+msgid "Thank you! Your information was received successfully."
+msgstr "سپاس! اطلاعات شما با موفقیت دریافت شد."
+
+#: includes/class-form-repository.php:187
+msgid "Please correct the highlighted errors."
+msgstr "لطفاً خطاهای مشخص‌شده را برطرف کنید."
+
+#: includes/class-form-repository.php:218
+msgid "Administrator notification"
+msgstr "اعلان مدیر"
+
+#: includes/class-form-repository.php:221
+msgid "New submission from {form_title}"
+msgstr "ارسال جدید از {form_title}"
+
+#: includes/class-form-repository.php:222
+msgid "A new submission was received from “{form_title}”.<br><br>{all_fields}"
+msgstr "یک ارسال جدید در فرم «{form_title}» دریافت شد.<br><br>{all_fields}"
+
+#: includes/class-form-repository.php:233
+msgid "Submitter receipt"
+msgstr "رسید برای کاربر"
+
+#: includes/class-form-repository.php:236
+msgid "We received your information | {site_name}"
+msgstr "اطلاعات شما دریافت شد | {site_name}"
+
+#: includes/class-form-repository.php:237
+msgid ""
+"Hello {field:name},<br><br>We received your information successfully. A copy"
+" of your responses appears below.<br><br>{all_fields}"
+msgstr ""
+"سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از "
+"پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}"
+
+#: includes/class-notification-service.php:54
+msgid "The recipient is invalid."
+msgstr "گیرنده معتبر نیست."
+
+#: includes/class-notification-service.php:70
+msgid "The wp_mail function failed."
+msgstr "تابع wp_mail ناموفق بود."
+
+#: includes/class-notification-service.php:75
+msgid "Email delivery failed."
+msgstr "ارسال ایمیل ناموفق بود."
+
+#: includes/class-renderer.php:33
+msgid "The form was not found or is not published yet."
+msgstr "فرم پیدا نشد یا هنوز منتشر نشده است."
+
+#: includes/class-renderer.php:43
+msgid "Submitting…"
+msgstr "در حال ارسال…"
+
+#: includes/class-renderer.php:44
+msgid "Could not connect to the server. Please try again."
+msgstr "ارتباط با سرور برقرار نشد. دوباره تلاش کنید."
+
+#: includes/class-renderer.php:45 includes/class-renderer.php:93
+msgid "Close"
+msgstr "بستن"
+
+#: includes/class-renderer.php:46
+msgid "Request and enter the SMS verification code first."
+msgstr "ابتدا کد پیامکی را دریافت و وارد کنید."
+
+#. translators: 1: field label, 2: related field label.
+#: includes/class-renderer.php:48 includes/class-validator.php:98
+#, php-format
+msgid "At least one of “%1$s” or “%2$s” must be provided."
+msgstr "حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود."
+
+#: includes/class-renderer.php:82
+msgid "Company"
+msgstr "شرکت"
+
+#: includes/class-renderer.php:144
+msgid "Required"
+msgstr "الزامی"
+
+#: includes/class-renderer.php:187
+msgid "Select an option"
+msgstr "انتخاب کنید"
+
+#: includes/class-rest-api.php:87 includes/class-submission-handler.php:42
+#: includes/class-submission-handler.php:144
+msgid "This form is unavailable."
+msgstr "این فرم در دسترس نیست."
+
+#: includes/class-submission-handler.php:50
+msgid "Please try again after completing the form."
+msgstr "لطفاً پس از تکمیل فرم دوباره تلاش کنید."
+
+#: includes/class-submission-handler.php:53
+msgid "Too many attempts. Please try again in a few minutes."
+msgstr "تعداد تلاش‌ها بیش از حد مجاز است؛ چند دقیقه دیگر دوباره امتحان کنید."
+
+#: includes/class-submission-handler.php:175
+msgid "The form session has expired. Please refresh the page."
+msgstr "نشست فرم منقضی شده است؛ صفحه را تازه‌سازی کنید."
+
+#: includes/class-submission-handler.php:178
+msgid "Submission could not be verified."
+msgstr "ارسال شناسایی نشد."
+
+#. translators: %s: upload field label.
+#: includes/class-submission-handler.php:248
+#, php-format
+msgid "Uploading “%s” is required."
+msgstr "بارگذاری «%s» الزامی است."
+
+#: includes/class-submission-handler.php:256
+msgid "This file type is not allowed."
+msgstr "نوع فایل مجاز نیست."
+
+#. translators: %d: maximum file size in megabytes.
+#: includes/class-submission-handler.php:261
+#, php-format
+msgid "The file must not be larger than %d MB."
+msgstr "حجم فایل نباید بیشتر از %d مگابایت باشد."
+
+#: includes/class-submission-handler.php:307
+msgid "Could not save the file."
+msgstr "ذخیره فایل ناموفق بود."
+
+#: includes/class-template-engine.php:72
+msgid "This message was sent automatically by MRN Forms."
+msgstr "این پیام به‌صورت خودکار توسط MRN Forms ارسال شده است."
+
+#. translators: %s: field label.
+#: includes/class-validator.php:39
+#, php-format
+msgid "The “%s” field is required."
+msgstr "تکمیل فیلد «%s» الزامی است."
+
+#: includes/class-validator.php:186
+msgid "The email address is invalid."
+msgstr "نشانی ایمیل معتبر نیست."
+
+#: includes/class-validator.php:189
+msgid "Please enter a valid number."
+msgstr "لطفاً یک عدد معتبر وارد کنید."
+
+#: includes/class-validator.php:192
+msgid "The entered date is invalid."
+msgstr "تاریخ واردشده معتبر نیست."
+
+#: includes/class-validator.php:198
+msgid "The selected option is invalid."
+msgstr "گزینه انتخاب‌شده معتبر نیست."
+
+#. translators: %d: minimum character count.
+#: includes/class-validator.php:204
+#, php-format
+msgid "Enter at least %d characters."
+msgstr "حداقل %d نویسه وارد کنید."
+
+#. translators: %d: maximum character count.
+#: includes/class-validator.php:208
+#, php-format
+msgid "A maximum of %d characters is allowed."
+msgstr "حداکثر %d نویسه مجاز است."
+
+#. translators: %s: minimum numeric value.
+#: includes/class-validator.php:212
+#, php-format
+msgid "The value must be at least %s."
+msgstr "مقدار باید حداقل %s باشد."
+
+#. translators: %s: maximum numeric value.
+#: includes/class-validator.php:216
+#, php-format
+msgid "The value must be no more than %s."
+msgstr "مقدار باید حداکثر %s باشد."
+
+#: includes/class-validator.php:221
+msgid "The entered value does not match the expected pattern."
+msgstr "مقدار واردشده با الگوی مورد انتظار مطابقت ندارد."

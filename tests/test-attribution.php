@@ -56,10 +56,10 @@ $attribution = Attribution::from_request(
 $assert( 'google' === $attribution['source'], 'Source should be preserved.' );
 $assert( 'Fall lessons' === $attribution['campaign'], 'Campaign should be plain text.' );
 $assert( ! isset( $attribution['referrer'] ), 'Non-HTTP referrers should be rejected.' );
-$assert( 'تبلیغات گوگل' === Attribution::label( $attribution ), 'Google CPC should use the Google Ads label.' );
-$assert( 'Google / جست‌وجوی طبیعی' === Attribution::label( array( 'source' => 'google', 'medium' => 'organic' ) ), 'Organic Google traffic should be identified.' );
-$assert( 'نامشخص' === Attribution::label( array() ), 'Missing attribution should not be mistaken for direct traffic.' );
-$assert( 'مستقیم' === Attribution::label( array( 'source' => 'direct', 'medium' => '(none)' ) ), 'Explicit direct traffic should be identified.' );
-$assert( 'example.org / ارجاعی' === Attribution::label( array( 'source' => 'example.org', 'medium' => 'referral' ) ), 'Referral domains should stay readable.' );
+$assert( 'Google Ads' === Attribution::label( $attribution ), 'Google CPC should use the Google Ads label.' );
+$assert( 'Google / Organic search' === Attribution::label( array( 'source' => 'google', 'medium' => 'organic' ) ), 'Organic Google traffic should be identified.' );
+$assert( 'Unknown' === Attribution::label( array() ), 'Missing attribution should not be mistaken for direct traffic.' );
+$assert( 'Direct' === Attribution::label( array( 'source' => 'direct', 'medium' => '(none)' ) ), 'Explicit direct traffic should be identified.' );
+$assert( 'example.org / Referral' === Attribution::label( array( 'source' => 'example.org', 'medium' => 'referral' ) ), 'Referral domains should stay readable.' );
 
 echo "Attribution tests passed.\n";

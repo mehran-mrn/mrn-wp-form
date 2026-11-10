@@ -28,7 +28,7 @@ $packageRoot = Join-Path $staging 'mrn-forms'
 try {
 	New-Item -ItemType Directory -Path $packageRoot -Force | Out-Null
 	# Explicit runtime allowlist excludes development files and credentials.
-	foreach ($item in @('mrn-form.php', 'readme.txt', 'LICENSE', 'uninstall.php', 'includes', 'assets')) {
+	foreach ($item in @('mrn-form.php', 'readme.txt', 'LICENSE', 'uninstall.php', 'includes', 'assets', 'languages')) {
 		Copy-Item -LiteralPath (Join-Path $pluginRoot $item) -Destination $packageRoot -Recurse -Force
 	}
 

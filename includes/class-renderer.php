@@ -30,7 +30,7 @@ final class Renderer {
 	public function render( int|string $identifier, array $args = array() ): string {
 		$form = $this->forms->find( $identifier );
 		if ( ! $form || ( 'published' !== $form['status'] && ! current_user_can( 'manage_options' ) ) ) {
-			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'فرم پیدا نشد یا هنوز منتشر نشده است.', 'mrn-forms' ) . '</p>' : '';
+			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'The form was not found or is not published yet.', 'mrn-forms' ) . '</p>' : '';
 		}
 
 		wp_enqueue_style( 'mrnf-frontend', MRNF_URL . 'assets/css/frontend.css', array(), MRNF_VERSION );
@@ -40,12 +40,12 @@ final class Renderer {
 			'mrnfFrontend',
 			array(
 				'restUrl'         => esc_url_raw( rest_url( 'mrn-form/v1/forms/' ) ),
-				'processing'      => __( 'در حال ارسال…', 'mrn-forms' ),
-				'network'         => __( 'ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', 'mrn-forms' ),
-				'close'           => __( 'بستن', 'mrn-forms' ),
-				'smsCodeRequired' => __( 'ابتدا کد پیامکی را دریافت و وارد کنید.', 'mrn-forms' ),
+				'processing'      => __( 'Submitting…', 'mrn-forms' ),
+				'network'         => __( 'Could not connect to the server. Please try again.', 'mrn-forms' ),
+				'close'           => __( 'Close', 'mrn-forms' ),
+				'smsCodeRequired' => __( 'Request and enter the SMS verification code first.', 'mrn-forms' ),
 				/* translators: 1: field label, 2: related field label. */
-				'requiredWithout' => __( 'حداقل یکی از «%1$s» یا «%2$s» باید تکمیل شود.', 'mrn-forms' ),
+				'requiredWithout' => __( 'At least one of “%1$s” or “%2$s” must be provided.', 'mrn-forms' ),
 			)
 		);
 
@@ -90,7 +90,7 @@ final class Renderer {
 				$query_notice = sanitize_text_field( wp_unslash( $_GET['mrnf_success'] ?? $_GET['mrnf_error'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only classic submission feedback.
 				$query_type   = isset( $_GET['mrnf_error'] ) ? 'error' : 'success'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				?>
-				<div class="mrnf-form__notice <?php echo $query_notice ? 'is-' . esc_attr( $query_type ) . ( 'success' === $query_type ? ' is-toast' : '' ) : ''; ?>" role="status" aria-live="polite" <?php echo $query_notice ? '' : 'hidden'; ?>><span class="mrnf-form__notice-text"><?php echo esc_html( $query_notice ); ?></span><button class="mrnf-form__notice-close" type="button" aria-label="<?php esc_attr_e( 'بستن', 'mrn-forms' ); ?>">&times;</button></div>
+				<div class="mrnf-form__notice <?php echo $query_notice ? 'is-' . esc_attr( $query_type ) . ( 'success' === $query_type ? ' is-toast' : '' ) : ''; ?>" role="status" aria-live="polite" <?php echo $query_notice ? '' : 'hidden'; ?>><span class="mrnf-form__notice-text"><?php echo esc_html( $query_notice ); ?></span><button class="mrnf-form__notice-close" type="button" aria-label="<?php esc_attr_e( 'Close', 'mrn-forms' ); ?>">&times;</button></div>
 				<div class="mrnf-form__grid">
 					<?php foreach ( $form['fields'] as $field ) : ?>
 						<?php echo $this->field( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Field method escapes values. ?>
@@ -141,7 +141,7 @@ final class Renderer {
 				<?php
 				if ( $required || $required_without ) :
 					?>
-					<b class="mrnf-field__required" aria-label="<?php esc_attr_e( 'الزامی', 'mrn-forms' ); ?>"<?php echo $required_without && ! $required ? ' data-mrnf-required-indicator' : ''; ?>>*</b><?php endif; ?></label>
+					<b class="mrnf-field__required" aria-label="<?php esc_attr_e( 'Required', 'mrn-forms' ); ?>"<?php echo $required_without && ! $required ? ' data-mrnf-required-indicator' : ''; ?>>*</b><?php endif; ?></label>
 			<?php endif; ?>
 			<?php $this->control( $field, $id ); ?>
 			<?php
@@ -184,7 +184,7 @@ final class Renderer {
 			return;
 		}
 		if ( 'select' === $type ) {
-			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $attrs . '><option value="">' . esc_html( $field['placeholder'] ? $field['placeholder'] : __( 'انتخاب کنید', 'mrn-forms' ) ) . '</option>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $attrs . '><option value="">' . esc_html( $field['placeholder'] ? $field['placeholder'] : __( 'Select an option', 'mrn-forms' ) ) . '</option>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			foreach ( $field['choices'] as $choice ) {
 				echo '<option value="' . esc_attr( $choice ) . '"' . selected( $field['default'], $choice, false ) . '>' . esc_html( $choice ) . '</option>';
 			}

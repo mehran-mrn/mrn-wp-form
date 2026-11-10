@@ -1,44 +1,58 @@
 <?php
 /**
- * Standalone locale catalogue tests.
+ * Standalone translation registration and catalogue tests.
  *
  * @package MRN_Form
  */
 
 define( 'ABSPATH', dirname( __DIR__ ) . DIRECTORY_SEPARATOR );
+define( 'MRNF_FILE', ABSPATH . 'mrn-form.php' );
 
-$test_locale = 'en_US';
+function add_action( $hook, $callback ): void {
+	if ( 'init' !== $hook ) {
+		throw new RuntimeException( 'Plugin translations should be registered on init.' );
+	}
+	$callback();
+}
 
-function add_filter(): void {}
-function determine_locale(): string {
-	global $test_locale;
-	return $test_locale;
+function plugin_basename( $file ): string {
+	return 'mrn-forms/' . basename( $file );
+}
+
+function load_plugin_textdomain( $domain, $deprecated, $path ): void {
+	if ( 'mrn-forms' !== $domain || 'mrn-forms/languages' !== $path ) {
+		throw new RuntimeException( 'The domain should point to the bundled languages directory.' );
+	}
 }
 
 require_once dirname( __DIR__ ) . '/includes/class-i18n.php';
 
 use MRN\Form\I18n;
 
-$errors = array();
+I18n::register();
 
-if ( 'Forms' !== I18n::translate( 'فرم‌ها', 'فرم‌ها', 'mrn-forms' ) ) {
-	$errors[] = 'English locale should translate administration strings.';
-}
-if ( 'The email address is invalid.' !== I18n::translate( 'نشانی ایمیل معتبر نیست.', 'نشانی ایمیل معتبر نیست.', 'mrn-forms' ) ) {
-	$errors[] = 'English locale should translate frontend validation strings.';
-}
-if ( 'Hello {field:name},<br><br>We received your information successfully. A copy of your responses appears below.<br><br>{all_fields}' !== I18n::translate( '', 'سلام {field:name}،<br><br>اطلاعات شما با موفقیت دریافت شد. نسخه‌ای از پاسخ‌های شما در ادامه آمده است.<br><br>{all_fields}', 'mrn-forms' ) ) {
-	$errors[] = 'English locale should preserve merge tags and email HTML.';
+$catalogue = file_get_contents( ABSPATH . 'languages/mrn-forms-fa_IR.mo' );
+$header    = unpack( 'Vmagic/Vversion/Vcount/Voriginals/Vtranslations', $catalogue );
+if ( 0x950412de !== $header['magic'] || 0 !== $header['version'] ) {
+	throw new RuntimeException( 'The bundled file should be a valid gettext MO catalogue.' );
 }
 
-$test_locale = 'fa_IR';
-if ( 'فرم‌ها' !== I18n::translate( 'فرم‌ها', 'فرم‌ها', 'mrn-forms' ) ) {
-	$errors[] = 'Persian locale should preserve the original interface.';
+$translations = array();
+for ( $index = 0; $index < $header['count']; ++$index ) {
+	$original   = unpack( 'Vlength/Voffset', $catalogue, $header['originals'] + 8 * $index );
+	$translated = unpack( 'Vlength/Voffset', $catalogue, $header['translations'] + 8 * $index );
+	$translations[ substr( $catalogue, $original['offset'], $original['length'] ) ] = substr( $catalogue, $translated['offset'], $translated['length'] );
 }
 
-if ( $errors ) {
-	fwrite( STDERR, implode( PHP_EOL, $errors ) . PHP_EOL );
-	exit( 1 );
+$expected = array(
+	'Forms'                         => 'فرم‌ها',
+	'The email address is invalid.' => 'نشانی ایمیل معتبر نیست.',
+	'New submission from {form_title}' => 'ارسال جدید از {form_title}',
+);
+foreach ( $expected as $english => $persian ) {
+	if ( $persian !== ( $translations[ $english ] ?? null ) ) {
+		throw new RuntimeException( 'The Persian catalogue is missing the translation for ' . $english );
+	}
 }
 
 echo "I18n tests passed.\n";

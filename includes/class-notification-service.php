@@ -51,7 +51,7 @@ final class Notification_Service {
 				$results[] = array(
 					'id'      => $notification['id'],
 					'sent'    => false,
-					'message' => __( 'گیرنده معتبر نیست.', 'mrn-forms' ),
+					'message' => __( 'The recipient is invalid.', 'mrn-forms' ),
 				);
 				continue;
 			}
@@ -67,12 +67,12 @@ final class Notification_Service {
 
 			$sent = wp_mail( $emails, $subject, $this->templates->email_document( $subject, $body ), $headers );
 			foreach ( $emails as $email ) {
-				$this->entries->log_notification( (int) $form['id'], $entry_id, $email, $sent ? 'sent' : 'failed', $sent ? '' : __( 'تابع wp_mail ناموفق بود.', 'mrn-forms' ) );
+				$this->entries->log_notification( (int) $form['id'], $entry_id, $email, $sent ? 'sent' : 'failed', $sent ? '' : __( 'The wp_mail function failed.', 'mrn-forms' ) );
 			}
 			$results[] = array(
 				'id'      => $notification['id'],
 				'sent'    => $sent,
-				'message' => $sent ? '' : __( 'ارسال ایمیل ناموفق بود.', 'mrn-forms' ),
+				'message' => $sent ? '' : __( 'Email delivery failed.', 'mrn-forms' ),
 			);
 			do_action( 'mrnf_after_notification', $notification, $sent, $form, $values, $entry_id );
 		}

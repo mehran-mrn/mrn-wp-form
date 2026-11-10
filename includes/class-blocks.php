@@ -61,9 +61,9 @@ final class Blocks {
 				'logoUrl' => esc_url_raw( MRNF_URL . 'assets/images/logo.png' ),
 				'i18n'    => array(
 					'title'        => __( 'MRN Forms', 'mrn-forms' ),
-					'form'         => __( 'فرم', 'mrn-forms' ),
-					'selectForm'   => __( 'یک فرم انتخاب کنید…', 'mrn-forms' ),
-					'selectedForm' => __( 'فرم انتخاب‌شده:', 'mrn-forms' ),
+					'form'         => __( 'Form', 'mrn-forms' ),
+					'selectForm'   => __( 'Select a form…', 'mrn-forms' ),
+					'selectedForm' => __( 'Selected form:', 'mrn-forms' ),
 				),
 			)
 		);
