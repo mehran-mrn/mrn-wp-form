@@ -2,7 +2,7 @@
 Contributors: mrnwp
 Tags: form builder, contact form, conditional logic, email notifications, rtl
 Requires at least: 6.6
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.1
 Stable tag: 1.5.1
 License: GPLv2 or later
